@@ -1,5 +1,13 @@
 from django.db import models
 from datetime import *
+
+class Utente(models.Model):
+    nrSocio = models.IntegerField()#chiave
+    nome = models.CharField()
+    cognome = models.CharField()
+    codiceFiscale = models.CharField()
+    email = models.CharField()
+
 '''classe modello per l'attrazione'''
 class Attrazione(models.Model):
     nome = models.CharField(max_length=200)
@@ -7,8 +15,8 @@ class Attrazione(models.Model):
     costo = models.FloatField(default=10.5)
     durata = models.DurationField#questi sono i secondi della durata
     tipo = models.CharField(max_length=200)
-    oraInizio = models.DateTimeField('ora inizio')
-    oraFine = models.DateTimeField('ora fine')
+    oraInizio = models.DateTimeField('ora inizio')#TODO APERTURA
+    oraFine = models.DateTimeField('ora fine')#TODO CHIUSURA
 
     #override del metodo save
     def save(self, *args, **kwargs):
@@ -17,14 +25,10 @@ class Attrazione(models.Model):
     #def __str__(self):
     #   return  self.__str__(self.nome, self.posizione, self.tipo)
 
-class Giornata(models.Model):
-    numero = models.IntegerField#TODO chiave
-    attrazioni = models.ForeignKey(Attrazione, on_delete=models.CASCADE)
-    #attrazioni = models.CharField(max_length=500)#TODO è una lista di attrazioni salvate sul db
-    oraSveglia = models.DateTimeField('ora Sveglia')
-    oraRientro = models.DateTimeField('Ora Rientro')
-
-    def __str__(self):
-        return self.Giornata_text
-
-
+class Scelta(models.Model):
+    #TODO chiave è composta dalla chiave di utente e di attrazione e giorno in mezzo
+    #TODO controllare che ora inizio e fine siano ammissibili
+    giorno = models.DateTimeField()
+    oraInizio = models.DateTimeField()
+    oraFine = models.DateTimeField()
+    numero = models.IntegerField()
