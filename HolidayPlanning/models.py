@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import *
-
+#TODO Utente dovrà essere spostato in un'altra sezione, destinata alla registrazione dell'account
 class Utente(models.Model):
     nrSocio = models.IntegerField(primary_key=True)#chiave
     nome = models.CharField()
@@ -27,7 +27,8 @@ class Attrazione(models.Model):
 class Scelta(models.Model):
     #TODO chiave è composta dalla chiave di utente e di attrazione e giorno in mezzo
     giorno = models.DateTimeField() #scelto dall'utente
-    attrazione = models.ForeignKey('Attrazione')
+    attrazione = models.ForeignKey('Attrazione', on_delete=models.CASCADE)
+    utente = models.ForeignKey('Utente', on_delete=models.CASCADE)
     oraInizio = models.DateTimeField(blank=True) #scelta dall'utente
     oraFine = models.DateTimeField(blank=True) #scelta dall'utente
     durata = models.DurationField  # questi sono i secondi della durata
@@ -42,3 +43,17 @@ class Scelta(models.Model):
     # TODO controllare che ora inizio e fine siano ammissibili
     def controllaOrari(self):
         return True
+class Giornata(models.Model):
+    data = models.DateField()
+    numeroGiornata = models.IntegerField()
+    totAttrazioni = models.IntegerField()
+    totCosto = models.FloatField()
+    scelte = models.ManyToManyField(Scelta, related_name='giornate')
+class Vacanza(models.Model):
+    dataArrivo = models.DateTimeField()
+    dataPartenza = models.DateTimeField()
+    nrPersone = models.IntegerField()
+    budgetDisponibile = models.FloatField()
+    totGiorni = models.IntegerField()
+    totNotti = models.IntegerField()
+    giornata = models.ManyToManyField(Giornata, related_name='vacanze')
