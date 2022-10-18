@@ -1,0 +1,50 @@
+nome: "ERICE: La pasticceria di Maria Grammatico"
+luogo: "Pasticceria Maria Grammatico"
+via: "Via Vittorio Emanuele 14"
+citta: "Erice"
+costo: 10.00
+tipo: "gastronomia"
+oraApertura: 9,0,0
+oraChiusura: 18,0,0
+descrizione: "Visita del villaggio medievale e degustazione della locale pasticceria a base di mandorla"
+
+nome: "MARSALA: 'The Marsala Connection', il vino degli Inglesi"
+luogo: "Cantina enologica"
+via: ""
+citta: "Marsala"
+costo: "25.00"
+tipo: "gastronomia"
+oraApertura: 10,0,0
+oraChiusura: 20,0,0
+descrizione: "Visita del centro storico e degustazione in cantina"
+
+nome: "CASTELBUONO: la manna non viene dal cielo... ma si produce solo in Sicilia"
+luogo: "Centro Storico"
+via: "Piazza Margherita 10"
+citta: "Castelbuono"
+costo: 15.00
+tipo: "gastronomia"
+oraApertura: 8
+oraChiusura: 21
+descrizione: "Visita del centro storico e degustazione della locale pasticceria a base di manna"
+
+nome:
+luogo:
+via:
+citta:
+costo:
+tipo:
+oraApertura:
+oraChiusura:
+descrizione:
+
+nome:
+luogo:
+via:
+citta:
+costo:
+tipo:
+oraApertura:
+oraChiusura:
+descrizione:
+
