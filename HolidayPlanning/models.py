@@ -1,5 +1,9 @@
 from django.db import models
 from datetime import *
+
+import profiles.models
+
+
 #TODO Utente dovrà essere spostato in un'altra sezione, destinata alla registrazione dell'account
 class Utente(models.Model):
     nrSocio = models.IntegerField(primary_key=True)#chiave
@@ -25,10 +29,9 @@ class Attrazione(models.Model):
     #   return  self.__str__(self.nome, self.posizione, self.tipo)
 
 class Scelta(models.Model):
-    #TODO chiave è composta dalla chiave di utente e di attrazione e giorno in mezzo
     giorno = models.DateTimeField() #scelto dall'utente
     attrazione = models.ForeignKey('Attrazione', on_delete=models.CASCADE)
-    utente = models.ForeignKey('Utente', on_delete=models.CASCADE)
+    utente = models.ForeignKey(profiles.models.UserProfileModel, related_name ='Utente', on_delete=models.CASCADE)
     oraInizio = models.DateTimeField(blank=True) #scelta dall'utente
     oraFine = models.DateTimeField(blank=True) #scelta dall'utente
     durata = models.DurationField  # questi sono i secondi della durata
