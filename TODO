@@ -1,3 +1,5 @@
 aggiungere app profili per la gestione degli utenti
 come modello aggiungere solo un tipo di utente (abstract user)
 aggiungere campo foto all' attrazione
+Aprire progetto su pycharm da cartella fisica non link home
+Ricreare database e applicare migrazioni
