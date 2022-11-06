@@ -1,13 +1,13 @@
-from django.db import models
+import datetime
 
-import profiles.models
+from django.db import models
 class Attrazione(models.Model):
     objects = None
     nome = models.CharField(max_length=200, primary_key=True)
     luogo = models.CharField(max_length=300)
     via = models.CharField(max_length=500)
     citta = models.CharField(max_length=200)
-    costo = models.FloatField(default=10.5)
+    costo = models.FloatField()
     tipo = models.CharField(max_length=200)
     oraApertura = models.DateTimeField('ora apertura')
     oraChiusura = models.DateTimeField('ora chiusura')
@@ -17,11 +17,11 @@ class Attrazione(models.Model):
 
 class Scelta(models.Model):
     giorno = models.DateTimeField()  # scelto dall'utente
-    attrazione = models.ForeignKey('Attrazione', on_delete=models.CASCADE)
-    utente = models.ForeignKey(profiles.models.UserProfileModel, related_name='Utente', on_delete=models.CASCADE)
+    attrazione = models.ForeignKey(to='Attrazione', on_delete=models.CASCADE, related_name="attrazione")
+    #utente = models.ForeignKey(to=profiles.models.UserProfileModel, related_name='Utente', on_delete=models.CASCADE)
     oraInizio = models.DateTimeField(blank=True)  # scelta dall'utente
     oraFine = models.DateTimeField(blank=True)  # scelta dall'utente
-    durata = models.DurationField  # questi sono i secondi della durata
+    durata = models.DurationField()  # questi sono i secondi della durata
     posizioneInGiornata = models.IntegerField()  # numero progressivo
 
     # override del metodo save
