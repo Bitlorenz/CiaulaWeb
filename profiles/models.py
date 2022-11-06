@@ -5,9 +5,13 @@ from django.contrib.auth.models import User, AbstractUser
 
 class UserProfileModel(AbstractUser):
     nrSocio = models.IntegerField(primary_key=True)  # chiave, deve autogenerarsi
-    nome = models.CharField()
-    cognome = models.CharField()
-    email = models.CharField()
-    codiceFiscale = models.CharField()
-    telefono = models.CharField()
+    nome = models.CharField(max_length=32)
+    cognome = models.CharField(max_length=32)
+    email = models.CharField(max_length=32)
+    codiceFiscale = models.CharField(max_length=18)
+    telefono = models.CharField(max_length=32)
     dataDiNascita = models.DateField()
+
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
