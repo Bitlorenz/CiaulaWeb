@@ -6,3 +6,13 @@ tipo="spettacolo"
 oraInizio=datetime.date(<anno>,<mese>,<giorno>,<ora>,<minuto>,<sec>)
 oraFine=datetime.date(<anno>,<mese>,<giorno>,<ora>,<minuto>,<sec>)
 numero=int(2)
+
+nome$
+luogo$
+via$
+citta$
+costo$
+tipo$
+oraApertura$
+oraChiusura$
+descrizione$
