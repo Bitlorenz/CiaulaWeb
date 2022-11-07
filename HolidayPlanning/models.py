@@ -9,18 +9,18 @@ class Attrazione(models.Model):
     citta = models.CharField(max_length=200)
     costo = models.FloatField()
     tipo = models.CharField(max_length=200)
-    oraApertura = models.DateTimeField('ora apertura')
-    oraChiusura = models.DateTimeField('ora chiusura')
+    oraApertura = models.TimeField('ora apertura')
+    oraChiusura = models.TimeField('ora chiusura')
     descrizione = models.TextField()
     # def __str__(self):
     #   return  self.__str__(self.nome, self.posizione, self.tipo)
 
 class Scelta(models.Model):
-    giorno = models.DateTimeField()  # scelto dall'utente
+    giorno = models.DateField()  # scelto dall'utente
     attrazione = models.ForeignKey(to='Attrazione', on_delete=models.CASCADE, related_name="attrazione")
     #utente = models.ForeignKey(to=profiles.models.UserProfileModel, related_name='Utente', on_delete=models.CASCADE)
-    oraInizio = models.DateTimeField(blank=True)  # scelta dall'utente
-    oraFine = models.DateTimeField(blank=True)  # scelta dall'utente
+    oraInizio = models.TimeField(blank=True)  # scelta dall'utente
+    oraFine = models.TimeField(blank=True)  # scelta dall'utente
     durata = models.DurationField()  # questi sono i secondi della durata
     posizioneInGiornata = models.IntegerField()  # numero progressivo
 
@@ -36,8 +36,8 @@ class Giornata(models.Model):
 
 
 class Vacanza(models.Model):
-    dataArrivo = models.DateTimeField()
-    dataPartenza = models.DateTimeField()
+    dataArrivo = models.DateField()
+    dataPartenza = models.DateField()
     nrPersone = models.IntegerField()
     budgetDisponibile = models.FloatField()
     totGiorni = models.IntegerField()

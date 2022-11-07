@@ -1,0 +1,49 @@
+nome% ERICE: La pasticceria di Maria Grammatico
+luogo% Pasticceria Maria Grammatico
+via% Via Vittorio Emanuele 14
+citta% Erice
+costo% 10.00
+tipo% gastronomia
+oraApertura% 09:00
+oraChiusura% 18:00
+descrizione% Visita del villaggio medievale e degustazione della locale pasticceria a base di mandorla
+
+nome% MARSALA: 'The Marsala Connection', il vino degli Inglesi
+luogo% Cantina enologica
+via% Via Mazara 209
+citta% Marsala
+costo% 25.00
+tipo% gastronomia
+oraApertura% 10:00
+oraChiusura% 20:00
+descrizione% Visita del centro storico e degustazione in cantina
+
+nome% CASTELBUONO: la manna non viene dal cielo... ma si produce solo in Sicilia
+luogo% Centro Storico
+via% Piazza Margherita 10
+citta% Castelbuono
+costo% 15.00
+tipo% gastronomia
+oraApertura% 08:00
+oraChiusura% 21:00
+descrizione% Visita del centro storico e degustazione della locale pasticceria a base di manna
+
+nome% PALERMO: nobiltà e popolo, sarde a beccafico e street food
+luogo% Centro Storico
+via% Corso Vittorio Emanuele
+citta% Palermo
+costo% 17.00
+tipo% culturale
+oraApertura% 09:00
+oraChiusura% 18:00
+descrizione% Piazza Marina, facciata della Chiesa di San Francesco e dell'omonima Focacceria, i palazzi nobiliari della Kalsa e Palazzo Ganci, Piazza Bellini, Chiese di Santa Caterina e San Cataldo, Chiesa di Casa Professa, Chiesa della Martorana (sito Unesco), Piazza Pretoria e la sua fontana, Quattro Canti, mercato di Ballarò, Corso Vittorio Emanuele, visita all'interno della Cattedrale (sito Unesco)
+
+nome% BAGHERIA: suggestioni gastronomiche d'autore
+luogo% Ristorante 'I Pupi' (chef Tony Lo Coco)
+via% Piazza Larderia
+citta% Bagheria
+costo% 120
+tipo% gastronomia
+oraApertura% 12:00
+oraChiusura% 15:00
+descrizione% Pranzo al ristorante stellato Michelin 'I Pupi'
