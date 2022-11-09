@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}{{title}}{% endblock %}
+{% block content %}
+    <center>
+        <h1>{{title}}</h1>
+
+    {% if listaattrazioni.count > 0 %}
+        <p> Ci sono ben {{listaattrazioni.count}} da scegliere! </p>
+        <ul>
+        {% for a in listaattrazioni %}
+
+            <li>{{ a.nome }} a {{a.luogo}} </li>
+
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Non ci sono attrazioni!</p>
+    {% endif %}
+
+    </center>
+
+{% endblock %}

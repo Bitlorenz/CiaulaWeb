@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import models
 class Attrazione(models.Model):
     objects = None
@@ -12,8 +10,6 @@ class Attrazione(models.Model):
     oraApertura = models.TimeField('ora apertura')
     oraChiusura = models.TimeField('ora chiusura')
     descrizione = models.TextField()
-    # def __str__(self):
-    #   return  self.__str__(self.nome, self.posizione, self.tipo)
 
 class Scelta(models.Model):
     giorno = models.DateField()  # scelto dall'utente
