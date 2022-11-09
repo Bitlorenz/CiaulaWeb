@@ -23,5 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
-erase_db()
-init_db()
+#erase_db()
+#init_db()
