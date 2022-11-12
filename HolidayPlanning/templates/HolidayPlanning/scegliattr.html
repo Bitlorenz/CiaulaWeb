@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}{{title}}{% endblock %}
+{% block content %}
+    <center>
+        <h1>{{title}}</h1>
+
+        {% if message == "" %}
+
+        <form action="/HolidayPlanning/scegliattr">
+            <label for="citta">citta:</label><br>
+            <input type="text" id="citta" name="citta"><br>
+            <label for="luogo">luogo:</label><br>
+            <input type="text" id="luogo" name="luogo"><br>
+            <label for="posizioneInGiornata">posizioneInGiornata:</label><br>
+            <input type="text" id="posizioneInGiornata" name="posizioneInGiornata"><br>
+            <input type="submit" value="Scegli Attrazione">
+        </form>
+
+        {% else %}
+
+        <p> {{message}}</p>
+        <a href="{% url 'HolidayPlanning:listaattrazioni' %}">Lista Attrazioni</a>
+
+        {% endif %}
+         </center>
+
+{% endblock %}

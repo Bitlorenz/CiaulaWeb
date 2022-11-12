@@ -1,5 +1,7 @@
 aggiungere app profili per la gestione degli utenti
 come modello aggiungere solo un tipo di utente (abstract user)
 aggiungere campo foto all' attrazione
-Aprire progetto su pycharm da cartella fisica non link home
-Ricreare database e applicare migrazioni
+contatore (globale?) per aggiungere la scelta in fondo alle altre scelte
+	DOING:
+aggiunta di entries nel db: form per creare una scelta di attrazione
+    
