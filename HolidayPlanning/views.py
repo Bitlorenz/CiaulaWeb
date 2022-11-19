@@ -3,9 +3,6 @@ import datetime
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from .models import Attrazione, Scelta
-from django.db.models import CharField
-from django.db.models.functions import Cast
-
 
 # Create your views here.
 
@@ -26,8 +23,8 @@ def crea_scelta_da_citta(request):
 
         try:
             posizioneInGiornata = int(request.GET["posizioneInGiornata"])
-        except:
-            message = "Posizione non valida. Inserita posizione di default."
+        except Exception as e:
+            message = "Posizione non valida. Inserita posizione di default." + str(e)
 
         att = get_object_or_404(Attrazione, citta=cittaScelta, luogo=luogoScelta)
         print(att.nome)
@@ -50,6 +47,38 @@ def crea_scelta_da_citta(request):
                   context={"title": "Scegli Attrazione", "message": message})
 
 
+def modscelta(request, scelta_da_modificare=None):
+
+    msg = ""
+    title = "Modifica Libro"
+    templ = "HolidayPlanning/modificascelta.html" #TODO fare il template
+    #modifica libro
+    if "citta" in request.GET:
+        inizioH = datetime.time(hour=11)
+        fineH = datetime.time(hour=12)
+        try:
+            inizioH = datetime.time(hour=int(request.GET["inizioH"]))
+            fineH = datetime.time(hour=int(request.GET["fineH"]))
+        except Exception as e:
+            msg = " Orari imposti al default"+str(e)
+
+        scelta_da_modificare.oraInizio = inizioH
+        scelta_da_modificare.oraFine = fineH
+
+        try:
+            scelta_da_modificare.save()
+            msg = "Aggiornamento completato! " + msg
+        except Exception as e:
+            msg = "Errore nella modifica della scelta " + str(e)
+
+    ctx = {"title":title, "scelta": scelta_da_modificare, "message":msg}
+    return render(request, template_name=templ, context=ctx)
+
+
+
+def modifica_scelta(request, InCitta):
+    sce = get_object_or_404(Scelta, citta=InCitta)
+    return modscelta(request, sce)
 def lista_attrazioni(request):
     templ = "HolidayPlanning/listaattrazioni.html"
 
