@@ -13,4 +13,41 @@ creazione giornata
 aggiunta di entries nel db: form per creare una scelta di attrazione
 aggiunta e creazione di una scelta basata sul luogo e città di una attrazione
 14/11 !modifica di una scelta!
+
+
     
+DA Mockup_Holidayplanning2_HOME
+La colonna dell' info profilo presenta la possibilità di registrarsi o accedere al profilo ciaulaweb
+---> 	se si accede al profilo allora viene ricaricata la home, identica tranne per alcuni dettagli del profilo al 
+	posto del bottone (vacanze fatte, nome, cognome, vacanze organizzate?, riprendi ad organizzare la vacaza?)
+
+La parte centrale presenta tutte le attrazioni in ordine sparso presenti nel database, può essere presenta il form
+di filtraggio e ricerca presente nella sezione di creazione vacanza. Non sono presenti azioni possibili sulle attr.
+E' possibile scorrere solamente l'elenco delle attrazioni? ci devono essere più pagine per mostrarle?
+
+Modalità crea vacanza
+Campo arrivo, partenza, nr persone, budget disponibile x persona, questi campi sono settabili (inserire anche trasporto?)
+tramite calendari e text->int e text->float, i campi tot giorni e tot notti sono aggiornati al momento dell'inizia
+(sono necessari o basta solo mostrarli come informazioni?)
+--->	premuto il bottone inizia: se l'UTENTE è REGISTRATO vengono presi i valori dei campi e si crea un oggetto/
+	entità vacanza salvata nel db per l'utente e si passa alla schermata di holiday making, inoltre vengono settati
+	i tot giorni e notti, vengono creati tanti oggetti giorni tanti quanti sono i tot_giorni
+				   se l'UTENTE NON è REGISTRATO, viene presentata una scritta rossa che avverte di registrarsi
+
+
+DA Mockup_Holidayplanning2_MAKE
+Header e footer rimangono sempre gli stessi
+la colonna di sinistra mostra sempre alcune info sul profilo come foto nome e cognome, ma in questa schermata
+può mostrare anche alcune info sulla vacanza che si sta organizzando come il nome della vacanza, il budget iniziale
+e il budget disponibile che è calcolato dal budget iniziale meno quello disponibile.
+Nella parte centrale ci sono sempre le attrazioni, ma con alcuni dettagli in meno rispetto alla home (fondamentali:
+tipo, citta, luogo, costo e immagine). Ma per ogni attrazione devono essere presenti bottoni per compiere azioni
+sulle attrazioni legate alla vacanza, come l'aggiunta alla vacanza (in un giorno particolare o in quello correntemente
+usato e in che posizione). Nella parte centrale rimane il filtro di ricerca delle attrazioni.
+La parte di sinistra contiene le scelte fatte, per ognuna di queste vengono inserite il nome, orari inizio fine e prezzo
+insieme ai tasti modifica(?) e cancella, per cambiare l'ordine delle scelte inserire i tastini su e giù nella destra
+di ogni scelta, se si preme giù si abbassa la posizione della scelta di uno (il contrario se si preme sù).
+Viene presentata soltanto la lista delle scelte di una giornata, in cima alla parte sx si può scegliere la giornata
+su cui lavorare (tramite un text field che cliccando mostra le giornate).
+
+Possibilità di creare la propria attrazione?
