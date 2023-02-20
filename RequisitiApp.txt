@@ -1,0 +1,56 @@
+FUNZIONALITà OFFERTE A UTENTI REGISTRATI E/O ANONIMI
+si può visualizzare una lista di attrazioni/attività,
+si può cercare una attrazione/attività,
+si può comprare un'attività singola o più attività
+si può organizzare una vacanza, mettendo insieme più attività
+si può impostare il budget della vacanza
+si possono comprare in blocco le attività collegate in una vacanza
+si possono leggere recensioni riguardo le attività
+si possono scrivere recensioni riguardo le attività
+si possono leggere articoli riguardanti le attività
+si può stampare il piano vacanza in pdf
+si possono visualizzare delle attività consigliate
+si possono visualizzare le attività fatte e le vacanza programmate
+si possono aggiungere i traferimenti tra attività e attività
+
+
+USER STORIES E REQUISITI SPECIFICI
+1)  Visualizzare tutte le attrazioni presenti sul sito è permesso a utenti registrati e non. Leggendo un' attività nella
+    lista si capiscono alcuni dettagli (dove,come,orario,costo,tipologia) in sintesi, ma si può anche espandere la
+    scheda dell'attrazione per vedere i dettagli in modalità estesa. IMPORTANZA: 5, DIFFICOLTA: 1
+2)  Cercare un' attrazione è permesso a utenti registrati e non. Si fa a seconda dei campi presenti nel db, vengono ri-
+    tornate le attrazioni che rispettano le condizioni, possono essere filtrate o ordinate in base a parametri numerici.
+    IMPORTANZA: 5, DIFFICOLTA: 1
+3)  Comprare (il biglietto per) un'attrazione è permesso ai soli utenti registrati. Si può aggiumgere un'attività al
+    carrello direttamente dalla lista delle attività, tramite il bottone aggiungi al carrello. Cliccando sul carrello si
+    procede al pagamento, per acquistare un'attività si decide esclusivamente il giorno e il numero di biglietti
+    Non tutte le attività sono acquistabili, ma quelle guidate sì. IMPORTANZA: 4, DIFFICOLTA: 3
+4)  Organizzare una vacanza è possibile ai soli utenti registrati. Dalla lista delle attrazioni si può scegliere una vo-
+    ce alla volta e si aggiunge alla scaletta della vacanza, bisogna scegliere anche il giorno in cui posizionarla e l'
+    orario in cui posizionarla, la posizione tra le altre attività. E' fondamentale la facilità di immissione rispetto
+    ai giorni e all'orario. IMPORTANZA: 5, DIFFICOLTA: 3
+5)  Impostare il budget della vacanza può essere fatto ad inizio vacanza e può essere modificato manualmente durante la
+    creazione della vacanza, quindi è permesso ai soli utenti registrati. Ogni volta che si aggiunge una attrazione,
+    viene controllata la spesa totale corrente con il bufget prefissato e si avvisa se lo si è superato.
+    IMPORTANZA: 5, DIFFICOLTA: 2
+6)  In ogni momento dell' organizzazione della vacanza, quindi è permesso ai soli utenti registrati, si può comprare il
+    blocco delle attività programmate, vengono aggiunte al carrello tutte le attività ed è calcolato il prezzo totale.
+    IMPORTANZA: 5, DIFFICOLTA: 2
+7)  Leggere le recensioni è permesso ad utenti registrati e anonimi. Sono visibili solo quando si espande la scheda di
+    una attività, in cui nella versione ridotta ci sono solo le stelline e nella versione estesa i commenti di altri
+    utenti. IMPORTANZA: 3, DIFFICOLTA: 3
+8)  Scrivere le recensioni è permesso ai soli utenti registrati. Si possono recensire solo le attività acquistate, solo
+    dopo la data in cui sono state svolte. Viene fatto da una pagina separata, quella in cui si visualizzano le attività
+    e le vacanze svolte. IMPORTANZA: 3, DIFFICOLTA: 3
+9)  Leggere degli articoli riguardanti le attività è permesso ad utenti registrati e anonimi. Si trovano nella sezione
+    blog e possono essere linkati nell'elenco delle attività per organizzare la vacanza. IMPORTANZA: 2, DIFFICOLTA: 2
+10) Stampare il piano vacanza in pdf è permesso ai soli utenti registrati. In ogni momento della organizzazione della
+    vacanza, con un template molto semplice, si scaricano tutte le giornate e le attività. IMPORTANZA: 2, DIFFICOLTA:4/5
+11) Le attività raccomandate sono messe nei primi posti dell'elenco delle attività--> RECOMMENDATION SYSTEM.
+    IMPORTANZA: 5, DIFFICOLTA:2/3
+12) Visualizzare le attività fatte e le vacanza programmate è permesso ai soli utenti registrati, in una sezione del
+    profilo, si vede l'organigramma della vacanza, l'elenco delle attività fatte e il budget speso. IMPORTANZA: 4,
+    DIFFICOLTA: 2/3
+13) Aggiungere i traferimenti tra attività e attività nell'organizzazione di una vacanza è permesso ai soli utenti regi-
+    strati, sono voci statiche che in una riga aggiungono il tempo che ci vuole per andare da un luogo di un attrazione
+    all'altro. IMPORTANZA: 4, DIFFICOLTA: 4.

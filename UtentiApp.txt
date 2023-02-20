@@ -1,0 +1,31 @@
+UTENTE ANONIMO
+1)  Visualizzare tutte le attrazioni presenti sul sito
+2)  Cercare un' attrazione
+7)  Leggere le recensioni
+9)  Leggere degli articoli riguardanti le attività
+
+UTENTE REGISTRATO
+1)  Visualizzare tutte le attrazioni presenti sul sito
+2)  Cercare un' attrazione
+3)  Comprare (il biglietto per) un'attrazione
+4)  Organizzare una vacanza
+    4.1)Impostare il budget della vacanza
+    4.2)Comprare il blocco delle attività programmate
+    4.3)Aggiungere i traferimenti tra due attività
+    4.4)Stampare il piano vacanza in pdf
+5)  Leggere le recensioni
+6)  Scrivere le recensioni
+7)  Visualizzare le attività fatte e le vacanza programmate
+8)  Leggere degli articoli riguardanti le attività
+
+TOUR MANAGER
+1)  Aggiunge Attrazioni: IMP=5, DIF=3
+2)  Scrive articoli per il blog
+3)  Modifica, Elimina Attrazioni
+4)  Aggiunge tour già fatti
+più tutte le funzioni dell'utente registrato
+
+ADMIN
+1)tutte le funzioni precedenti
+2)può aggiungere e togliere tour manager
+3)aggiunge città e aree
