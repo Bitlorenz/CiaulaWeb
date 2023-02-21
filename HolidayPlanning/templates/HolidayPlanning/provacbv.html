@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ titolo }} {% endblock %}
+
+{% block content %}
+
+    <h1> Lista di {{ view.get_model_name }}</h1>
+
+{% for p in object_list %}
+<ul>
+    {{ p.nome }}
+</ul>
+{% endfor %}
+
+{% endblock %}

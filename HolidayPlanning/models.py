@@ -1,4 +1,6 @@
 from django.db import models
+
+
 class Attrazione(models.Model):
     objects = None
     nome = models.CharField(max_length=200, primary_key=True)
@@ -11,10 +13,17 @@ class Attrazione(models.Model):
     oraChiusura = models.TimeField('ora chiusura')
     descrizione = models.TextField()
 
+    def __str__(self):
+        return "ID: " + str(self.pk) + ": " + self.nome + " di tipo " + self.tipo + " a " + self.citta
+
+    class Meta:
+        verbose_name_plural = "Attrazioni"
+
+
 class Scelta(models.Model):
     giorno = models.DateField()  # scelto dall'utente
     attrazione = models.ForeignKey(to='Attrazione', on_delete=models.CASCADE, related_name="attrazione")
-    #utente = models.ForeignKey(to=profiles.models.UserProfileModel, related_name='Utente', on_delete=models.CASCADE)
+    # utente = models.ForeignKey(to=profiles.models.UserProfileModel, related_name='Utente', on_delete=models.CASCADE)
     oraInizio = models.TimeField(blank=True)  # scelta dall'utente
     oraFine = models.TimeField(blank=True)  # scelta dall'utente
     durata = models.DurationField()  # questi sono i secondi della durata
@@ -22,6 +31,7 @@ class Scelta(models.Model):
 
     # override del metodo save
     # TODO controllare che ora inizio e fine siano ammissibili
+
 
 class Giornata(models.Model):
     data = models.DateField()

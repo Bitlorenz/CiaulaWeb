@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 
 {% block head %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href='{% static "css/style.css" %}'>
 {% endblock %}
 
 {% block title %}{{title}}{% endblock %}
+
 {% block content %}
     <center>
         <h1>{{title}}</h1>
@@ -12,9 +15,11 @@
         <p> Ci sono ben {{listaattrazioni.count}} da scegliere! </p>
         <ul>
         {% for a in listaattrazioni %}
-
-            <li>{{ a.nome }} a {{a.luogo}} in {{a.citta}}</li>
-
+            <li>{{ a.nome }} a {{a.luogo}} in {{a.citta}}<br>
+            {# <a href="/HolidayPlanning/scegli/{{ a.citta }}/">Scegliere</a> #}
+            {# <a href="/HolidayPlanning/visualizza/{{ a.citta }}/">Visualizzare</a> #}
+            <a href="{% url 'HolidayPlanning:attrazione' a.citta %}">Visualizzare</a>
+            </li>
         {% endfor %}
         </ul>
     {% else %}
