@@ -19,8 +19,9 @@ from django.urls import include, path
 from ciaulaweb.initcmds import erase_db, init_db
 
 urlpatterns = [
-    path('HolidayPlanning/', include('HolidayPlanning.urls')),
     path('admin/', admin.site.urls),
+    path('HolidayPlanning/', include('HolidayPlanning.urls')),
+
 ]
 
 #erase_db()
