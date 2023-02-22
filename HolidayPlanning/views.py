@@ -1,8 +1,8 @@
 import datetime
 
 from django.http import HttpResponse, Http404
-from django.shortcuts import render, get_object_or_404, get_list_or_404
-from django.urls import reverse_lazy
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy, reverse
 
 from .models import Attrazione, Scelta
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
@@ -46,43 +46,12 @@ def crea_scelta_da_citta(request):
                   context={"title": "Scegli Attrazione", "message": message})
 
 
-def modscelta(request, scelta_da_modificare=None):
-    msg = ""
-    title = "Modifica Libro"
-    templ = "HolidayPlanning/modificascelta.html"  # TODO fare il template
-    # modifica libro
-    if "citta" in request.GET:
-        inizioH = datetime.time(hour=11)
-        fineH = datetime.time(hour=12)
-        try:
-            inizioH = datetime.time(hour=int(request.GET["inizioH"]))
-            fineH = datetime.time(hour=int(request.GET["fineH"]))
-        except Exception as e:
-            msg = " Orari imposti al default" + str(e)
-
-        scelta_da_modificare.oraInizio = inizioH
-        scelta_da_modificare.oraFine = fineH
-
-        try:
-            scelta_da_modificare.save()
-            msg = "Aggiornamento completato! " + msg
-        except Exception as e:
-            msg = "Errore nella modifica della scelta " + str(e)
-
-    ctx = {"title": title, "scelta": scelta_da_modificare, "message": msg}
-    return render(request, template_name=templ, context=ctx)
-
-
-def modifica_scelta(request, InCitta):
-    sce = get_object_or_404(Scelta, citta=InCitta)
-    return modscelta(request, sce)
-
-
 # class view per vedere tutte le attrazioni presenti
 class AttrazioniList(ListView):
     model = Attrazione
     template_name = "HolidayPlanning/provacbv.html"
-    #paginate_by = 10
+
+    # paginate_by = 10
     def get_queryset(self):
         return self.model.objects.exclude(costo__exact=0)
 
@@ -100,18 +69,61 @@ class ScegliAttrazione(CreateView):
     model = Scelta
     template_name = "HolidayPlanning/scegli_attrazione.html"
     fields = "__all__"
-    success_url = reverse_lazy("HolidayPlanning:listaattrazioni")
+    success_url = reverse_lazy("HolidayPlanning:scelte")
+
+
+# class view per vedere tutte le scelte presenti
+class ScelteList(ListView):
+    model = Scelta
+    template_name = "HolidayPlanning/listascelte.html"
+
+    def get_model_name(self):
+        return self.model._meta.verbose_name_plural
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['titolo'] = "Attrazioni Scelte"
+        return context
+
+#class detail view per una scelta
+class DetailSceltaEntita(DetailView):
+    model = Scelta
+    template_name = "HolidayPlanning/dettaglioscelta.html"
+
+#class detail view per un'attrazione
+class DetailAttrazioneEntita(DetailView):
+    model = Attrazione
+    template_name = "HolidayPlanning/dettaglioattrazione.html"
+
+
+#class per modificare una scelta data la chiave primaria
+class ModificaScelta(UpdateView):
+    model = Scelta
+    template_name = "HolidayPlanning/modificascelta.html"
+    fields = ['giorno', 'oraInizio', 'oraFine']
+
+    def get_success_url(self):
+        pk = self.get_context_data()["object"].pk
+        return reverse("HolidayPlanning:dettaglioscelta", kwargs={'pk': pk})
+
+
+#class delete view per eliminare una scelta
+class CancellaScelta(DeleteView):
+    model = Scelta
+    template_name = "HolidayPlanning/cancellascelta.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        entita = "Scelta"
+        ctx["entita"] = entita
+        return ctx
+
+    def get_success_url(self):
+        return reverse("HolidayPlanning:scelte")
+
 
 # function view per vedere tutte le attrazioni presenti
 def lista_attrazioni(request):
     template = "HolidayPlanning/listaattrazioni.html"
     ctx = {"title": "lista di attrazioni", "listaattrazioni": Attrazione.objects.all()}
     return render(request, template_name=template, context=ctx)
-
-
-# function view di prova che stampa a schermo il parametro passato come nome_attrazione
-def attrazione(request, attrazione_citta):
-    attrazionevar = get_list_or_404(Attrazione, citta__iexact=attrazione_citta)
-    print(attrazionevar)
-    context = {"title": "Attrazione da citta", 'attrazione': attrazionevar}
-    return render(request, 'HolidayPlanning/attrazione.html', context)

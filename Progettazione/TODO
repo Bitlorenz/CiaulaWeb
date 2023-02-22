@@ -8,13 +8,7 @@ mettere posizione nella giornata
 creazione vacanza
 creazione giornata
 cambiare nome modello Scelta --> AttivitaModel
-	DOING:
-aggiunta di entries nel db: form per creare una scelta di attrazione
-aggiunta e creazione di una scelta basata sul luogo e città di una attrazione
-14/11 !modifica di una scelta!
-
-
-    
+NON fare lista infinita attrazioni, Fare griglia come amazon
 DA Mockup_Holidayplanning2_HOME
 La colonna dell' info profilo presenta la possibilità di registrarsi o accedere al profilo ciaulaweb
 ---> 	se si accede al profilo allora viene ricaricata la home, identica tranne per alcuni dettagli del profilo al 

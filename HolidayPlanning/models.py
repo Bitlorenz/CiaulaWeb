@@ -30,14 +30,14 @@ class Scelta(models.Model):
     durata = models.DurationField()  # questi sono i secondi della durata
     posizioneInGiornata = models.IntegerField()  # numero progressivo
 
-     def __str__(self):
-         return "ID: " + str(self.pk) + "scelta: " + self.attrazione + " , il " + str(self.giorno)
+    def __str__(self):
+        return "ID: " + str(self.pk) + "scelta: " + str(self.attrazione) + " , il " + str(self.giorno)
 
-     class Meta:
+    class Meta:
         verbose_name = "Scelta"
         verbose_name_plural = "Scelte"
-    #override del metodo save
-    #controllare che ora inizio e fine siano ammissibili
+    # override del metodo save
+    # controllare che ora inizio e fine siano ammissibili
 
 
 class Giornata(models.Model):
@@ -47,13 +47,14 @@ class Giornata(models.Model):
     totCosto = models.FloatField()
     scelte = models.ManyToManyField(Scelta, related_name='giornate')
 
-     def __str__(self):
-         return "ID: " + str(self.pk) + "giorno: " + str(self.data) + " , num " + self.numeroGiornata
+    def __str__(self):
+        return "ID: " + str(self.pk) + "giorno: " + str(self.data) + " , num " + str(self.numeroGiornata)
 
-     class Meta:
+    class Meta:
         verbose_name = "Giornata"
         verbose_name_plural = "Giornate"
- 
+
+
 class Vacanza(models.Model):
     dataArrivo = models.DateField()
     dataPartenza = models.DateField()
@@ -63,11 +64,9 @@ class Vacanza(models.Model):
     totNotti = models.IntegerField()
     giornata = models.ManyToManyField(Giornata, related_name='vacanze')
 
-     def __str__(self):
-         return "ID: " + str(self.pk) + "inizio: " + str(self.dataArrivo) + " , fine: " + str(self.dataPartenza)
+    def __str__(self):
+        return "ID: " + str(self.pk) + "inizio: " + str(self.dataArrivo) + " , fine: " + str(self.dataPartenza)
 
-     class Meta:
+    class Meta:
         verbose_name = "Vacanza"
         verbose_name_plural = "Vacanze"
- 
-

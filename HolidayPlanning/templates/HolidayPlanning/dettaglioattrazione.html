@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}Dettaglio attrazione: {{object.nome}}{% endblock %}
+{% block content %}
+<p> citta: {{ object.citta }}</p>
+<p> costo: {{ object.costo }}</p>
+<p> tipo: {{ object.tipo }}</p>
+<p> id: {{ object.pk }}</p>
+{% endblock %}

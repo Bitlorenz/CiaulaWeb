@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}Attivita Scelta: {{object.attrazione.nome}}{% endblock %}
+{% block content %}
+    <p>Giorno: {{ object.giorno }}</p>
+    <p>Ora Inizio: {{ object.oraInizio }}</p>
+    <p>Ora Fine: {{ object.oraFine }}</p>
+    <p>Luogo: {{ object.attrazione.luogo }}</p>
+    <p> id: {{ object.pk }}</p>
+{% endblock %}

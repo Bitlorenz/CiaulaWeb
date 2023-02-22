@@ -3,14 +3,13 @@
 {% block head %}
 {% endblock %}
 
-{% block title %}{{title}}{% endblock %}
+{% block title %}{{object.attrazione}}{% endblock %}
 {% block content %}
-    <center>
-        <h1>{{title}}</h1>
+    <h1>Modifica Scelta di {{ object.attrazione  }}</h1>
 
-        {% if title == "Modifica Scelta" and message == "" %}
+    <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Modifica">
+    </form>
 
-        <form action="/HolidayPlanning/modificascelta"></form>
-
-
-</html>
+{% endblock %}
