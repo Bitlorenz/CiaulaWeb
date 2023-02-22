@@ -7,8 +7,7 @@ controllo degli orari e giorno per la scelta
 mettere posizione nella giornata
 creazione vacanza
 creazione giornata
-!rimozione di una scelta!--> slide 49,50
-!modifica di una scelta!--> slide 47,48
+cambiare nome modello Scelta --> AttivitaModel
 	DOING:
 aggiunta di entries nel db: form per creare una scelta di attrazione
 aggiunta e creazione di una scelta basata sul luogo e città di una attrazione
