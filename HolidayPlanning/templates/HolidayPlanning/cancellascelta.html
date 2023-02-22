@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}Cancellazione Scelta {{ entita }}{% endblock %}
+{% block content %}
+    <h1>Modifica Scelta di {{ entita }}</h1>
+<br>
+    <form method="post">{% csrf_token %}
+    <p>Sicuro di voler cancellare {{ object }}?</p>
+    <input type="submit" value="Conferma">
+    </form>
+
+{% endblock %}
