@@ -1,49 +1,9 @@
-import datetime
-
-from django.http import HttpResponse, Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 
+from .forms import SearchForm
 from .models import Attrazione, Scelta
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
-
-
-# Create your views here.
-
-def crea_scelta_da_citta(request):
-    message = ""
-
-    if "citta" in request.GET and "luogo" in request.GET:
-        cittaScelta = request.GET["citta"]
-        # luogoScelta = request.GET["luogo"]
-        print("Citta inserita: " + cittaScelta)
-        # print("luogo inserito: " + luogoScelta)
-        posizioneInGiornata = 0
-
-        try:
-            posizioneInGiornata = int(request.GET["posizioneInGiornata"])
-        except Exception as e:
-            message = "Posizione non valida. Inserita posizione di default." + str(e)
-
-        att = get_object_or_404(Attrazione, citta=cittaScelta)
-        print(att.nome)
-        s = Scelta()
-        s.giorno = datetime.date(2023, 6, 12)
-        s.attrazione = att
-        s.oraInizio = datetime.time(20)
-        s.oraFine = datetime.time(22, 30)
-        s.durata = datetime.timedelta(hours=s.oraFine.hour - s.oraInizio.hour,
-                                      minutes=s.oraFine.minute - s.oraInizio.minute)
-        s.posizioneInGiornata = posizioneInGiornata
-
-        try:
-            s.save()
-            message = "Creazione Scelta riuscita!" + message
-        except Exception as e:
-            message = "Errore nella creazione della Scelta " + str(e)
-
-    return render(request, template_name="HolidayPlanning/scegliattr.html",
-                  context={"title": "Scegli Attrazione", "message": message})
 
 
 # class view per vedere tutte le attrazioni presenti
@@ -85,18 +45,20 @@ class ScelteList(ListView):
         context['titolo'] = "Attrazioni Scelte"
         return context
 
-#class detail view per una scelta
+
+# class detail view per una scelta
 class DetailSceltaEntita(DetailView):
     model = Scelta
     template_name = "HolidayPlanning/dettaglioscelta.html"
 
-#class detail view per un'attrazione
+
+# class detail view per un'attrazione
 class DetailAttrazioneEntita(DetailView):
     model = Attrazione
     template_name = "HolidayPlanning/dettaglioattrazione.html"
 
 
-#class per modificare una scelta data la chiave primaria
+# class per modificare una scelta data la chiave primaria
 class ModificaScelta(UpdateView):
     model = Scelta
     template_name = "HolidayPlanning/modificascelta.html"
@@ -107,7 +69,7 @@ class ModificaScelta(UpdateView):
         return reverse("HolidayPlanning:dettaglioscelta", kwargs={'pk': pk})
 
 
-#class delete view per eliminare una scelta
+# class delete view per eliminare una scelta
 class CancellaScelta(DeleteView):
     model = Scelta
     template_name = "HolidayPlanning/cancellascelta.html"
@@ -127,3 +89,35 @@ def lista_attrazioni(request):
     template = "HolidayPlanning/listaattrazioni.html"
     ctx = {"title": "lista di attrazioni", "listaattrazioni": Attrazione.objects.all()}
     return render(request, template_name=template, context=ctx)
+
+
+# ##FORMS###
+# raggiunta tramite richiesta GET, al click del pulsante submit, i dati inseriti (nei campi definiti dal SearchForm)
+# re-indirizzeranno sul secondo url, i cui parametri sono compilati in funzione di request.POST
+def cerca(request):
+    if request.method == "POST":
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            stringa = form.cleaned_data.get("search_string")
+            where = form.cleaned_data.get("search_where")  # indica la table su cui vogliamo fare la query
+            return redirect("HolidayPlanning:risultati", stringa, where)
+    else:
+        form = SearchForm()  # è il form personalizzato, passato poi in context
+
+    return render(request, template_name="HolidayPlanning/cerca.html", context={"form": form})
+
+
+class RisultatiList(ListView):
+    model = Attrazione
+    template_name = "HolidayPlanning/risultati.html"
+
+    def get_queryset(self):
+        stringa = self.request.resolver_match.kwargs["stringa"]
+        where = self.request.resolver_match.kwargs["where"]
+
+        if "Scelta" in where:
+            sc = Scelta.objects.filter(posizioneInGiornata__exact=int(stringa))
+            return sc
+        if "Attrazione" in where:
+            sa = Attrazione.objects.filter(citta__icontains=stringa)
+            return sa

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %} Form di ricerca {% endblock %}
+{% block content %}
+
+<h1>Pagina di Ricerca</h1>
+<form action="{% url 'HolidayPlanning:cerca' %}" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Cerca">
+</form>
+{% endblock %}
