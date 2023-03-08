@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import SearchForm
 from .models import Attrazione, Scelta
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
@@ -33,6 +34,7 @@ class ScegliAttrazione(CreateView):
 
 
 # class view per vedere tutte le scelte presenti
+
 class ScelteList(ListView):
     model = Scelta
     template_name = "HolidayPlanning/listascelte.html"
@@ -85,6 +87,7 @@ class CancellaScelta(DeleteView):
 
 
 # function view per vedere tutte le attrazioni presenti
+@login_required
 def lista_attrazioni(request):
     template = "HolidayPlanning/listaattrazioni.html"
     ctx = {"title": "lista di attrazioni", "listaattrazioni": Attrazione.objects.all()}
@@ -121,3 +124,31 @@ class RisultatiList(ListView):
         if "Attrazione" in where:
             sa = Attrazione.objects.filter(citta__icontains=stringa)
             return sa
+
+
+class SceltaFattaView(LoginRequiredMixin, DetailView):
+    model = Scelta
+    template_name = "HolidayPlanning/sceltafatta.html"
+    errore = "NO_ERRORS"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        c = ctx["object"]
+
+        if c.giorno != None:
+            if c.utente.pk != self.request.user.pk:
+                self.errore = "Non hai scelto attività per questo giorno"
+        else:
+            self.errore = "Attività ancora non scelta"
+
+        if self.errore == "NO_ERRORS":
+            try:
+                c.giorno = None
+                c.utente = None
+                c.save()
+            except Exception as e:
+                print("Errore! " + str(e))
+                self.errore = "Errore nell'operazione di restituzione"
+
+        return ctx
+

@@ -9,6 +9,19 @@ creazione vacanza
 creazione giornata
 cambiare nome modello Scelta --> AttivitaModel
 NON fare lista infinita attrazioni, Fare griglia come amazon
+nell'app profiles bisogna gestire i profili:
+-in views.py: UserCreationView, UserUpdateView, UserDetailView
+-in urls.py: urlpatterns deve contenere gli indirizzi delle views derivate da auth_views:LoginView,LogoutView,PasswordChangeView,
+più anche le views contenute in views.py
+-in admin.py: si può lasciare com'è oppure aggiungere una classe UserProfileModelAdmin con dei campi che filtrano gli
+attributi
+-in forms.py: classe form (eredita da UserCreationForm) per il form di creazione utente e UserUpdateForm per l'aggiornamento
+-in mixins.py: una classe IsMyselfMixin per controllare che l'utente che fa la richiesta sia lo stesso che deve essere
+modificato, con all'interno solo un metodo dispatch
+-in model aggiungere un campo bool per contrassegnare se un utente è un tour manager
+-aggiungere la classe ProfilesTest con tutte le funzioni di test connesse
+
+
 DA Mockup_Holidayplanning2_HOME
 La colonna dell' info profilo presenta la possibilità di registrarsi o accedere al profilo ciaulaweb
 ---> 	se si accede al profilo allora viene ricaricata la home, identica tranne per alcuni dettagli del profilo al 
