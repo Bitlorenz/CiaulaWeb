@@ -1,12 +1,12 @@
 	TO-DO:
+1)creazione vacanza
+2)creazione giornata
 aggiungere app profili per la gestione degli utenti
 come modello aggiungere solo un tipo di utente (abstract user)
 aggiungere campo foto all' attrazione
 contatore (globale?) per aggiungere la scelta in fondo alle altre scelte
 controllo degli orari e giorno per la scelta
 mettere posizione nella giornata
-creazione vacanza
-creazione giornata
 cambiare nome modello Scelta --> AttivitaModel
 NON fare lista infinita attrazioni, Fare griglia come amazon
 nell'app profiles bisogna gestire i profili:

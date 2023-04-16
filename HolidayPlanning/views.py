@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import SearchForm
-from .models import Attrazione, Scelta
+from .forms import SearchForm, CreaVacanzaForm
+from .models import Attrazione, Scelta, Vacanza
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
 
@@ -33,8 +33,19 @@ class ScegliAttrazione(CreateView):
     success_url = reverse_lazy("HolidayPlanning:scelte")
 
 
-# class view per vedere tutte le scelte presenti
+# class view per creare una vacanza
+class CreaVacanza(CreateView):
+    model = Vacanza
+    form_class = CreaVacanzaForm
+    template_name = "HolidayPlanning/crea_vacanza.html"
+    success_message = "Vacanza creata correttamente"
 
+    def form_valid(self, form):
+        #campi per attribuire l'appartenenza della vacanza ad un utente
+        #form.instance.creatore_vacanza = self.request.user
+        return super().form_valid(form)
+
+# class view per vedere tutte le scelte presenti
 class ScelteList(ListView):
     model = Scelta
     template_name = "HolidayPlanning/listascelte.html"
@@ -151,4 +162,3 @@ class SceltaFattaView(LoginRequiredMixin, DetailView):
                 self.errore = "Errore nell'operazione di restituzione"
 
         return ctx
-
