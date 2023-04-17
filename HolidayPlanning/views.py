@@ -33,12 +33,13 @@ class ScegliAttrazione(CreateView):
     success_url = reverse_lazy("HolidayPlanning:scelte")
 
 
-# class view per creare una vacanza
+# class view per iniziare a creare una vacanza
 class CreaVacanza(CreateView):
     model = Vacanza
     form_class = CreaVacanzaForm
     template_name = "HolidayPlanning/crea_vacanza.html"
-    success_message = "Vacanza creata correttamente"
+    #success_message = "Vacanza creata correttamente"
+    success_url = reverse_lazy("HolidayPlanning:scegliattrazione")
 
     def form_valid(self, form):
         #campi per attribuire l'appartenenza della vacanza ad un utente

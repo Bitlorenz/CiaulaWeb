@@ -15,4 +15,5 @@ urlpatterns = [
     path("cerca/", cerca, name="cerca"),
     path("risultati/<str:stringa>/<str:where>/", RisultatiList.as_view(), name="risultati"),
     path("sceltafatta/<pk>/", SceltaFattaView.as_view(), name="sceltafatta"),
+    path("creavacanza/", CreaVacanza.as_view(), name="creavacanza"),
 ]

@@ -1,5 +1,5 @@
 	TO-DO:
-1)creazione vacanza
+1)creazione vacanza ---> creazione oggetti Giornata, togliere campi totgiorni e totnotti
 2)creazione giornata
 aggiungere app profili per la gestione degli utenti
 come modello aggiungere solo un tipo di utente (abstract user)
@@ -9,7 +9,7 @@ controllo degli orari e giorno per la scelta
 mettere posizione nella giornata
 cambiare nome modello Scelta --> AttivitaModel
 NON fare lista infinita attrazioni, Fare griglia come amazon
-nell'app profiles bisogna gestire i profili:
+App Profiles per gestire i profili:
 -in views.py: UserCreationView, UserUpdateView, UserDetailView
 -in urls.py: urlpatterns deve contenere gli indirizzi delle views derivate da auth_views:LoginView,LogoutView,PasswordChangeView,
 più anche le views contenute in views.py

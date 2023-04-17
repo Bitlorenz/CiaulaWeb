@@ -1,3 +1,9 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %} Crea Vacanza {% endblock %}
+{% block content %}
+    <h2>Inserisci i dati per iniziare a pianfificare la tua vacanza!</h2>
+    {% crispy form %}
+    <a class="btn" href="{% url 'home' %}">Cancel</a>
+{% endblock %}

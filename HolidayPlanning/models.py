@@ -67,6 +67,7 @@ class Vacanza(models.Model):
     def __str__(self):
         return "ID: " + str(self.pk) + "inizio: " + str(self.dataArrivo) + " , fine: " + str(self.dataPartenza)
 
+#  TODO provare a spostarlo nella view tramite la funzione post
     def calcolaGiorniNotti(self):
         totGiorni = abs(Vacanza.dataArrivo - Vacanza.dataPartenza) +1
         totGiorni = totGiorni.day
