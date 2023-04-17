@@ -60,19 +60,18 @@ class Vacanza(models.Model):
     dataPartenza = models.DateField()
     nrPersone = models.IntegerField()
     budgetDisponibile = models.FloatField()
-    totGiorni = models.IntegerField()
-    totNotti = models.IntegerField()
     giornata = models.ManyToManyField(Giornata, related_name='vacanze')
 
     def __str__(self):
         return "ID: " + str(self.pk) + "inizio: " + str(self.dataArrivo) + " , fine: " + str(self.dataPartenza)
 
-#  TODO provare a spostarlo nella view tramite la funzione post
-    def calcolaGiorniNotti(self):
+    def calcolaGiorni(self):
         totGiorni = abs(Vacanza.dataArrivo - Vacanza.dataPartenza) +1
-        totGiorni = totGiorni.day
+        return totGiorni.day
+
+    def calcolaNotti(self):
         totNotti = abs(Vacanza.dataArrivo - Vacanza.dataPartenza)
-        totNotti = totNotti.day
+        return totNotti.day
     class Meta:
         verbose_name = "Vacanza"
         verbose_name_plural = "Vacanze"

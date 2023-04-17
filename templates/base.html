@@ -45,7 +45,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     {% block navbar %}
         <div class="w-75 container-fluid">
-        <a class="navbar-brand pl-5" href="{% url 'home' %}">
+        <a class="navbar-brand pl-5" href="{% url 'HolidayPlanning:attrazioni' %}">
             <img src="cropped-LOGO_CIAULA_FONDO_WHITE-32x32.png" width="32" height="32" class="d-inline-block align-top"
                  alt="Logo">
             CiaulaWeb
@@ -57,25 +57,25 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav pl-5">
                 <li class="nav-item active pl-5">
-                    <a class="nav-link" href="{% url 'holidayplanning:home' %}">Home</a>
+                    <a class="nav-link" href="{% url 'HolidayPlanning:attrazioni' %}">Home</a>
                 </li>
                 <li class="nav-item pl-5">
-                    <a class="nav-link" href="{% url 'holidayplanning:creavacanza' %}">Holiday Planning</a>
+                    <a class="nav-link" href="{% url 'HolidayPlanning:creavacanza' %}">Holiday Planning</a>
                 </li>
                 <li class="nav-item pl-5">
-                    <a class="nav-link" href="{% url 'holidayplanning:blog' %}">Blog</a>
+                    <a class="nav-link" href="{% url 'HolidayPlanning:cerca' %}">Blog</a>
                 </li>
                 <li class="nav-item pl-5">
-                    <a class="nav-link" href="{% url 'holidayplanning:contatti' %}">Contattaci</a>
+                    <a class="nav-link" href="{% url 'HolidayPlanning:scelte' %}">Contattaci</a>
                 </li>
                 <li class="nav-item pl-5">
-                    <a class="nav-link " href="{% url 'holidayplanning:tourpronti' %}">I Nostri Tour</a>
+                    <a class="nav-link " href="{% url 'HolidayPlanning:attrazioni' %}">I Nostri Tour</a>
                 </li>
                 <li class="nav-item pl-5">
-                    <a class="nav-link " href="{% url 'holidayplanning:login' %}">Login</a>
+                    <a class="nav-link " href="{% url 'HolidayPlanning:attrazioni' %}">Login</a>
                 </li>
                 <li class="nav-item pl-5">
-                    <a class="nav-link " href="{% url 'holidayplanning:register' %}">Registrati</a>
+                    <a class="nav-link " href="{% url 'HolidayPlanning:attrazioni' %}">Registrati</a>
                 </li>
             </ul>
         </div>

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'crispy_bootstrap4',
     'HolidayPlanning',
 ]
 
@@ -128,3 +129,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = "/?login=ok"
 LOGIN_URL = "/login/?auth=notok"
 #AUTH_USER_MODEL = "profiles.UserProfileModel"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

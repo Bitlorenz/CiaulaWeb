@@ -1,7 +1,22 @@
 	TO-DO:
-1)creazione vacanza ---> creazione oggetti Giornata, togliere campi totgiorni e totnotti
+1)creazione vacanza
+        creazione oggetti Giornata-->si creano totGiorni oggetti vacanza
+        aggiunta campo nome vacanza
 2)creazione giornata
-aggiungere app profili per la gestione degli utenti
+        data e numero giornata sono impostati programmaticamente alla creazione della giornata
+        totAttrazioni e totCosto possono essere rimossi come campi ed essere sostituiti da funzioni
+3)consistenza scelte
+        quando si fa una scelta si controlla che la data sia nel periodo della vacanza
+        quando si fa una scelta si controlla che la posizioneInGiornata non sia occupata
+4)creazione login
+        creazione di un profilo utente
+5)unione login e creazione vacanza
+        inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
+
+    DOING:
+
+
+    DONE:
 come modello aggiungere solo un tipo di utente (abstract user)
 aggiungere campo foto all' attrazione
 contatore (globale?) per aggiungere la scelta in fondo alle altre scelte
@@ -33,8 +48,7 @@ E' possibile scorrere solamente l'elenco delle attrazioni? ci devono essere più
 
 Modalità crea vacanza
 Campo arrivo, partenza, nr persone, budget disponibile x persona, questi campi sono settabili (inserire anche trasporto?)
-tramite calendari e text->int e text->float, i campi tot giorni e tot notti sono aggiornati al momento dell'inizia
-(sono necessari o basta solo mostrarli come informazioni?)
+tramite calendari e text->int e text->float
 --->	premuto il bottone inizia: se l'UTENTE è REGISTRATO vengono presi i valori dei campi e si crea un oggetto/
 	entità vacanza salvata nel db per l'utente e si passa alla schermata di holiday making, inoltre vengono settati
 	i tot giorni e notti, vengono creati tanti oggetti giorni tanti quanti sono i tot_giorni
