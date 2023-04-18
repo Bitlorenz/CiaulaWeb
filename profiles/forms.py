@@ -12,7 +12,7 @@ class UserProfileForm(UserCreationForm):
         return user  # restituisco quello che il metodo padre di questo metodo avrebbe restituito
 
 
-class CreaManagerView(UserCreationForm):
+class ManagerProfileForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit)
         g = Group.objects.get(name="Manager")
