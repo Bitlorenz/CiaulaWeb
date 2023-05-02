@@ -3,25 +3,21 @@ from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.views.generic import CreateView
 
-from profiles.forms import UserProfileForm, ManagerProfileForm
+from profiles.forms import UserCreationForm
 from profiles.models import UserProfileModel
 
 
 # View per creazione di utente normale
 class UserCreateView(CreateView):
-    #form_class = UserCreationForm
+    print("chiamata la view profiles.view.UserCreateView")
     model = UserProfileModel
-    form_class = UserProfileForm
-    template_name = "profiles/create_user.html"
+    #fields = ('first_name',)
+    form_class = UserCreationForm
+    template_name = "profiles/user_create.html"
     success_message = "Utente creato correttamente!"
-    success_url = reverse_lazy("login")
+    success_url = reverse_lazy("profiles:user-login")
 
 
 # view per aggiornare un profilo utente
-#class UserUpdateView(UpdateView):
+# class UserUpdateView(UpdateView):
 
-
-# view per creazione utente staff, tour manager, può aggiungere attività
-class ManagerCreateView(PermissionRequiredMixin, UserCreateView):
-    permission_required = "is_staff"
-    form_class = ManagerProfileForm

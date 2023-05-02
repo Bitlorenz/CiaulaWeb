@@ -1,22 +1,62 @@
-from django.contrib.auth.models import Group
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+from profiles.models import UserProfileModel
 
 
-class UserProfileForm(UserCreationForm):
-    #override del metodo save per assicurarci di assegnare il gruppo specificato all'utente appena registrato.
-    #I gruppi sono stati creati dal pannello web dell'admin.
+# class UserProfileForm(UserCreationForm):
+#    helper = FormHelper()
+#    helper.form_id = 'user_profile_crispy_form'
+#    helper.form_method = 'POST'
+#    helper.add_input(Submit('save', 'Save'))
+#    helper.inputs[0].field_classes = 'btn btn-success'
+
+#    class Meta:
+#        model = UserProfileModel
+#        fields =['first_name', 'last_name', 'email', 'codiceFiscale', 'telefono', 'dataDiNascita']
+
+class UserCreationForm(forms.ModelForm):
+    """A form for creating new users. Includes all the required
+        fields, plus a repeated password."""
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Conferma Password', widget=forms.PasswordInput)
+
+    class Meta:
+        model = UserProfileModel
+        fields = ['first_name', 'last_name', 'email', 'codiceFiscale', 'telefono', 'dataDiNascita']
+        labels = {'first_name': _('Nome'), 'last_name': _('Cognome'),
+                  'codiceFiscale': _('Codice Fiscale'), 'telefono': _('Telefono'), 'dataDiNascita': _('Data di Nascita')}
+
+    def clean_password2(self):
+        # Check that the two password entries match
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise ValidationError("Passwords don't match")
+        return password2
+
     def save(self, commit=True):
-        user = super().save(commit)  # ottengo un riferimento al turista
-        g = Group.objects.get(name="Turisti")  # cerco il gruppo che mi interessa
-        g.user_set.add(user)  # aggiungo l'utente al gruppo
-        return user  # restituisco quello che il metodo padre di questo metodo avrebbe restituito
-
-
-class ManagerProfileForm(UserCreationForm):
-    def save(self, commit=True):
-        user = super().save(commit)
-        g = Group.objects.get(name="Manager")
-        g.user_set.add(user)
+        # Save the provided password in hashed format
+        print("chiamata la funzione save di UserCreationForm ")
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
         return user
 
 
+class UserChangeForm(forms.ModelForm):
+    """A form for updating users. Includes all the fields on
+    the user, but replaces the password field with admin's
+    disabled password hash display field.
+    """
+    password = ReadOnlyPasswordHashField()
+
+    class Meta:
+        model = UserProfileModel
+        fields = ('email', 'password', 'is_active', 'is_admin')

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Attrazione
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -9,9 +9,9 @@ class UserAdmin(admin.ModelAdmin):
     fields = ["username"]
 
 
-admin.site.unregister(User)
-admin.site.unregister(Group)
+#admin.site.unregister(User)
+#admin.site.unregister(Group)
 
 # Register your models here.
 admin.site.register(Attrazione)
-admin.site.register(User, UserAdmin)
+#admin.site.register(User, UserAdmin)

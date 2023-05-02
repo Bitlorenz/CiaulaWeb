@@ -1,9 +1,5 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView
 
-def ciaulaweb_home(request):
-    return render(request, template_name="home.html")
 
-# sostituibile con
-# class HomeView(TemplateView):
-#   template_name = 'home.html'
-
+class HomeView(TemplateView):
+    template_name = 'homepage.html'

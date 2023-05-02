@@ -12,16 +12,31 @@
 5)unione login e creazione vacanza
         inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
 
+7)nell'app profiles fare dei template appositi per login e logout e inserire l'argomento template_name nella funzione
+as_view nel path corrispondente in urlpatterns
+
+8)aggiustare template base.html e homepage.html
+
+9)aggiungere campo foto al modello di attrazione
+
+10)aggiungere campo immagine al UserProfileModel, aggiungere i REQUIRED_FIELDS=[], aggiungere def __str__(self)
+
+
     DOING:
+
 4)creazione login
-        creazione di un profilo utente
-        creazione gruppi dal pannello admin
+        cosa fanno le variabili in settings.py: LOGIN_REDIRECT_URL, LOGIN_URL, AUTH_USER_MODEL
+        registrazione di un profilo utente
+        recuperare la schermata di admin
+        admin.py aggiustamento
+
 
     DONE:
+6)aggiustare file ciaulaweb\views.py: dare a template_name un valore esistente e in ciaulaweb\urls.py aggiungere il
+path('', HomeView.as_view(), name='home') con from ciaulaweb.views import HomeView
+!!!RISOLVERE InconsistentMigrationHistory !!!
 
 
-come modello aggiungere solo un tipo di utente (abstract user)
-aggiungere campo foto all' attrazione
 contatore (globale?) per aggiungere la scelta in fondo alle altre scelte
 controllo degli orari e giorno per la scelta
 mettere posizione nella giornata

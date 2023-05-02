@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_bootstrap4',
-    'HolidayPlanning',
+    'HolidayPlanning.apps.HolidayPlanningConfig',
+    'profiles.apps.ProfilesConfig'
 ]
 
 MIDDLEWARE = [
@@ -57,8 +58,7 @@ ROOT_URLCONF = 'ciaulaweb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,8 +126,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "/?login=ok"
-LOGIN_URL = "/login/?auth=notok"
-#AUTH_USER_MODEL = "profiles.UserProfileModel"
+#LOGIN_REDIRECT_URL = "/?login=ok"
+LOGIN_REDIRECT_URL = 'home'
+#LOGIN_URL = "/login/?auth=notok"
+LOGIN_URL = 'profiles:user-login'
+
+AUTH_USER_MODEL = "profiles.UserProfileModel"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+#DJANGO_SUPERUSER_USERNAME = 'root'

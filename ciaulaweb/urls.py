@@ -15,17 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from django.contrib.auth import views as auth_views
 
+from ciaulaweb.views import HomeView
 
+#from ciaulaweb.views import HomeView
 #from ciaulaweb.initcmds import erase_db, init_db
 
 urlpatterns = [
-    path('HolidayPlanning/', include('HolidayPlanning.urls')),
     path('admin/', admin.site.urls),
-    path("login/", auth_views.LoginView.as_view(), name="login"),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
-
+    path('', HomeView.as_view(), name='home'),
+    path('HolidayPlanning/', include('HolidayPlanning.urls')),
+    path('profiles/', include('profiles.urls')),
 ]
 
 #erase_db()
