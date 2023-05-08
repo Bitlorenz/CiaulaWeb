@@ -5,7 +5,7 @@ from profiles.views import UserCreateView
 app_name = 'profiles'
 
 urlpatterns = [
-    path("register/", UserCreateView.as_view(), name="user-registration"),
+    path("register/", UserCreateView.as_view(template_name='profiles/user_create.html'), name="user-registration"),
     path("login/", auth_views.LoginView.as_view(
         template_name='profiles/registration/login.html'
     ), name="user-login"),

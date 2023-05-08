@@ -12,8 +12,6 @@
 5)unione login e creazione vacanza
         inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
 
-7)nell'app profiles fare dei template appositi per login e logout e inserire l'argomento template_name nella funzione
-as_view nel path corrispondente in urlpatterns
 
 8)aggiustare template base.html e homepage.html
 
@@ -23,18 +21,27 @@ as_view nel path corrispondente in urlpatterns
 
 
     DOING:
+2)creazione giornata
+        data e numero giornata sono impostati programmaticamente alla creazione della giornata
+        totAttrazioni e totCosto possono essere rimossi come campi ed essere sostituiti da funzioni
+1)creazione vacanza
+        creazione oggetti Giornata-->si creano totGiorni oggetti vacanza
+        aggiunta campo nome vacanza
 
-4)creazione login
-        cosa fanno le variabili in settings.py: LOGIN_REDIRECT_URL, LOGIN_URL, AUTH_USER_MODEL
-        registrazione di un profilo utente
-        recuperare la schermata di admin
-        admin.py aggiustamento
 
 
     DONE:
 6)aggiustare file ciaulaweb\views.py: dare a template_name un valore esistente e in ciaulaweb\urls.py aggiungere il
 path('', HomeView.as_view(), name='home') con from ciaulaweb.views import HomeView
 !!!RISOLVERE InconsistentMigrationHistory !!!
+4)creazione login
+        cosa fanno le variabili in settings.py: LOGIN_REDIRECT_URL, LOGIN_URL, AUTH_USER_MODEL
+        registrazione di un profilo utente
+        recuperare la schermata di admin
+        admin.py aggiustamento
+7)nell'app profiles fare dei template appositi per login e logout e inserire l'argomento template_name nella funzione
+as_view nel path corrispondente in urlpatterns
+11)ripopolare db attrazioni
 
 
 contatore (globale?) per aggiungere la scelta in fondo alle altre scelte
