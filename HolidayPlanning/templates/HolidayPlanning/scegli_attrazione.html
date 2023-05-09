@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
 {% block title %} Scegli Attrazione {% endblock %}
+
 {% block content %}
-    <h1> Scegli Attrazione </h1>
+<h1> Scegli Attrazione </h1>
+
     {% crispy form %}
-    <a class="btn" href="{% url 'HolidayPlanning:attrazioni' %}">Aggiungi</a>
+    <a class="btn" href="{% url 'HolidayPlanning:attrazioni' %}">Cancella</a>
+
 {% endblock %}

@@ -18,7 +18,7 @@
             <li>{{ a.nome }} a {{a.luogo}} in {{a.citta}}<br>
             {# <a href="/HolidayPlanning/scegli/{{ a.citta }}/">Scegliere</a> #}
             {# <a href="/HolidayPlanning/visualizza/{{ a.citta }}/">Visualizzare</a> #}
-            <a href="{% url 'HolidayPlanning:attrazione' a.citta %}">Visualizzare</a>
+            <a href="{% url 'HolidayPlanning:scegliattrazione' a.id %}">Visualizzare</a>
             </li>
         {% endfor %}
         </ul>

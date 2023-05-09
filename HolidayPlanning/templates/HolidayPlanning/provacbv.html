@@ -3,13 +3,14 @@
 {% block title %} {{ titolo }} {% endblock %}
 
 {% block content %}
-
-    <h1> Lista di {{ view.get_model_name }}</h1>
-
-{% for p in object_list %}
-<ul>
-    {{ p.nome }}
-</ul>
-{% endfor %}
+    {% if object_list %}
+        <ul>
+            {% for attrazione in object_list %}
+                <li><a href="{% url 'HolidayPlanning:scegliattrazione' attrazione.id %}">{{ attrazione.nome }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Non ci sono attrazioni!</p>
+    {% endif %}
 
 {% endblock %}

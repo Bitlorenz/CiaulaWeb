@@ -11,14 +11,12 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView, D
 class AttrazioniList(ListView):
     model = Attrazione
     template_name = "HolidayPlanning/provacbv.html"
-
     # paginate_by = 10
-    # def get_queryset(self):
+    #def get_queryset(self):
     #    return self.model.objects.exclude(costo__exact=0)
 
     def get_model_name(self):
         return self.model._meta.verbose_name_plural
-
     # def get_context_data(self, **kwargs):
     #    context = super().get_context_data(**kwargs)
     #    context['titolo'] = "Attrazioni non gratuite"
@@ -26,10 +24,10 @@ class AttrazioniList(ListView):
 
 
 # class view per creare una scelta da un elenco di attrazioni
-class ScegliAttrazione(CreateView):
+class ScegliOrarioGiornoAttrazione(CreateView):
     model = Scelta
-    form_class = ScegliAttrazioneForm
     template_name = "HolidayPlanning/scegli_attrazione.html"
+    form_class = ScegliAttrazioneForm
     success_url = reverse_lazy("HolidayPlanning:scelte")
 
 
@@ -39,7 +37,7 @@ class CreaVacanza(CreateView):
     form_class = CreaVacanzaForm
     template_name = "HolidayPlanning/crea_vacanza.html"
     #success_message = "Vacanza creata correttamente"
-    success_url = reverse_lazy("HolidayPlanning:attrazioni")
+    success_url = reverse_lazy("HolidayPlanning:scegliattrazione")
 
     def form_valid(self, form):
         #campi per attribuire l'appartenenza della vacanza ad un utente

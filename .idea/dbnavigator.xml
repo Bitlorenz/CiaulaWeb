@@ -46,11 +46,10 @@
     <connection id="1fe82640-ac06-471a-844d-ee45e1a0f7a2" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="1fe82640-ac06-471a-844d-ee45e1a0f7a2" dataset="main.HolidayPlanning_attrazione" active-filter-id="" />
-    <filter-actions connection-id="27fefe60-e079-4669-adc6-3be23d1cccb2" dataset="main.profiles_userprofilemodel" active-filter-id="" />
     <filter-actions connection-id="27fefe60-e079-4669-adc6-3be23d1cccb2" dataset="main.auth_group" active-filter-id="" />
     <filter-actions connection-id="27fefe60-e079-4669-adc6-3be23d1cccb2" dataset="main.auth_group_permissions" active-filter-id="" />
     <filter-actions connection-id="27fefe60-e079-4669-adc6-3be23d1cccb2" dataset="main.HolidayPlanning_vacanza" active-filter-id="" />
+    <filter-actions connection-id="1fe82640-ac06-471a-844d-ee45e1a0f7a2" dataset="main.HolidayPlanning_attrazione" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

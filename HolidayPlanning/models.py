@@ -38,7 +38,7 @@ class Scelta(models.Model):
         verbose_name_plural = "Scelte"
 
     # controllo ammissibilità ora inizio e fine, da chiamare nella creazione della scelta
-    def orariAmmissibili(self):
+    def orari_ammissibili(self):
         ammissibile = False
         if self.attrazione.oraApertura < (self.oraInizio and self.oraFine) < self.attrazione.oraChiusura:
             if self.oraInizio < self.oraFine:
@@ -60,11 +60,11 @@ class Vacanza(models.Model):
         return "ID: " + str(self.pk) + "inizio: " + str(self.dataArrivo) + " , fine: " + str(self.dataPartenza)
 
     def calcolaGiorni(self):
-        totGiorni = abs(Vacanza.dataArrivo - Vacanza.dataPartenza)
+        totGiorni = abs(Vacanza.dataPartenza - Vacanza.dataArrivo)
         return totGiorni.days+1
 
     def calcolaNotti(self):
-        totNotti = abs(Vacanza.dataArrivo - Vacanza.dataPartenza)
+        totNotti = abs(Vacanza.dataPartenza - Vacanza.dataPartenza)
         return totNotti.days
     class Meta:
         verbose_name = "Vacanza"
