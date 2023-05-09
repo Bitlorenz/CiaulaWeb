@@ -2,7 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
-from .models import Vacanza
+from .models import Vacanza, Scelta
 
 
 class SearchForm(forms.Form):
@@ -18,9 +18,21 @@ class CreaVacanzaForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_id = 'vacanza-crispy-form'
     helper.form_method = 'POST'
-    #TODO valutare opzione Save
     helper.add_input(Submit('submit', 'Crea Vacanza'))
     helper.inputs[0].field_classes = 'btn btn-success'
     class Meta:
         model = Vacanza
         fields = ['dataArrivo', 'dataPartenza', 'nrPersone', 'budgetDisponibile']
+
+
+class ScegliAttrazioneForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'scelta-crispy-form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Aggiungi'))
+    helper.inputs[0].field_classes = 'btn btn-success'
+
+    class Meta:
+        model = Scelta
+        fields = ['giorno', 'oraInizio', 'oraFine']
+

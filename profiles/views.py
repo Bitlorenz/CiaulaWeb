@@ -9,7 +9,6 @@ from profiles.models import UserProfileModel
 
 # View per creazione di utente normale
 class UserCreateView(CreateView):
-    print("chiamata la view profiles.view.UserCreateView")
     model = UserProfileModel
     #fields = ('first_name',)
     form_class = UserCreationForm

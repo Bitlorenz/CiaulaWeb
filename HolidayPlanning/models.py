@@ -1,5 +1,7 @@
 from django.db import models
 
+import ciaulaweb.settings
+
 
 class Attrazione(models.Model):
     objects = None
@@ -24,11 +26,9 @@ class Attrazione(models.Model):
 class Scelta(models.Model):
     giorno = models.DateField()  # scelto dall'utente
     attrazione = models.ForeignKey(to='Attrazione', on_delete=models.CASCADE, related_name="attrazione")
-    # utente = models.ForeignKey(to=profiles.models.UserProfileModel, related_name='Utente', on_delete=models.CASCADE)
     oraInizio = models.TimeField(blank=True)  # scelta dall'utente
     oraFine = models.TimeField(blank=True)  # scelta dall'utente
     durata = models.DurationField()  # questi sono i secondi della durata
-    posizioneInGiornata = models.IntegerField()  # numero progressivo
 
     def __str__(self):
         return "ID: " + str(self.pk) + "scelta: " + str(self.attrazione) + " , il " + str(self.giorno)
@@ -36,23 +36,16 @@ class Scelta(models.Model):
     class Meta:
         verbose_name = "Scelta"
         verbose_name_plural = "Scelte"
-    # override del metodo save
-    # controllare che ora inizio e fine siano ammissibili
+
+    # controllo ammissibilità ora inizio e fine, da chiamare nella creazione della scelta
+    def orariAmmissibili(self):
+        ammissibile = False
+        if self.attrazione.oraApertura < (self.oraInizio and self.oraFine) < self.attrazione.oraChiusura:
+            if self.oraInizio < self.oraFine:
+                ammissibile = True
+        return ammissibile
 
 
-class Giornata(models.Model):
-    data = models.DateField()
-    numeroGiornata = models.IntegerField()
-    totAttrazioni = models.IntegerField()
-    totCosto = models.FloatField()
-    scelte = models.ManyToManyField(Scelta, related_name='giornate')
-
-    def __str__(self):
-        return "ID: " + str(self.pk) + "giorno: " + str(self.data) + " , num " + str(self.numeroGiornata)
-
-    class Meta:
-        verbose_name = "Giornata"
-        verbose_name_plural = "Giornate"
 
 
 class Vacanza(models.Model):
@@ -60,18 +53,19 @@ class Vacanza(models.Model):
     dataPartenza = models.DateField()
     nrPersone = models.IntegerField()
     budgetDisponibile = models.FloatField()
-    giornata = models.ManyToManyField(Giornata, related_name='vacanze')
+    utente = models.ForeignKey(to=ciaulaweb.settings.AUTH_USER_MODEL, related_name='Utente', on_delete=models.CASCADE)
+    scelte = models.ManyToManyField(Scelta, related_name='vacanze')
 
     def __str__(self):
         return "ID: " + str(self.pk) + "inizio: " + str(self.dataArrivo) + " , fine: " + str(self.dataPartenza)
 
     def calcolaGiorni(self):
-        totGiorni = abs(Vacanza.dataArrivo - Vacanza.dataPartenza) +1
-        return totGiorni.day
+        totGiorni = abs(Vacanza.dataArrivo - Vacanza.dataPartenza)
+        return totGiorni.days+1
 
     def calcolaNotti(self):
         totNotti = abs(Vacanza.dataArrivo - Vacanza.dataPartenza)
-        return totNotti.day
+        return totNotti.days
     class Meta:
         verbose_name = "Vacanza"
         verbose_name_plural = "Vacanze"
