@@ -32,11 +32,15 @@ class ScegliAttrazioneForm(forms.ModelForm):
     helper.form_method = 'POST'
     helper.add_input(Submit('submit', 'Aggiungi'))
     helper.inputs[0].field_classes = 'btn btn-success'
-    q = get_object_or_404(Attrazione)
+
+    #def __init__(self, *args, **kwargs):
+    #    self.attrazione_id = kwargs.pop('attrazione')
+    #    super(ScegliAttrazioneForm, self).__init__(*args, **kwargs)
+
     def clean(self):
     #TODO bisogna mettere nella pagina l'id dell'attrazione da scegliere, si può mettere un choice field che recupera l'attrazione
     # da rivedere quando la primary key sarà passata tramite link
-       # att = get_object_or_404(Attrazione, pk=self.cleaned_data["attrazione"].id)
+        #att = get_object_or_404(Attrazione, pk=self.cleaned_data["attrazione"].pk)
         oraInizioInput = self.cleaned_data["oraInizio"]
         oraFineInput = self.cleaned_data["oraFine"]
        # if not att.oraApertura < (self.oraInizio and self.oraFine) < att.oraChiusura:

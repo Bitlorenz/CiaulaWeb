@@ -1,3 +1,5 @@
+from datetime import timedelta as td
+
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
@@ -12,7 +14,7 @@ class AttrazioniList(ListView):
     model = Attrazione
     template_name = "HolidayPlanning/provacbv.html"
     # paginate_by = 10
-    #def get_queryset(self):
+    # def get_queryset(self):
     #    return self.model.objects.exclude(costo__exact=0)
 
     def get_model_name(self):
@@ -28,23 +30,52 @@ class ScegliOrarioGiornoAttrazione(CreateView):
     model = Scelta
     template_name = "HolidayPlanning/scegli_attrazione.html"
     form_class = ScegliAttrazioneForm
-    success_url = reverse_lazy("HolidayPlanning:scelte")
+    # success_url = reverse_lazy("HolidayPlanning:scelte")
+
+    def get_context_data(self, **kwargs):
+        primary_key = self.kwargs['pk']
+        context = super().get_context_data(**kwargs)
+        context['title'] = primary_key
+        return context
+
+    # postprocessing della scelta
+    def form_valid(self, form):
+        scelta = form.save(commit=False)
+        scelta.attrazione = Attrazione(self.kwargs['pk'])
+        fine = scelta.oraFine
+        ini = scelta.oraInizio
+        scelta.durata = td(hours=fine.hour - ini.hour)+td(minutes=fine.minute-ini.minute)
+        creatore_scelta = self.request.user
+        rifvacanza = Vacanza.objects.filter(utente=creatore_scelta).last()
+        print(rifvacanza)
+        scelta.save()
+        rifvacanza.scelte.add(scelta)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        ctx = self.get_context_data()
+        pk = ctx["object"].pk
+        return reverse("HolidayPlanning:dettaglioscelta", kwargs={"pk": pk})
 
 
 # class view per iniziare a creare una vacanza
-class CreaVacanza(CreateView):
+class CreaVacanza(LoginRequiredMixin, CreateView):
     model = Vacanza
     form_class = CreaVacanzaForm
     template_name = "HolidayPlanning/crea_vacanza.html"
-    #success_message = "Vacanza creata correttamente"
-    success_url = reverse_lazy("HolidayPlanning:scegliattrazione")
+    success_url = reverse_lazy("HolidayPlanning:attrazioni")
+
+    #def get_context_data(self, **kwargs):
+    #    ctx = super().get_context_data(**kwargs)
+    #    c = ctx["object"]
 
     def form_valid(self, form):
-        #campi per attribuire l'appartenenza della vacanza ad un utente
-        #form.instance.creatore_vacanza = self.request.user
+        vacanza = form.save(commit=False)
+        vacanza.utente = self.request.user
+        vacanza.save()
         return super().form_valid(form)
 
-# class view per vedere tutte le scelte presenti
+
 class ScelteList(ListView):
     model = Scelta
     template_name = "HolidayPlanning/listascelte.html"
@@ -77,8 +108,8 @@ class ModificaScelta(UpdateView):
     fields = ['giorno', 'oraInizio', 'oraFine']
 
     def get_success_url(self):
-        pk = self.get_context_data()["object"].pk
-        return reverse("HolidayPlanning:dettaglioscelta", kwargs={'pk': pk})
+        # pk = self.get_context_data()["object"].pk
+        return reverse("HolidayPlanning:dettaglioscelta") # , kwargs={'pk': id})
 
 
 # class delete view per eliminare una scelta

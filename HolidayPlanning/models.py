@@ -1,6 +1,5 @@
 from django.db import models
-
-import ciaulaweb.settings
+from profiles.models import UserProfileModel
 
 
 class Attrazione(models.Model):
@@ -46,18 +45,16 @@ class Scelta(models.Model):
         return ammissibile
 
 
-
-
 class Vacanza(models.Model):
     dataArrivo = models.DateField()
     dataPartenza = models.DateField()
     nrPersone = models.IntegerField()
     budgetDisponibile = models.FloatField()
-    utente = models.ForeignKey(to=ciaulaweb.settings.AUTH_USER_MODEL, related_name='Utente', on_delete=models.CASCADE)
+    utente = models.ForeignKey(UserProfileModel, related_name='Utente', on_delete=models.PROTECT)
     scelte = models.ManyToManyField(Scelta, related_name='vacanze')
 
     def __str__(self):
-        return "ID: " + str(self.pk) + "inizio: " + str(self.dataArrivo) + " , fine: " + str(self.dataPartenza)
+        return "ID: " + str(self.pk) + " , inizio: " + str(self.dataArrivo) + " , fine: " + str(self.dataPartenza)
 
     def calcolaGiorni(self):
         totGiorni = abs(Vacanza.dataPartenza - Vacanza.dataArrivo)

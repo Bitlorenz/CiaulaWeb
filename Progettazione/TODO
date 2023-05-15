@@ -1,16 +1,7 @@
 	TO-DO:
-1)creazione vacanza
-        creazione oggetti Giornata-->si creano totGiorni oggetti vacanza
-        aggiunta campo nome vacanza
-2)creazione giornata
-        data e numero giornata sono impostati programmaticamente alla creazione della giornata
-        totAttrazioni e totCosto possono essere rimossi come campi ed essere sostituiti da funzioni
 3)consistenza scelte
         quando si fa una scelta si controlla che la data sia nel periodo della vacanza
         quando si fa una scelta si controlla che la posizioneInGiornata non sia occupata
-
-5)unione login e creazione vacanza
-        inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
 
 
 8)aggiustare template base.html e homepage.html
@@ -21,16 +12,18 @@
 
 
     DOING:
-2)creazione giornata
-        data e numero giornata sono impostati programmaticamente alla creazione della giornata
-        totAttrazioni e totCosto possono essere rimossi come campi ed essere sostituiti da funzioni
+13)aggiunta della scelta alla vacanza: aggiungere controllo if quando si recupera l'utente dal metodo form_valid di
+    form_valid scegliorariogiornoatt
+12)collegamento utente-vacanza: aggiungere gli if del controllo
 1)creazione vacanza
-        creazione oggetti Giornata-->si creano totGiorni oggetti vacanza
         aggiunta campo nome vacanza
 
 
 
     DONE:
+
+5)unione login e creazione vacanza
+        inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
 6)aggiustare file ciaulaweb\views.py: dare a template_name un valore esistente e in ciaulaweb\urls.py aggiungere il
 path('', HomeView.as_view(), name='home') con from ciaulaweb.views import HomeView
 !!!RISOLVERE InconsistentMigrationHistory !!!
