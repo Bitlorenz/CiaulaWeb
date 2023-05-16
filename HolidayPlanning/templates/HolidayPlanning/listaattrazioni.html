@@ -1,31 +1,15 @@
 {% extends "base.html" %}
 
-{% block head %}
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href='{% static "css/style.css" %}'>
-{% endblock %}
-
 {% block title %}{{title}}{% endblock %}
 
 {% block content %}
-    <center>
-        <h1>{{title}}</h1>
-
-    {% if listaattrazioni.count > 0 %}
-        <p> Ci sono ben {{listaattrazioni.count}} da scegliere! </p>
+    {% if object_list %}
         <ul>
-        {% for a in listaattrazioni %}
-            <li>{{ a.nome }} a {{a.luogo}} in {{a.citta}}<br>
-            {# <a href="/HolidayPlanning/scegli/{{ a.citta }}/">Scegliere</a> #}
-            {# <a href="/HolidayPlanning/visualizza/{{ a.citta }}/">Visualizzare</a> #}
-            <a href="{% url 'HolidayPlanning:scegliattrazione' a.id %}">Visualizzare</a>
-            </li>
-        {% endfor %}
+            {% for attrazione in object_list %}
+                <li><a href="{% url 'HolidayPlanning:dettaglioattr' attrazione.pk%}">{{ attrazione.nome }}</a></li>
+            {% endfor %}
         </ul>
     {% else %}
         <p>Non ci sono attrazioni!</p>
     {% endif %}
-
-    </center>
-
 {% endblock %}

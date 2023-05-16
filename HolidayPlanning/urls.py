@@ -1,10 +1,9 @@
-from django.urls import path, include
-from django.contrib import admin
+from django.urls import path
 from .views import *
 
 app_name = 'HolidayPlanning'
 urlpatterns = [
-    path("listaattrazioni/", lista_attrazioni, name="listaattrazioni"),
+    path("listaattrazioni/", AttrazioniHome.as_view(), name="listaattrazioni"),
     path("attrazioni/", AttrazioniList.as_view(), name="attrazioni"),
     path("scegliattrazione/<pk>", ScegliOrarioGiornoAttrazione.as_view(), name="scegliattrazione"),
     path("listascelte/", ScelteList.as_view(), name="scelte"),

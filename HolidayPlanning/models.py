@@ -57,12 +57,13 @@ class Vacanza(models.Model):
         return "ID: " + str(self.pk) + " , inizio: " + str(self.dataArrivo) + " , fine: " + str(self.dataPartenza)
 
     def calcolaGiorni(self):
-        totGiorni = abs(Vacanza.dataPartenza - Vacanza.dataArrivo)
-        return totGiorni.days+1
+        totGiorni = abs(self.dataPartenza - self.dataArrivo)
+        return totGiorni.days + 1
 
     def calcolaNotti(self):
-        totNotti = abs(Vacanza.dataPartenza - Vacanza.dataPartenza)
+        totNotti = abs(self.dataPartenza - self.dataPartenza)
         return totNotti.days
+
     class Meta:
         verbose_name = "Vacanza"
         verbose_name_plural = "Vacanze"

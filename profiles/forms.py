@@ -5,10 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 from profiles.models import UserProfileModel
 
-"""A form for creating new users. Includes all the required
-        fields, plus a repeated password."""
 
-
+# Un form per creare nuovi utenti. Include tutti i campi richiesti e una password ripetuta
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Conferma Password', widget=forms.PasswordInput)

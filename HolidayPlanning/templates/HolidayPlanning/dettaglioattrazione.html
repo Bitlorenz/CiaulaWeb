@@ -5,8 +5,13 @@
 
 {% block title %}Dettaglio attrazione: {{object.nome}}{% endblock %}
 {% block content %}
-<p> citta: {{ object.citta }}</p>
+<p> città: {{ object.citta }}</p>
+<p> luogo: {{ object.luogo }}</p>
+<p> via: {{ object.via }}</p>
 <p> costo: {{ object.costo }}</p>
 <p> tipo: {{ object.tipo }}</p>
+<p> Inizia alle: {{ object.oraApertura }}</p>
+<p> Finisce alle: {{ object.oraChiusura }}</p>
+<p> Attività: {{ object.descrizione }}</p>
 <p> id: {{ object.pk }}</p>
 {% endblock %}

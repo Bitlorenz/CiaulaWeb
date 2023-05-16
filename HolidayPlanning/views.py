@@ -13,16 +13,9 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView, D
 class AttrazioniList(ListView):
     model = Attrazione
     template_name = "HolidayPlanning/provacbv.html"
-    # paginate_by = 10
-    # def get_queryset(self):
-    #    return self.model.objects.exclude(costo__exact=0)
 
     def get_model_name(self):
         return self.model._meta.verbose_name_plural
-    # def get_context_data(self, **kwargs):
-    #    context = super().get_context_data(**kwargs)
-    #    context['titolo'] = "Attrazioni non gratuite"
-    #    return context
 
 
 # class view per creare una scelta da un elenco di attrazioni
@@ -30,7 +23,7 @@ class ScegliOrarioGiornoAttrazione(CreateView):
     model = Scelta
     template_name = "HolidayPlanning/scegli_attrazione.html"
     form_class = ScegliAttrazioneForm
-    # success_url = reverse_lazy("HolidayPlanning:scelte")
+    success_url = reverse_lazy("HolidayPlanning:scelte")
 
     def get_context_data(self, **kwargs):
         primary_key = self.kwargs['pk']
@@ -38,24 +31,50 @@ class ScegliOrarioGiornoAttrazione(CreateView):
         context['title'] = primary_key
         return context
 
+
     # postprocessing della scelta
     def form_valid(self, form):
         scelta = form.save(commit=False)
-        scelta.attrazione = Attrazione(self.kwargs['pk'])
+        ctx = self.get_context_data()
+        primary_key = ctx['title']
+        scelta.attrazione = Attrazione.objects.get(pk=primary_key)
+        att = scelta.attrazione
         fine = scelta.oraFine
         ini = scelta.oraInizio
+        print("oraFine: " + str(fine)+" oraInizio: "+str(ini)+" oraApertura attrazione: "+str(scelta.attrazione.oraApertura))
         scelta.durata = td(hours=fine.hour - ini.hour)+td(minutes=fine.minute-ini.minute)
         creatore_scelta = self.request.user
         rifvacanza = Vacanza.objects.filter(utente=creatore_scelta).last()
-        print(rifvacanza)
-        scelta.save()
-        rifvacanza.scelte.add(scelta)
-        return super().form_valid(form)
+        if not (scelta.attrazione.oraApertura < ini < scelta.attrazione.oraChiusura
+                and scelta.attrazione.oraApertura < fine < scelta.attrazione.oraChiusura):
+            print("ORARI NON AMMISSIBILI")
+            form.add_error("oraInizio", "Inserire orario compreso tra: "+str(att.oraApertura)+" e "+str(att.oraChiusura))
+            form.add_error("oraFine", "Inserire orario compreso tra: " + str(att.oraApertura)+" e "+str(att.oraChiusura))
+            # elif not rifvacanza.dataArrivo < scelta.giorno < rifvacanza.dataPartenza:
+            #    form.add_error("giorno", "Inserire giorno tra "+str(rifvacanza.dataArrivo)+" e "+str(rifvacanza.dataPartenza))
+            # elif self.checkSovrapposizione(self, fine, ini):
+            #    form.add_error("oraInizio", "Sovrapposizione con altre scelte")
+        else:
+            scelta.save()
+            rifvacanza.scelte.add(scelta)
+            return super().form_valid(form)
 
-    def get_success_url(self):
-        ctx = self.get_context_data()
-        pk = ctx["object"].pk
-        return reverse("HolidayPlanning:dettaglioscelta", kwargs={"pk": pk})
+def get_success_url(self):
+    ctx = self.get_context_data()
+    pk = ctx["object"].pk
+    return reverse("HolidayPlanning:dettaglioscelta", kwargs={"pk": pk})
+
+def checkSovrapposizione(self, fine, ini):
+    creatore_scelta = self.request.user
+    rifvacanza = Vacanza.objects.filter(utente=creatore_scelta).last()
+    scelteFatte = rifvacanza.scelte
+    for i in scelteFatte:
+        if i.oraInizio < ini and fine < i.oraFine: # sovrapposizione totale
+            return True
+        if i.oraInizio < ini < i.oraFine or i.oraInizio < fine < i.oraFine: # sovrapposizione parziale
+            return True
+    return False
+
 
 
 # class view per iniziare a creare una vacanza
@@ -128,11 +147,11 @@ class CancellaScelta(DeleteView):
 
 
 # function view per vedere tutte le attrazioni presenti
-@login_required
-def lista_attrazioni(request):
-    template = "HolidayPlanning/listaattrazioni.html"
+class AttrazioniHome(ListView):
+    model = Attrazione
+    template_name = "HolidayPlanning/listaattrazioni.html"
     ctx = {"title": "lista di attrazioni", "listaattrazioni": Attrazione.objects.all()}
-    return render(request, template_name=template, context=ctx)
+    # return render(request, template_name=template, context=ctx)
 
 
 # ##FORMS###

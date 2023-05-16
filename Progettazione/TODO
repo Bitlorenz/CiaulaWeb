@@ -1,17 +1,24 @@
 	TO-DO:
-3)consistenza scelte
-        quando si fa una scelta si controlla che la data sia nel periodo della vacanza
-        quando si fa una scelta si controlla che la posizioneInGiornata non sia occupata
+	        BACKEND
+19)fare detail view della vacanza con tutte le scelte, raggruppate per giorni, e alcuni dettagli di queste
+    OPERAZIONI FINE VACANZA                          OPERAZIONI SULLE SCELTE
+    concludere la vacanza e stampare il piano        continuare ad aggiungere e modificare scelte
+    concludere e comprare tutte le scelte            cancellare una scelta
+18)aggiungere controllo sui giorni di creazione della vacanza direttamente nel form
+9)aggiungere campo foto al modello di attrazione
+10)aggiungere campo immagine al UserProfileModel
+17)mettere mixin login required nella lista di attrazioni da scegliere e nella pagina della scleta
 
-
+            FRONTEND
+15)da base.html non si può raggiungere attrazioni.html perchè è riservata a chi fa una vacanza (e crea le scelte)
+16)sistemare detailview attrazione con tutti i campi e la foto
 8)aggiustare template base.html e homepage.html
 
-9)aggiungere campo foto al modello di attrazione
-
-10)aggiungere campo immagine al UserProfileModel, aggiungere i REQUIRED_FIELDS=[], aggiungere def __str__(self)
 
 
     DOING:
+3)consistenza scelte
+        quando si fa una scelta si controlla che non si sovrapponga ad altre
 13)aggiunta della scelta alla vacanza: aggiungere controllo if quando si recupera l'utente dal metodo form_valid di
     form_valid scegliorariogiornoatt
 12)collegamento utente-vacanza: aggiungere gli if del controllo
@@ -21,7 +28,10 @@
 
 
     DONE:
-
+3)consistenza scelte
+    quando si fa una scelta si controlla che la data sia nel periodo della vacanza
+14)ListView lista attrazioni che mostra le attrazioni in prima pagina (home) e rimanda nella detail view di ogni
+ attrazione, a differenza della pagina attrazioni è raggiungibile senza il login
 5)unione login e creazione vacanza
         inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
 6)aggiustare file ciaulaweb\views.py: dare a template_name un valore esistente e in ciaulaweb\urls.py aggiungere il
