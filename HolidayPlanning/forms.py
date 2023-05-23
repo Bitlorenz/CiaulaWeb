@@ -33,6 +33,12 @@ class ScegliAttrazioneForm(forms.ModelForm):
     helper.add_input(Submit('submit', 'Aggiungi'))
     helper.inputs[0].field_classes = 'btn btn-success'
 
+    def __init__(self, *args, **kwargs):
+        pkattrazione = kwargs.pop()
+        print("oggetto recuperato nel form: "+pkattrazione)
+        super(ScegliAttrazioneForm, self).__init__(*args, **kwargs)
+
+  
     def clean(self):
         oraInizioInput = self.cleaned_data["oraInizio"]
         oraFineInput = self.cleaned_data["oraFine"]
