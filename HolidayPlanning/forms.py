@@ -1,3 +1,7 @@
+import gettext
+_ = gettext.gettext
+from datetime import timedelta as td
+
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -21,6 +25,7 @@ class CreaVacanzaForm(forms.ModelForm):
     helper.form_method = 'POST'
     helper.add_input(Submit('submit', 'Crea Vacanza'))
     helper.inputs[0].field_classes = 'btn btn-success'
+
     class Meta:
         model = Vacanza
         fields = ['dataArrivo', 'dataPartenza', 'nrPersone', 'budgetDisponibile']
@@ -33,14 +38,29 @@ class ScegliAttrazioneForm(forms.ModelForm):
     helper.add_input(Submit('submit', 'Aggiungi'))
     helper.inputs[0].field_classes = 'btn btn-success'
 
+    def __init__(self, pk, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        a = get_object_or_404(Attrazione, pk=pk)
+        self.attrazione = a
+        self.fields['attrazione'].initial = a
+        self.fields['attrazione'].disabled = True
+        self.fields['attrazione'].widget.attrs["readonly"] = True
+
     def clean(self):
-        oraInizioInput = self.cleaned_data["oraInizio"]
-        oraFineInput = self.cleaned_data["oraFine"]
-        if oraFineInput < oraInizioInput:
-            self.add_error("oraInizio", "Errore: orario non ammissibile")
+        a = self.attrazione
+        ini = self.cleaned_data["oraInizio"]
+        fine = self.cleaned_data["oraFine"]
+        if fine < ini:
+            raise forms.ValidationError(_("Valore non valido: Ora di Inizio precede Ora di Fine"))
+        if not a.oraApertura <= ini <= a.oraChiusura:
+            print("ORARI NON AMMISSIBILI")
+            self.add_error("oraInizio", "Inserire orario compreso tra: "+str(a.oraApertura)+" e "+str(a.oraChiusura))
+        if not a.oraApertura <= fine <= a.oraChiusura:
+            print("ORARI NON AMMISSIBILI")
+            self.add_error("oraFine", "Inserire orario compreso tra: " + str(a.oraApertura)+" e "+str(a.oraChiusura))
         return self.cleaned_data
 
     class Meta:
         model = Scelta
-        fields = ['giorno', 'oraInizio', 'oraFine']
+        fields = ['attrazione', 'giorno', 'oraInizio', 'oraFine']
 

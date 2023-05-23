@@ -1,6 +1,6 @@
 from datetime import timedelta as td
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,55 +18,28 @@ class AttrazioniList(ListView):
         return self.model._meta.verbose_name_plural
 
 
-# class view per creare una scelta da un elenco di attrazioni
-class ScegliOrarioGiornoAttrazione(CreateView):
-    model = Scelta
-    template_name = "HolidayPlanning/scegli_attrazione.html"
-    form_class = ScegliAttrazioneForm
-    success_url = reverse_lazy("HolidayPlanning:scelte")
-
-    def get_context_data(self, **kwargs):
-        primary_key = self.kwargs['pk']
-        context = super().get_context_data(**kwargs)
-        context['title'] = primary_key
-        return context
-
-
-    # postprocessing della scelta
-    def form_valid(self, form):
-        scelta = form.save(commit=False)
-        ctx = self.get_context_data()
-        primary_key = ctx['title']
-        scelta.attrazione = Attrazione.objects.get(pk=primary_key)
-        att = scelta.attrazione
-        fine = scelta.oraFine
-        ini = scelta.oraInizio
-        print("oraFine: " + str(fine)+" oraInizio: "+str(ini)+" oraApertura attrazione: "+str(scelta.attrazione.oraApertura))
-        scelta.durata = td(hours=fine.hour - ini.hour)+td(minutes=fine.minute-ini.minute)
-        creatore_scelta = self.request.user
-        rifvacanza = Vacanza.objects.filter(utente=creatore_scelta).last()
-        if not (scelta.attrazione.oraApertura < ini < scelta.attrazione.oraChiusura
-                and scelta.attrazione.oraApertura < fine < scelta.attrazione.oraChiusura):
-            print("ORARI NON AMMISSIBILI")
-            form.add_error("oraInizio", "Inserire orario compreso tra: "+str(att.oraApertura)+" e "+str(att.oraChiusura))
-            form.add_error("oraFine", "Inserire orario compreso tra: " + str(att.oraApertura)+" e "+str(att.oraChiusura))
-            # elif not rifvacanza.dataArrivo < scelta.giorno < rifvacanza.dataPartenza:
-            #    form.add_error("giorno", "Inserire giorno tra "+str(rifvacanza.dataArrivo)+" e "+str(rifvacanza.dataPartenza))
-            # elif self.checkSovrapposizione(self, fine, ini):
-            #    form.add_error("oraInizio", "Sovrapposizione con altre scelte")
-        else:
+def scegliattrazione(request, pk):
+    if request.method == "POST":
+        form = ScegliAttrazioneForm(data=request.POST, pk=pk)
+        if form.is_valid():
+            scelta = form.save(commit=False)
+            rifvacanza = Vacanza.objects.filter(utente=request.user).last()
+            ini = form.cleaned_data.get("oraInizio")
+            fine = form.cleaned_data.get("oraFine")
+            scelta.durata = td(hours=fine.hour - ini.hour) + td(minutes=fine.minute - ini.minute)
+            checkSovrapposizione(request, fine, ini)
             scelta.save()
             rifvacanza.scelte.add(scelta)
-            return super().form_valid(form)
+            return redirect("HolidayPlanning:dettaglioscelta", scelta.pk)
+    else:
+        att = get_object_or_404(Attrazione, pk=pk)
+        form = ScegliAttrazioneForm(pk=pk)
+        return render(request, template_name="HolidayPlanning/scegli_attrazione.html", context={"form": form, "att": att, "title": att.nome})
+    return render(request, template_name="HolidayPlanning/scegli_attrazione.html", context={"form": form})
 
-def get_success_url(self):
-    ctx = self.get_context_data()
-    pk = ctx["object"].pk
-    return reverse("HolidayPlanning:dettaglioscelta", kwargs={"pk": pk})
-
-def checkSovrapposizione(self, fine, ini):
-    creatore_scelta = self.request.user
-    rifvacanza = Vacanza.objects.filter(utente=creatore_scelta).last()
+#TODO spostare in ScegliAttrazioneForm passando al form anche l'user
+def checkSovrapposizione(request, fine, ini):
+    rifvacanza = Vacanza.objects.filter(utente=request.user).last()
     scelteFatte = rifvacanza.scelte
     for i in scelteFatte:
         if i.oraInizio < ini and fine < i.oraFine: # sovrapposizione totale
@@ -76,17 +49,12 @@ def checkSovrapposizione(self, fine, ini):
     return False
 
 
-
 # class view per iniziare a creare una vacanza
 class CreaVacanza(LoginRequiredMixin, CreateView):
     model = Vacanza
     form_class = CreaVacanzaForm
     template_name = "HolidayPlanning/crea_vacanza.html"
     success_url = reverse_lazy("HolidayPlanning:attrazioni")
-
-    #def get_context_data(self, **kwargs):
-    #    ctx = super().get_context_data(**kwargs)
-    #    c = ctx["object"]
 
     def form_valid(self, form):
         vacanza = form.save(commit=False)
