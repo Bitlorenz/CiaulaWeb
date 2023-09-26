@@ -37,13 +37,13 @@ def scegliattrazione(request, pk):
         return render(request, template_name="HolidayPlanning/scegli_attrazione.html", context={"form": form, "att": att, "title": att.nome})
     return render(request, template_name="HolidayPlanning/scegli_attrazione.html", context={"form": form})
 
-#TODO spostare in ScegliAttrazioneForm passando al form anche l'user
+#TODO non ritornare T/F, ma stampare un messaggio avvertendo che c'è sovrapposizione con la specifica scelta
 def checkSovrapposizione(request, fine, ini):
     rifvacanza = Vacanza.objects.filter(utente=request.user).last()
     scelteFatte = rifvacanza.scelte
     for i in scelteFatte:
         if i.oraInizio < ini and fine < i.oraFine: # sovrapposizione totale
-            return True
+            sovrapposta = i
         if i.oraInizio < ini < i.oraFine or i.oraInizio < fine < i.oraFine: # sovrapposizione parziale
             return True
     return False
@@ -117,7 +117,7 @@ class CancellaScelta(DeleteView):
 # function view per vedere tutte le attrazioni presenti
 class AttrazioniHome(ListView):
     model = Attrazione
-    template_name = "HolidayPlanning/listaattrazioni.html"
+    template_name = "HolidayPlanning/homeattrazioni.html"
     ctx = {"title": "lista di attrazioni", "listaattrazioni": Attrazione.objects.all()}
     # return render(request, template_name=template, context=ctx)
 

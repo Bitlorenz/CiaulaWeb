@@ -26,6 +26,10 @@ class CreaVacanzaForm(forms.ModelForm):
     helper.add_input(Submit('submit', 'Crea Vacanza'))
     helper.inputs[0].field_classes = 'btn btn-success'
 
+    def clean(self):
+        if self.cleaned_data["dataArrivo"] > self.cleaned_data["dataPartenza"]:
+            raise forms.ValidationError(_("Valori non validi: Data di Arrivo precede data di Partenza"))
+
     class Meta:
         model = Vacanza
         fields = ['dataArrivo', 'dataPartenza', 'nrPersone', 'budgetDisponibile']
@@ -41,6 +45,8 @@ class ScegliAttrazioneForm(forms.ModelForm):
     def __init__(self, pk, *args, **kwargs):
         super().__init__(*args, **kwargs)
         a = get_object_or_404(Attrazione, pk=pk)
+        utente = kwargs.pop("user")
+        print(str(utente))
         self.attrazione = a
         self.fields['attrazione'].initial = a
         self.fields['attrazione'].disabled = True
@@ -51,12 +57,12 @@ class ScegliAttrazioneForm(forms.ModelForm):
         ini = self.cleaned_data["oraInizio"]
         fine = self.cleaned_data["oraFine"]
         if fine < ini:
-            raise forms.ValidationError(_("Valore non valido: Ora di Inizio precede Ora di Fine"))
+            raise forms.ValidationError(_("Valori non validi: Ora di Inizio precede Ora di Fine"))
         if not a.oraApertura <= ini <= a.oraChiusura:
-            print("ORARI NON AMMISSIBILI")
+            raise forms.ValidationError(_("Orario di Inizio non valido"))
             self.add_error("oraInizio", "Inserire orario compreso tra: "+str(a.oraApertura)+" e "+str(a.oraChiusura))
         if not a.oraApertura <= fine <= a.oraChiusura:
-            print("ORARI NON AMMISSIBILI")
+            raise forms.ValidationError(_("Orario di Fine non valido"))
             self.add_error("oraFine", "Inserire orario compreso tra: " + str(a.oraApertura)+" e "+str(a.oraChiusura))
         return self.cleaned_data
 

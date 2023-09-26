@@ -86,14 +86,16 @@
           <description value="db progetto ciaulaweb" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
-          <database-version value="3.39" />
-          <driver-source value="BUILTIN" />
+          <database-version value="3.41" />
+          <driver-source value="BUNDLED" />
           <driver-library value="" />
           <driver value="" />
           <url-type value="FILE" />
           <host value="" />
           <port value="" />
           <database value="" />
+          <tns-folder value="" />
+          <tns-profile value="" />
           <files>
             <file path="$PROJECT_DIR$/db.sqlite3" schema="main" />
           </files>
@@ -173,14 +175,16 @@
           <description value="" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
-          <database-version value="3.39" />
-          <driver-source value="BUILTIN" />
+          <database-version value="3.41" />
+          <driver-source value="BUNDLED" />
           <driver-library value="" />
           <driver value="" />
           <url-type value="FILE" />
           <host value="" />
           <port value="" />
           <database value="" />
+          <tns-folder value="" />
+          <tns-profile value="" />
           <files>
             <file path="$PROJECT_DIR$/db.sqlite3" schema="main" />
           </files>

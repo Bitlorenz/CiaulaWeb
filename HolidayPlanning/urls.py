@@ -6,7 +6,6 @@ urlpatterns = [
     path("listaattrazioni/", AttrazioniHome.as_view(), name="listaattrazioni"),
     path("attrazioni/", AttrazioniList.as_view(), name="attrazioni"),
     path("scegliattrazione/<pk>", scegliattrazione, name="scegli"),
-    #path("scegliattrazione/<pk>", ScegliOrarioGiornoAttrazione.as_view(), name="scegliattrazione"),
     path("listascelte/", ScelteList.as_view(), name="scelte"),
     path("detscelta/<pk>", DetailSceltaEntita.as_view(), name="dettaglioscelta"),
     path("detattrazione/<pk>/", DetailAttrazioneEntita.as_view(), name="dettaglioattr"),

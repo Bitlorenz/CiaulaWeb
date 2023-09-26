@@ -1,0 +1,28 @@
+codice html per includere i popup modal nella homepage dopo che si è fatto l'accesso, però forse è meglio usare i django messages
+
+
+{% if user.is_authenticated and "ok" in request.GET.login %}
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Benvenuto {{ user.name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p> La procedura di login è andata a buon fine </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#modal").modal('show');
+        });
+    </script>
+{% endif %}
