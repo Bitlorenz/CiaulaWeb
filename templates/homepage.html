@@ -1,5 +1,31 @@
 {% extends 'base.html' %}
-{% block title %}
-    Ciaula Web
+
+{% block head %}
+
 {% endblock %}
 
+{% block title %} Ciaula Web {% endblock %}
+
+{% block content %} 
+
+<center>
+    <div class="container">
+        <br>	
+	<h3> {{title}} </h3><br>
+
+	<div class="row">
+	    {% for l in listaattrazioni %}
+            <div class="col-4">
+		        <div class="card" style="border-radius:25px;">
+	                <br>
+                    <a href="detattrazione/{{ att.nome }}" style="color:black;"> <h3> <b> {{ att.nome }} </b> </h3> </a>
+                    <a href="detattrazione/{{ att.nome }}"> <img src="{{ att.image.url }}" style="width:auto;height:240px"> </a>  <!-- collegamento a specifiche attrazione -->
+	            </div>
+                <br>
+	        </div>
+        {% endfor %}
+	</div>
+    </div>
+</center>
+
+{%  endblock %}

@@ -7,13 +7,13 @@
 9)aggiungere campo foto al modello di attrazione
 10)aggiungere campo immagine al UserProfileModel
 17)mettere mixin login required nella lista di attrazioni da scegliere e nella pagina della scelta
-18)la registrazioe dell admin avviene dalla pagina /admin/signup e il login da /admin/signin
+19)la registrazioe dell admin avviene dalla pagina /admin/signup e il login da /admin/signin
 
             FRONTEND
 IMPORTANTE: scalare la dimensione del logo nella navbar con il css size, guardare da max base-styles.css
 15)da base.html non si può raggiungere attrazioni.html perchè è riservata a chi fa una vacanza (e crea le scelte)
 16)sistemare detailview attrazione con tutti i campi e la foto
-
+20)sistemare colori footer
 
     DOING:
 8)aggiustare template base.html: head-> mi connetto ai cdn e ai link vari, navbar, messages se necessario, main content, footer.
