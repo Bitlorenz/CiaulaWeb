@@ -13,6 +13,7 @@ class Attrazione(models.Model):
     oraApertura = models.TimeField('ora apertura')
     oraChiusura = models.TimeField('ora chiusura')
     descrizione = models.TextField()
+    attrazione_image = models.ImageField(blank=True, null=True) # , upload_to='attractionImages/')
 
     def __str__(self):
         return "ID: " + str(self.pk) + ": " + self.nome + " di tipo " + self.tipo + " a " + self.citta
@@ -20,6 +21,13 @@ class Attrazione(models.Model):
     class Meta:
         verbose_name = "Attrazione"
         verbose_name_plural = "Attrazioni"
+
+    @property
+    def image_url(self):
+        if self.attrazione_image and hasattr(self.attrazione_image, 'url'):
+            return self.attrazione_image.url
+        else:
+            return "/static/img/erice.jpg"
 
 
 class Scelta(models.Model):

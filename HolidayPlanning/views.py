@@ -17,6 +17,11 @@ class AttrazioniList(ListView):
     def get_model_name(self):
         return self.model._meta.verbose_name_plural
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['listaattrazioni'] = Attrazione.objects.all()
+        return context
+
 
 def scegliattrazione(request, pk):
     if request.method == "POST":

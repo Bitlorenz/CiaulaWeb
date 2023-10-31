@@ -1,16 +1,31 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+{% endblock %}
 
-{% block title %} {{ titolo }} {% endblock %}
+{% block title %} Ciaula Web {% endblock %}
 
 {% block content %}
-    {% if object_list %}
-        <ul>
-            {% for attrazione in object_list %}
-                <li><a href="{% url 'HolidayPlanning:scegli' attrazione.pk%}">{{ attrazione.nome }}</a></li>
+    <div class="container">
+        <br>
+	<h3> {{title}} </h3><br>
+
+	    <div class="row">
+	        {% for l in listaattrazioni %}
+                <div class="col-3">
+		            <div class="card" style="border-radius:25px;">
+	                    <br>
+                        <a href="{% url 'HolidayPlanning:dettaglioattr' l.pk%}" {{ l.nome }}style="color:black;"> <h3> <b> {{ l.nome }} </b> </h3> </a>
+                        <a href="{% url 'HolidayPlanning:dettaglioattr' l.pk%}"> 
+
+                            <img src="{{ l.attrazione_image.url | default_if_none:'#' }}" alt="pic attrazione" style="width:auto;height:240px"> </a>  <!-- collegamento a specifiche attrazione -->
+
+	                </div>
+                    <br>
+	            </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>Non ci sono attrazioni!</p>
-    {% endif %}
+	    </div>
+    </div>
 
 {% endblock %}
