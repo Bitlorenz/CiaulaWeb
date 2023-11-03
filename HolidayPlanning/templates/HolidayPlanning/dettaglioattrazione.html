@@ -5,6 +5,7 @@
 
 {% block title %}Dettaglio attrazione: {{object.nome}}{% endblock %}
 {% block content %}
+<img src="{{ object.attrazione_image.url | default_if_none:'#' }}" alt="pic attrazione" style="width:auto;height:240px">
 <p> città: {{ object.citta }}</p>
 <p> luogo: {{ object.luogo }}</p>
 <p> via: {{ object.via }}</p>

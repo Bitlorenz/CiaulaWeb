@@ -12,7 +12,7 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView, D
 # class view per vedere tutte le attrazioni presenti
 class AttrazioniList(ListView):
     model = Attrazione
-    template_name = "HolidayPlanning/provacbv.html"
+    template_name = "HolidayPlanning/attrazionilista.html"
 
     def get_model_name(self):
         return self.model._meta.verbose_name_plural
@@ -117,14 +117,6 @@ class CancellaScelta(DeleteView):
 
     def get_success_url(self):
         return reverse("HolidayPlanning:scelte")
-
-
-# function view per vedere tutte le attrazioni presenti
-class AttrazioniHome(ListView):
-    model = Attrazione
-    template_name = "HolidayPlanning/homeattrazioni.html"
-    ctx = {"title": "lista di attrazioni", "listaattrazioni": Attrazione.objects.all()}
-    # return render(request, template_name=template, context=ctx)
 
 
 # ##FORMS###

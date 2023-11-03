@@ -5,7 +5,6 @@ from django.conf import settings
 
 app_name = 'HolidayPlanning'
 urlpatterns = [
-    path("listaattrazioni/", AttrazioniHome.as_view(), name="listaattrazioni"),
     path("attrazioni/", AttrazioniList.as_view(), name="attrazioni"),
     path("scegliattrazione/<pk>", scegliattrazione, name="scegli"),
     path("listascelte/", ScelteList.as_view(), name="scelte"),

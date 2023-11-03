@@ -56,3 +56,12 @@ footer {
 
 h1 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight: normal; line-height: 48px; margin: 0; }
 p { color: #685206; font-family: 'Helvetica Neue', sans-serif; font-size: 14px; line-height: 24px; margin: 0 0 24px; text-align: justify; text-justify: inter-word; }
+
+
+:root {
+  --gradient: linear-gradient(to left top, #dd2476 10%, #ff512f 90%) !important;
+}
+
+body {
+  background: #111 !important;
+}
