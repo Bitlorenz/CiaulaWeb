@@ -1,0 +1,18 @@
+{% block content %}
+    <div class="container">
+	    <div class="row">
+	        {% for l in listaattrazioni %}
+                <div class="col-md-4 mb-4">
+		            <div class="card">
+                        <a href="{% url 'HolidayPlanning:dettaglioattr' l.pk%}"> <img src="{{ l.attrazione_image.url | default_if_none:'#' }}" class="card-img-top img-fluid" alt="pic attrazione" style="max-width: 270px; max-height: 200px;"> </a>  <!-- collegamento a specifiche attrazione -->
+                        <div class="card-body">
+                            <a href="{% url 'HolidayPlanning:dettaglioattr' l.pk%}"><h4 class="card-title" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{ l.nome }}</h4></a>
+                        </div>
+	                </div>                    
+	            </div>
+            {% endfor %}
+	    </div>
+    </div>
+    
+
+{% endblock %}
