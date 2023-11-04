@@ -42,11 +42,10 @@ class ScegliAttrazioneForm(forms.ModelForm):
     helper.add_input(Submit('submit', 'Aggiungi'))
     helper.inputs[0].field_classes = 'btn btn-success'
 
-    def __init__(self, pk, *args, **kwargs):
+    def __init__(self, pk, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.user = user
         a = get_object_or_404(Attrazione, pk=pk)
-        utente = kwargs.pop("user")
-        print(str(utente))
         self.attrazione = a
         self.fields['attrazione'].initial = a
         self.fields['attrazione'].disabled = True

@@ -1,4 +1,7 @@
-	TO-DO:
+GLOSSARIO:
+    TURISTA = UTENTE REGISTRATO E LOGGATO
+    
+    TO-DO:
 	        BACKEND
 19)fare detail view della vacanza con tutte le scelte, raggruppate per giorni, e alcuni dettagli di queste
     OPERAZIONI FINE VACANZA                          OPERAZIONI SULLE SCELTE
@@ -11,13 +14,23 @@
 
             FRONTEND
 IMPORTANTE: scalare la dimensione del logo nella navbar con il css size, guardare da max base-styles.css
-15)da base.html non si può raggiungere attrazioni.html perchè è riservata a chi fa una vacanza (e crea le scelte)
 16)sistemare detailview attrazione con tutti i campi e la foto
 20)sistemare colori footer
+9)Sistemare homepage.html
+
 
     DOING:
-8)aggiustare template base.html: head-> mi connetto ai cdn e ai link vari, navbar, messages se necessario, main content, footer.
-9)Sistemare homepage.html
+22)Sistemare ScelteList
+21)AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
+    Navbar piccola sotto quella principale che aggiunge qualche link se il turista ha già creato una vacanza oppure
+    mostra un messaggio "Inizia a Creare la tua vacanza! Clicca su HolidayPlanning"
+    {!!!HOT!!!} GESTIONE HOLIDAYPLANNING
+    PROBLEMI
+        -L'utente fa il login e dalla lista delle attrazioni può aggiungere un attrazione alla vacanza
+        --> NON PUÒ FARLO SE NON HA CREATO UNA VACANZA: LO AGGIUNGE IN UNA VACANZA GIÀ CREATA O IN UNA DA CREARE
+          -->Aggiunta in vacanza già creata: caso in cui il turista ha già creato una vacanza e riprende il planning, nel momento di aggiungere una scelta alla vacanza appare la voce di form "in quale vacanza aggiungere?"
+          -->TURISTA NON HA ANCORA CREATO UNA VACANZA: se il turista non ha creato nessuna vacanza ne deve creare una e poi iniziare ad aggiungere le scelte
+
 
 
 

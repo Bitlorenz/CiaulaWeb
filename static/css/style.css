@@ -36,7 +36,7 @@ ul li {
 
 a:link, a:visited {
   background-color: #f4b136;
-  color: rgb(0, 0, 0);
+  color: rgb(199, 77, 77);
   padding: 10px 16px;
   text-align: center;
   text-decoration: none;
@@ -63,5 +63,5 @@ p { color: #685206; font-family: 'Helvetica Neue', sans-serif; font-size: 14px; 
 }
 
 body {
-  background: #111 !important;
+  background: #bbadad !important;
 }

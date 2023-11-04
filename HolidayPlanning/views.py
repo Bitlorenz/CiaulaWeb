@@ -20,25 +20,31 @@ class AttrazioniList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['listaattrazioni'] = Attrazione.objects.all()
+        utente = self.request.user
+        context['user'] = utente
         return context
 
 
 def scegliattrazione(request, pk):
     if request.method == "POST":
-        form = ScegliAttrazioneForm(data=request.POST, pk=pk)
+        form = ScegliAttrazioneForm(data=request.POST, pk=pk, user=request.user)
         if form.is_valid():
             scelta = form.save(commit=False)
             rifvacanza = Vacanza.objects.filter(utente=request.user).last()
             ini = form.cleaned_data.get("oraInizio")
             fine = form.cleaned_data.get("oraFine")
             scelta.durata = td(hours=fine.hour - ini.hour) + td(minutes=fine.minute - ini.minute)
-            checkSovrapposizione(request, fine, ini)
+            #checkSovrapposizione(request, fine, ini)
             scelta.save()
             rifvacanza.scelte.add(scelta)
             return redirect("HolidayPlanning:dettaglioscelta", scelta.pk)
     else:
+        utente = request.user
         att = get_object_or_404(Attrazione, pk=pk)
-        form = ScegliAttrazioneForm(pk=pk)
+        form = ScegliAttrazioneForm(pk=pk, user=utente)
+        #TODO CONTROLLARE SE ESISTE UNA VACANZA PER L'UTENTE, SE NO CREARNE UNA
+        if (Vacanza.objects.filter(utente=utente).count() == 0):
+            return redirect("HolidayPlanning:creavacanza")
         return render(request, template_name="HolidayPlanning/scegli_attrazione.html", context={"form": form, "att": att, "title": att.nome})
     return render(request, template_name="HolidayPlanning/scegli_attrazione.html", context={"form": form})
 
@@ -68,7 +74,7 @@ class CreaVacanza(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ScelteList(ListView):
+class ScelteList(LoginRequiredMixin, ListView):
     model = Scelta
     template_name = "HolidayPlanning/listascelte.html"
 
@@ -77,7 +83,11 @@ class ScelteList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['titolo'] = "Attrazioni Scelte"
+        context['titolo'] = "Itinerario di Viaggio"
+        context['utente'] = self.request.user
+        context['vacanzacorrente'] = Vacanza.objects.filter(utente=self.request.user).last()
+        #context['scelte'] = Scelta.objects.filter(utente=self.request.user)
+        context['scelte'] = context['vacanzacorrente'].scelte.all()
         return context
 
 

@@ -6,10 +6,11 @@
 
     <h1> Lista di {{ view.get_model_name }}</h1>
 
-{% for p in object_list %}
-<ul>
-    {{ p.pk }}:{{ p.attrazione.nome }} da {{ p.oraInizio }} a {{ p.oraFine }} il {{ p.giorno }}
-</ul>
-{% endfor %}
-
+    {% for s in scelte %}
+    <ul>
+        {{ s.pk }}:{{ s.attrazione.nome }} da {{ s.oraInizio }} a {{ s.oraFine }} il {{ s.giorno }}
+        <a href="{% url 'HolidayPlanning:modificascelta' s.pk %}" class="btn btn-primary">Modifica scelta</a>
+        <a href="{% url 'HolidayPlanning:cancellascelta' s.pk %}" class="btn btn-primary">Cancella scelta</a>
+    </ul>
+    {% endfor %}
 {% endblock %}
