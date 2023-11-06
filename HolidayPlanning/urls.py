@@ -8,7 +8,6 @@ urlpatterns = [
     path("attrazioni/", AttrazioniList.as_view(), name="attrazioni"),
     path("scegliattrazione/<pk>", scegliattrazione, name="scegli"),
     path("listascelte/", ScelteList.as_view(), name="scelte"),
-    path("detscelta/<pk>", DetailSceltaEntita.as_view(), name="dettaglioscelta"),
     path("attrazioni/detattrazione/<pk>/", DetailAttrazioneEntita.as_view(), name="dettaglioattr"),
     path("editscelta/<pk>/", ModificaScelta.as_view(), name="modificascelta"),
     path("cancellascelta/<pk>", CancellaScelta.as_view(), name="cancellascelta"),
@@ -16,6 +15,9 @@ urlpatterns = [
     path("risultati/<str:stringa>/<str:where>/", RisultatiList.as_view(), name="risultati"),
     path("sceltafatta/<pk>/", SceltaFattaView.as_view(), name="sceltafatta"),
     path("creavacanza/", CreaVacanza.as_view(), name="creavacanza"),
+    path("vacanze/", VacanzeList.as_view(), name="vacanze"),
+    path("vacanza/<pk>/", DettaglioVacanza.as_view(), name="dettagliovacanza"),
+    path("vacanza/<pk>/modificavacanza/", ModificaVacanza.as_view(), name="modificavacanza"),
 ]
 
 

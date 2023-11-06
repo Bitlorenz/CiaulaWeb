@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Modifica Vacanza {% endblock %}
+{% block content %}
+    <h2>Inserisci i dati per modificare la tua vacanza!</h2>
+    {% crispy form %}
+    <a class="btn" href="{% url 'HolidayPlanning:vacanze' %}">Cancel</a>
+{% endblock %}

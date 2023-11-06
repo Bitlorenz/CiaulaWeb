@@ -1,10 +1,15 @@
+
 {% extends 'base.html' %}
 
-{% block title %} {{ titolo }} {% endblock %}
-
 {% block content %}
-    <div class="container">
-        <h1 class="text-center"> Ultima Vacanza Creata</h1>
+  <h1>{{ vacanza.titolo }}</h1>
+  <p>{{ vacanza.descrizione }}</p>
+  <p>Budget: {{ vacanza.budgetDisponibile }} €</p>
+  <p>Data di Arrivo: {{ vacanza.dataArrivo }}</p>
+  <p>Data di Partenza: {{ vacanza.dataPartenza }}</p>
+  <p>Durata: {{ vacanza.calcolaGiorni }} giorni</p>
+  <p>Numero di persone: {{ vacanza.nrPersone }}</p>
+  <div class="container">
         <div class="row"> 
             {% for s in scelte %}
                 <div class="col-md-12">

@@ -35,6 +35,22 @@ class CreaVacanzaForm(forms.ModelForm):
         fields = ['dataArrivo', 'dataPartenza', 'nrPersone', 'budgetDisponibile']
 
 
+# form per modificare una vacanza
+class ModificaVacanzaForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'vacanza-crispy-form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Modifica'))
+    helper.inputs[0].field_classes = 'btn btn-success'
+
+    def clean(self):
+        if self.cleaned_data["dataArrivo"] > self.cleaned_data["dataPartenza"]:
+            raise forms.ValidationError(_("Valori non validi: Data di Arrivo precede data di Partenza"))
+
+    class Meta:
+        model = Vacanza
+        fields = ['dataArrivo', 'dataPartenza', 'nrPersone', 'budgetDisponibile']
+
 class ScegliAttrazioneForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_id = 'scelta-crispy-form'

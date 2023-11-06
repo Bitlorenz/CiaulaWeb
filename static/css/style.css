@@ -65,3 +65,21 @@ p { color: #685206; font-family: 'Helvetica Neue', sans-serif; font-size: 14px; 
 body {
   background: #bbadad !important;
 }
+
+.scelta-card {
+  background-color: #f8f9fa;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.scelta-card:hover {
+  transform: scale(1.05);
+}
+
+.hours {
+  font-weight: bold;
+  color: #007bff;
+}

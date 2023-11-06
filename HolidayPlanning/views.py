@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import SearchForm, CreaVacanzaForm, ScegliAttrazioneForm
+from .forms import SearchForm, CreaVacanzaForm, ModificaVacanzaForm, ScegliAttrazioneForm
 from .models import Attrazione, Scelta, Vacanza
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
@@ -37,7 +37,7 @@ def scegliattrazione(request, pk):
             #checkSovrapposizione(request, fine, ini)
             scelta.save()
             rifvacanza.scelte.add(scelta)
-            return redirect("HolidayPlanning:dettaglioscelta", scelta.pk)
+            return redirect("HolidayPlanning:scelte")
     else:
         utente = request.user
         att = get_object_or_404(Attrazione, pk=pk)
@@ -60,20 +60,6 @@ def checkSovrapposizione(request, fine, ini):
     return False
 
 
-# class view per iniziare a creare una vacanza
-class CreaVacanza(LoginRequiredMixin, CreateView):
-    model = Vacanza
-    form_class = CreaVacanzaForm
-    template_name = "HolidayPlanning/crea_vacanza.html"
-    success_url = reverse_lazy("HolidayPlanning:attrazioni")
-
-    def form_valid(self, form):
-        vacanza = form.save(commit=False)
-        vacanza.utente = self.request.user
-        vacanza.save()
-        return super().form_valid(form)
-
-
 class ScelteList(LoginRequiredMixin, ListView):
     model = Scelta
     template_name = "HolidayPlanning/listascelte.html"
@@ -86,15 +72,8 @@ class ScelteList(LoginRequiredMixin, ListView):
         context['titolo'] = "Itinerario di Viaggio"
         context['utente'] = self.request.user
         context['vacanzacorrente'] = Vacanza.objects.filter(utente=self.request.user).last()
-        #context['scelte'] = Scelta.objects.filter(utente=self.request.user)
         context['scelte'] = context['vacanzacorrente'].scelte.all()
         return context
-
-
-# class detail view per una scelta
-class DetailSceltaEntita(DetailView):
-    model = Scelta
-    template_name = "HolidayPlanning/dettaglioscelta.html"
 
 
 # class detail view per un'attrazione
@@ -104,18 +83,17 @@ class DetailAttrazioneEntita(DetailView):
 
 
 # class per modificare una scelta data la chiave primaria
-class ModificaScelta(UpdateView):
+class ModificaScelta(LoginRequiredMixin, UpdateView):
     model = Scelta
     template_name = "HolidayPlanning/modificascelta.html"
     fields = ['giorno', 'oraInizio', 'oraFine']
 
     def get_success_url(self):
-        # pk = self.get_context_data()["object"].pk
-        return reverse("HolidayPlanning:dettaglioscelta") # , kwargs={'pk': id})
+        return reverse("HolidayPlanning:scelte")
 
 
 # class delete view per eliminare una scelta
-class CancellaScelta(DeleteView):
+class CancellaScelta(LoginRequiredMixin, DeleteView):
     model = Scelta
     template_name = "HolidayPlanning/cancellascelta.html"
 
@@ -127,6 +105,59 @@ class CancellaScelta(DeleteView):
 
     def get_success_url(self):
         return reverse("HolidayPlanning:scelte")
+    
+#API VACANZA
+class VacanzeList(LoginRequiredMixin, ListView):
+    model = Vacanza
+    template_name = "HolidayPlanning/vacanze.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Le tue Vacanze"
+        context['utente'] = self.request.user
+        context['vacanze'] = Vacanza.objects.filter(utente=self.request.user)
+        return context
+    
+
+# class view per creare una vacanza
+class CreaVacanza(LoginRequiredMixin, CreateView):
+    model = Vacanza
+    form_class = CreaVacanzaForm
+    template_name = "HolidayPlanning/crea_vacanza.html"
+    success_url = reverse_lazy("HolidayPlanning:attrazioni")
+
+    def form_valid(self, form):
+        vacanza = form.save(commit=False)
+        vacanza.utente = self.request.user
+        vacanza.save()
+        return super().form_valid(form)
+    
+
+
+# class view per i dettagli di una vacanza
+class DettaglioVacanza(LoginRequiredMixin, DetailView):
+    model = Vacanza
+    template_name = "HolidayPlanning/dettagliovacanza.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Dettagli Vacanza"
+        context['utente'] = self.request.user
+        vacanza = Vacanza.objects.get(pk=kwargs['object'].id)
+        context['vacanza'] = vacanza
+        context['scelte'] = vacanza.scelte.all().reverse()#l'ultima aggiunta viene mostrata per prima
+        return context
+
+
+# class view per modificare una vacanza
+class ModificaVacanza(LoginRequiredMixin, UpdateView):
+    model = Vacanza
+    template_name = "HolidayPlanning/modificavacanza.html"
+    form_class = ModificaVacanzaForm
+    #fields = ['dataArrivo', 'dataPartenza', 'nrPersone', 'budgetDisponibile']
+
+    def get_success_url(self):
+        return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": self.object.pk})
 
 
 # ##FORMS###

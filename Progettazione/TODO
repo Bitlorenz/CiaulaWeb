@@ -1,41 +1,43 @@
 GLOSSARIO:
     TURISTA = UTENTE REGISTRATO E LOGGATO
     
-    TO-DO:
-	        BACKEND
-19)fare detail view della vacanza con tutte le scelte, raggruppate per giorni, e alcuni dettagli di queste
-    OPERAZIONI FINE VACANZA                          OPERAZIONI SULLE SCELTE
-    concludere la vacanza e stampare il piano        continuare ad aggiungere e modificare scelte
-    concludere e comprare tutte le scelte            cancellare una scelta
+TO-DO:
+	BACKEND
+    OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano, concludere e comprare tutte le   scelte
+    25)Da url non si può cambiare la pk di una vacanza per modificarla, se l'user è diverso non si può fare         
+    10)aggiungere campo immagine al UserProfileModel, con anche la cartella upload_to
+    19)la registrazioe dell admin avviene dalla pagina /admin/signup e il login da /admin/signin
 
-10)aggiungere campo immagine al UserProfileModel
-17)mettere mixin login required nella lista di attrazioni da scegliere e nella pagina della scelta
-19)la registrazioe dell admin avviene dalla pagina /admin/signup e il login da /admin/signin
-
-            FRONTEND
-IMPORTANTE: scalare la dimensione del logo nella navbar con il css size, guardare da max base-styles.css
-16)sistemare detailview attrazione con tutti i campi e la foto
-20)sistemare colori footer
-9)Sistemare homepage.html
+    FRONTEND
+    24) sistemare deatilview vacanza con scelte raggruppate per giorni
+    20)sistemare navbar
+    9)Creare homepage.html
+    26) Riempire sezione "I nostri tour" con delle proposte di tour
+    27) Riempire la sezione contatti con alcuni contatti (e magari il form per le mail)
+    * Migliorare tutto l'aspetto grafico del sito
 
 
-    DOING:
-22)Sistemare ScelteList
-21)AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
+DOING:
+    22)Sistemare ScelteList
+    21)AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
     Navbar piccola sotto quella principale che aggiunge qualche link se il turista ha già creato una vacanza oppure
     mostra un messaggio "Inizia a Creare la tua vacanza! Clicca su HolidayPlanning"
-    {!!!HOT!!!} GESTIONE HOLIDAYPLANNING
-    PROBLEMI
-        -L'utente fa il login e dalla lista delle attrazioni può aggiungere un attrazione alla vacanza
-        --> NON PUÒ FARLO SE NON HA CREATO UNA VACANZA: LO AGGIUNGE IN UNA VACANZA GIÀ CREATA O IN UNA DA CREARE
-          -->Aggiunta in vacanza già creata: caso in cui il turista ha già creato una vacanza e riprende il planning, nel momento di aggiungere una scelta alla vacanza appare la voce di form "in quale vacanza aggiungere?"
-          -->TURISTA NON HA ANCORA CREATO UNA VACANZA: se il turista non ha creato nessuna vacanza ne deve creare una e poi iniziare ad aggiungere le scelte
+
+{!!!HOT!!!} GESTIONE HOLIDAYPLANNING
+PROBLEMI
+    La vacanza corrente è vista come il carrello e "Gestisci Vacanze" come una sezione "Miei Ordini"
+    Le scelte vengono aggiunte sempre all'ultima vacanza: è corretto oppure dobbiamo scegliere a quale vacanza aggiungere una scelta? La vacanza però non dovrebbe essere già passata
+    CancellaVacanza view: è utile cancellare una vacanza? al massimo si può svuotare il carrello, ovvero cancellare tutte le scelte dell'attuale vacanza
 
 
 
 
     DONE:
-    9)aggiungere campo foto al modello di attrazione
+16)sistemare detailview attrazione con tutti i campi e la foto
+23)API per le vacanze: VacanzeList, VacanzaDetail, VacanzaEdit
+19)fare detail view della vacanza con tutte le scelte
+17)mettere mixin login required nella lista di attrazioni da scegliere e nella pagina della scelta
+9)aggiungere campo foto al modello di attrazione
 18)aggiungere controllo sui giorni di creazione della vacanza direttamente nel form
 3)consistenza scelte
     quando si fa una scelta si controlla che la data sia nel periodo della vacanza
@@ -110,3 +112,13 @@ Viene presentata soltanto la lista delle scelte di una giornata, in cima alla pa
 su cui lavorare (tramite un text field che cliccando mostra le giornate).
 
 Possibilità di creare la propria attrazione?
+
+
+"todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "text",
+    "foreground": "red",
+    "background": "white",
+    "opacity": 50,
+    "iconColour": "blue"
+},
