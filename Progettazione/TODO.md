@@ -1,27 +1,34 @@
 GLOSSARIO:
     TURISTA = UTENTE REGISTRATO E LOGGATO
-    
+                BIG PROBLEM
+    FARE DIVENTARE L'APP UN MARKETPLACE DI SCELTE OPPURE NO?
+    SE UNA VACANZA È COMPRATA ALLORA COME CAMBIA NEL DB?
+    RECENSIONI ALLE ATTRAZIONI?
 TO-DO:
 	BACKEND
-    OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano, concludere e comprare tutte le   scelte
-    25)Da url non si può cambiare la pk di una vacanza per modificarla, se l'user è diverso non si può fare         
+    36)la lista delle scelte all'interno della vacanza deve sempre essere ordinata
+    32)Aggiungere nome alla vacanza, aggiungere stato chiusa alla vacanza
+    33)Come cambia una scelta o una vacanza se l'acquisto?
+    25)TEST: Da url non si può cambiare la pk di una vacanza per modificarla, se l'user è diverso non si può fare.   Provare: cambio utente, creo una vacanza, cosa succede se nell'url cambio l'id della vacanza? se vado nella vacanza dell'altro utente è un problema          
     10)aggiungere campo immagine al UserProfileModel, con anche la cartella upload_to
     19)la registrazioe dell admin avviene dalla pagina /admin/signup e il login da /admin/signin
 
     FRONTEND
-    24) sistemare deatilview vacanza con scelte raggruppate per giorni
+    35)nel form di aggiunta scelta bisogna ricordare la vacanza
+    34)Il mio itinerario deve ricordare alcuni dettagli della vacanza
+    30)sistemare pagina di cancella scelta
+    31)In ListaScelte metà pagina mostra la lista delle scelte e l'altra metà mostra i dettaglie del viaggio con il budget che scala
+    24)sistemare deatilview vacanza con scelte raggruppate per giorni
     20)sistemare navbar
     9)Creare homepage.html
-    26) Riempire sezione "I nostri tour" con delle proposte di tour
-    27) Riempire la sezione contatti con alcuni contatti (e magari il form per le mail)
-    * Migliorare tutto l'aspetto grafico del sito
+    26)Riempire sezione "I nostri tour" con delle proposte di tour
+    27)Riempire la sezione contatti con alcuni contatti (e magari il form per le mail)
+    * Migliorare tutto l'aspetto grafico del sito *
 
 
 DOING:
+    OPERAZIONI FINE VACANZA: concludere= e comprare tutte le scelte   
     22)Sistemare ScelteList
-    21)AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
-    Navbar piccola sotto quella principale che aggiunge qualche link se il turista ha già creato una vacanza oppure
-    mostra un messaggio "Inizia a Creare la tua vacanza! Clicca su HolidayPlanning"
 
 {!!!HOT!!!} GESTIONE HOLIDAYPLANNING
 PROBLEMI
@@ -33,6 +40,11 @@ PROBLEMI
 
 
     DONE:
+    OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano
+21)AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
+    Navbar piccola sotto quella principale che aggiunge qualche link se il turista ha già creato una vacanza oppure
+    mostra un messaggio "Inizia a Creare la tua vacanza! Clicca su HolidayPlanning"
+29)pulsante di logut quando l'utente è entrato
 16)sistemare detailview attrazione con tutti i campi e la foto
 23)API per le vacanze: VacanzeList, VacanzaDetail, VacanzaEdit
 19)fare detail view della vacanza con tutte le scelte

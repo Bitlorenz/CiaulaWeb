@@ -71,6 +71,12 @@ class Vacanza(models.Model):
     def calcolaNotti(self):
         totNotti = abs(self.dataPartenza - self.dataPartenza)
         return totNotti.days
+    
+    def calcolaTotale(self):
+        totale = 0
+        for s in self.scelte:
+            totale = totale + s.attrazione.costo
+        return totale
 
     class Meta:
         verbose_name = "Vacanza"

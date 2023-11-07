@@ -1,31 +1,48 @@
-
 {% extends 'base.html' %}
-
 {% block content %}
-  <h1>{{ vacanza.titolo }}</h1>
-  <p>{{ vacanza.descrizione }}</p>
-  <p>Budget: {{ vacanza.budgetDisponibile }} €</p>
-  <p>Data di Arrivo: {{ vacanza.dataArrivo }}</p>
-  <p>Data di Partenza: {{ vacanza.dataPartenza }}</p>
-  <p>Durata: {{ vacanza.calcolaGiorni }} giorni</p>
-  <p>Numero di persone: {{ vacanza.nrPersone }}</p>
-  <div class="container">
-        <div class="row"> 
-            {% for s in scelte %}
-                <div class="col-md-12">
-                    <div class="card mb-12 scelta-card">
-                        <img class="card-img-top img-fluid" src="{{ s.attrazione.attrazione_image.url }}" alt="Card image cap" style="max-width: 100%; max-height: auto;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ s.attrazione.nome }}</h5>
-                            <p class="card-text hours"> da {{ s.oraInizio }} a {{ s.oraFine }} il {{ s.giorno }}</p>
-                            <a href="{% url 'HolidayPlanning:modificascelta' s.pk %}" class="btn btn-primary">Modifica scelta</a>
-                            <a href="{% url 'HolidayPlanning:cancellascelta' s.pk %}" class="btn btn-primary">Cancella scelta</a>
-                        </div>
-                    </div>
-                </div>
-             {% empty %}
-                <p class="col-12">L'itinerario è ancora vuoto</p>
-            {% endfor %}
+
+<div class="container">
+    <h1>{{ vacanza.titolo }}</h1>
+    <p>{{ vacanza.descrizione }}</p>
+    <p>Budget: {{ vacanza.budgetDisponibile }} €</p>
+    <p>Data di Arrivo: {{ vacanza.dataArrivo }}</p>
+    <p>Data di Partenza: {{ vacanza.dataPartenza }}</p>
+    <p>Durata: {{ vacanza.calcolaGiorni }} giorni</p>
+    <p>Numero di persone: {{ vacanza.nrPersone }}</p>
+    <div class="row justify-content-end">
+        <div class="col-4" style="background-color: white; border-radius: 15px;">
+            <br>
+            <h3> Totale parziale: <b> {{totale}}€ </b> &nbsp; &nbsp;
+            <button type="submit" name="order" class="btn btn-success"> <a href="#" style="color:white"> Acquista </a> </button>
+            </h3>
+            <br>
+        </div>
+        <div class="col-4" style="background-color: white; border-radius: 15px;">
+            <br>
+            <button class="btn btn-success"> <a href="{% url 'HolidayPlanning:stampavacanza' vacanza.pk %}" style="color:white"> PDF Vacanza </a> </button>
+            </h3>
+            <br>
         </div>
     </div>
+    <div class="row">
+        {% for s in scelte %}
+        <div class="col-md-12">
+            <div class="card mb-12 scelta-card">
+                <img class="card-img-top img-fluid" src="{{ s.attrazione.attrazione_image.url }}" alt="Card image cap"
+                    style="max-width: 100%; max-height: auto;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ s.attrazione.nome }}</h5>
+                    <p class="card-text hours"> da {{ s.oraInizio }} a {{ s.oraFine }} il {{ s.giorno }}</p>
+                    <a href="{% url 'HolidayPlanning:modificascelta' s.pk %}" class="btn btn-primary">Modifica
+                        scelta</a>
+                    <a href="{% url 'HolidayPlanning:cancellascelta' s.pk %}" class="btn btn-primary">Cancella
+                        scelta</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="col-12">L'itinerario è ancora vuoto</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
