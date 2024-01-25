@@ -1,14 +1,12 @@
 GLOSSARIO:
     TURISTA = UTENTE REGISTRATO E LOGGATO
                 BIG PROBLEM
-    FARE DIVENTARE L'APP UN MARKETPLACE DI SCELTE OPPURE NO?
-    SE UNA VACANZA È COMPRATA ALLORA COME CAMBIA NEL DB?
-    RECENSIONI ALLE ATTRAZIONI?
+    Guardando la traccia inviata alla canali ci sono molte cose che non vanno bene
+    
 TO-DO:
 	BACKEND
     36)la lista delle scelte all'interno della vacanza deve sempre essere ordinata
     32)Aggiungere nome alla vacanza, aggiungere stato chiusa alla vacanza
-    33)Come cambia una scelta o una vacanza se l'acquisto?
     25)TEST: Da url non si può cambiare la pk di una vacanza per modificarla, se l'user è diverso non si può fare.   Provare: cambio utente, creo una vacanza, cosa succede se nell'url cambio l'id della vacanza? se vado nella vacanza dell'altro utente è un problema          
     10)aggiungere campo immagine al UserProfileModel, con anche la cartella upload_to
     19)la registrazioe dell admin avviene dalla pagina /admin/signup e il login da /admin/signin
@@ -27,7 +25,10 @@ TO-DO:
 
 
 DOING:
-    OPERAZIONI FINE VACANZA: concludere= e comprare tutte le scelte   
+    RECENSIONI ALLE ATTRAZIONI: bisgonerebbe aggiungere il controllo di possibilità per la scrittura della recensione;
+    --->si può lasciare una recensione solo se tra tutte le scelte che ha fatto un turista, nelle sue vacanze passate,
+        c'è l'attrazione a cui si vuole lasciare una recensione. [andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passato la data scelta]
+    OPERAZIONI FINE VACANZA: concludere  
     22)Sistemare ScelteList
 
 {!!!HOT!!!} GESTIONE HOLIDAYPLANNING
@@ -41,6 +42,9 @@ PROBLEMI
 
     DONE:
     OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano
+37)Immettere interfacce di gestione per cancellare attrazioni
+38)Refactoring separando views di gestione dell'attrazione in nuova app attractions (cambiare urls, views, forms, tempalates...)
+37)Immettere interfacce di gestione per aggiungere, modificare attrazioni
 21)AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
     Navbar piccola sotto quella principale che aggiunge qualche link se il turista ha già creato una vacanza oppure
     mostra un messaggio "Inizia a Creare la tua vacanza! Clicca su HolidayPlanning"

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Crea Attrazione {% endblock %}
+{% block content %}
+    <h2>Inserisci i dati della Nuova Attrazione</h2>
+    {% crispy form %}
+    <a class="btn" href="{% url 'HolidayPlanning:attrazioni' %}">Cancel</a>
+{% endblock %}

@@ -1,38 +1,11 @@
 from django.db import models
 from profiles.models import UserProfileModel
-
-
-class Attrazione(models.Model):
-    objects = None
-    nome = models.CharField(max_length=200, primary_key=True)
-    luogo = models.CharField(max_length=300)
-    via = models.CharField(max_length=500)
-    citta = models.CharField(max_length=200)
-    costo = models.FloatField()
-    tipo = models.CharField(max_length=200)
-    oraApertura = models.TimeField('ora apertura')
-    oraChiusura = models.TimeField('ora chiusura')
-    descrizione = models.TextField()
-    attrazione_image = models.ImageField(blank=True, null=True) # , upload_to='attractionImages/')
-
-    def __str__(self):
-        return "ID: " + str(self.pk) + ": " + self.nome + " di tipo " + self.tipo + " a " + self.citta
-
-    class Meta:
-        verbose_name = "Attrazione"
-        verbose_name_plural = "Attrazioni"
-
-    @property
-    def image_url(self):
-        if self.attrazione_image and hasattr(self.attrazione_image, 'url'):
-            return self.attrazione_image.url
-        else:
-            return "/static/img/erice.jpg"
+from attractions.models import Attrazione
 
 
 class Scelta(models.Model):
     giorno = models.DateField()  # scelto dall'utente
-    attrazione = models.ForeignKey(to='Attrazione', on_delete=models.CASCADE, related_name="attrazione")
+    attrazione = models.ForeignKey(to='attractions.Attrazione', on_delete=models.CASCADE, related_name="attrazione")
     oraInizio = models.TimeField(blank=True)  # scelta dall'utente
     oraFine = models.TimeField(blank=True)  # scelta dall'utente
     durata = models.DurationField()  # questi sono i secondi della durata
@@ -71,7 +44,7 @@ class Vacanza(models.Model):
     def calcolaNotti(self):
         totNotti = abs(self.dataPartenza - self.dataPartenza)
         return totNotti.days
-    
+
     def calcolaTotale(self):
         totale = 0
         for s in self.scelte:

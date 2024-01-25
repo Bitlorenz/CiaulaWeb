@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>Crea una recensione per questa attrazione</h1>
+    {% crispy form %}
+    <a class="btn" href="attrazionilista.html">Annulla</a>
+{% endblock %}

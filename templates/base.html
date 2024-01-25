@@ -24,7 +24,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="w-75 container-fluid">
-        <a class="navbar-brand pl-5" href="{% url 'HolidayPlanning:attrazioni' %}">
+        <a class="navbar-brand pl-5" href="{% url 'attractions:attrazioni' %}">
             <img src="/../../static/img/logo_ciaulaweb-192x192.png" class="d-inline-block logo_ciaulaweb align-top" alt="Logo">
             CiaulaWeb
         </a>
@@ -35,19 +35,19 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav pl-5">
                 <li class="nav-item active pl-5">
-                    <a class="nav-link" href="{% url 'HolidayPlanning:attrazioni' %}">Home</a>
+                    <a class="nav-link" href="{% url 'attractions:attrazioni' %}">Home</a>
                 </li>
                 <li class="nav-item pl-5">
                     <a class="nav-link" href="{% url 'HolidayPlanning:creavacanza' %}">Holiday Planning</a>
                 </li>
                 <li class="nav-item pl-5">
-                    <a class="nav-link" href="{% url 'HolidayPlanning:cerca' %}">Blog</a>
+                    <a class="nav-link" href="{% url 'attractions:cerca' %}">Blog</a>
                 </li>
                 <li class="nav-item pl-5">
                     <a class="nav-link" href="#">Contattaci</a>
                 </li>
                 <li class="nav-item pl-5">
-                    <a class="nav-link " href="{% url 'HolidayPlanning:attrazioni' %}">I Nostri Tour</a>
+                    <a class="nav-link " href="{% url 'attractions:attrazioni' %}">I Nostri Tour</a>
                 </li>
                 {% if user.is_authenticated %}
                     <div class="nav-item pl-5">

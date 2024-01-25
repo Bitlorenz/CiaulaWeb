@@ -1,21 +1,11 @@
-import gettext
-_ = gettext.gettext
-from datetime import timedelta as td
-
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.shortcuts import get_object_or_404
-
-from .models import Vacanza, Scelta, Attrazione
-
-
-class SearchForm(forms.Form):
-    CHOICE_LIST = [("Attrazione", "Cerca nelle Attrazioni"),
-                   ("Scelta", "Cerca nelle Scelte")]
-
-    search_string = forms.CharField(label="Cosa cerchi?", max_length=100, min_length=1, required=True)
-    search_where = forms.ChoiceField(label="Dove lo cerchi?", required=True, choices=CHOICE_LIST)
+from .models import Vacanza, Scelta
+from attractions.models import Attrazione
+import gettext
+_ = gettext.gettext
 
 
 #  form per creare una vacanza
@@ -51,6 +41,7 @@ class ModificaVacanzaForm(forms.ModelForm):
         model = Vacanza
         fields = ['dataArrivo', 'dataPartenza', 'nrPersone', 'budgetDisponibile']
 
+
 class ScegliAttrazioneForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_id = 'scelta-crispy-form'
@@ -74,14 +65,16 @@ class ScegliAttrazioneForm(forms.ModelForm):
         if fine < ini:
             raise forms.ValidationError(_("Valori non validi: Ora di Inizio precede Ora di Fine"))
         if not a.oraApertura <= ini <= a.oraChiusura:
+            self.add_error("oraInizio",
+                           "Inserire orario compreso tra: " + str(a.oraApertura) + " e " + str(a.oraChiusura))
+
             raise forms.ValidationError(_("Orario di Inizio non valido"))
-            self.add_error("oraInizio", "Inserire orario compreso tra: "+str(a.oraApertura)+" e "+str(a.oraChiusura))
         if not a.oraApertura <= fine <= a.oraChiusura:
+            self.add_error("oraFine",
+                           "Inserire orario compreso tra: " + str(a.oraApertura) + " e " + str(a.oraChiusura))
             raise forms.ValidationError(_("Orario di Fine non valido"))
-            self.add_error("oraFine", "Inserire orario compreso tra: " + str(a.oraApertura)+" e "+str(a.oraChiusura))
         return self.cleaned_data
 
     class Meta:
         model = Scelta
         fields = ['attrazione', 'giorno', 'oraInizio', 'oraFine']
-

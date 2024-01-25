@@ -12,7 +12,7 @@ si può stampare il piano vacanza in pdf
 si possono visualizzare delle attività consigliate
 si possono visualizzare le attività fatte e le vacanza programmate
 si possono aggiungere i traferimenti tra attività e attività
-
+l'admin può aggiungere un attrazione da una schermata predefinita
 
 USER STORIES E REQUISITI SPECIFICI
 1)  Visualizzare tutte le attrazioni presenti sul sito è permesso a utenti registrati e non. Leggendo un' attività nella

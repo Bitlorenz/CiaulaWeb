@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Dettaglio attrazione: {{object.nome}}{% endblock %}
+{% block content %}
+<div class="container">
+    <img src="{{ object.attrazione_image.url | default_if_none:'#' }}" alt="pic attrazione" style="width:auto;height:240px">
+    <p> città: {{ object.citta }}</p>
+    <p> luogo: {{ object.luogo }}</p>
+    <p> via: {{ object.via }}</p>
+    <p> costo: {{ object.costo }}</p>
+    <p> tipo: {{ object.tipo }}</p>
+    <p> Inizia alle: {{ object.oraApertura }}</p>
+    <p> Finisce alle: {{ object.oraChiusura }}</p>
+    <p> Attività: {{ object.descrizione }}</p>
+    <p> id: {{ object.pk }}</p>
+</div>
+
+    <br> <br>
+    <div class="container" style="background-color:white; border-radius: 10px;">
+        <br>
+        <div class="row align-self-center">
+            <h4> <b> Recensioni Attrazione: </b> </h4> <br>
+            {% if recensione.attrazione.count == 0 %} <!-- se nessuna recensione per l'attrazione -->
+                <h4> Nessuna recensione disponibile </h4> <br>
+                <br>
+            {% else %}
+                {% for r in recensione.attrazione.all %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="text-end">
+                                <p class="card-text">{{ r.valutazione }}/5</p>
+                            </div>
+                            <h5 class="card-title">{{ r.titolo }}</h5>
+                            <p class="card-text">{{ r.contenuto }}</p>
+                            <p class="card-text">{{ r.autore }}, il {{ r.data_creazione }} </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+            {% if check == True %}
+            <div>
+                <br>
+                <button type="submit" name="review" class="btn btn-success"> <a href="crea_recensione.html"> </a></button>
+            </div>
+            {% endif %}
+    </div>
+{% endblock %}

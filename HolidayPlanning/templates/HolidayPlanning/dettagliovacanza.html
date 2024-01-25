@@ -12,9 +12,7 @@
     <div class="row justify-content-end">
         <div class="col-4" style="background-color: white; border-radius: 15px;">
             <br>
-            <h3> Totale parziale: <b> {{totale}}€ </b> &nbsp; &nbsp;
-            <button type="submit" name="order" class="btn btn-success"> <a href="#" style="color:white"> Acquista </a> </button>
-            </h3>
+            <h3> Totale parziale: <b> {{totale}}€ </b> </h3>
             <br>
         </div>
         <div class="col-4" style="background-color: white; border-radius: 15px;">
@@ -29,7 +27,7 @@
         <div class="col-md-12">
             <div class="card mb-12 scelta-card">
                 <img class="card-img-top img-fluid" src="{{ s.attrazione.attrazione_image.url }}" alt="Card image cap"
-                    style="max-width: 100%; max-height: auto;">
+                    style="max-width: 100%;">
                 <div class="card-body">
                     <h5 class="card-title">{{ s.attrazione.nome }}</h5>
                     <p class="card-text hours"> da {{ s.oraInizio }} a {{ s.oraFine }} il {{ s.giorno }}</p>
