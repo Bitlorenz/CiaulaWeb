@@ -1,9 +1,17 @@
 GLOSSARIO:
     TURISTA = UTENTE REGISTRATO E LOGGATO
-                BIG PROBLEM
-    Guardando la traccia inviata alla canali ci sono molte cose che non vanno bene
     
-TO-DO:
+# REQUISITI FONDAMENTALI:
+* recensioni
+* tour organizzati
+* ricerca attrazioni
+* piano vacanza scandito per giornate
+* calcolare gli spostamenti
+* difficoltà prevista della giornata
+* recommendation system
+
+
+## TO-DO:
 	BACKEND
     36)la lista delle scelte all'interno della vacanza deve sempre essere ordinata
     32)Aggiungere nome alla vacanza, aggiungere stato chiusa alla vacanza
@@ -23,13 +31,14 @@ TO-DO:
     27)Riempire la sezione contatti con alcuni contatti (e magari il form per le mail)
     * Migliorare tutto l'aspetto grafico del sito *
 
-
-DOING:
-    RECENSIONI ALLE ATTRAZIONI: bisgonerebbe aggiungere il controllo di possibilità per la scrittura della recensione;
-    --->si può lasciare una recensione solo se tra tutte le scelte che ha fatto un turista, nelle sue vacanze passate,
-        c'è l'attrazione a cui si vuole lasciare una recensione. [andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passato la data scelta]
-    OPERAZIONI FINE VACANZA: concludere  
-    22)Sistemare ScelteList
+# DOING:
+* RECENSIONI ALLE ATTRAZIONI:
+  * risolvere bug: quando si clicca sul bottone della recensione bisogna passare la pk che dovrebbe essere quella dell'attrazione non della scelta
+  * verifica UI Recensioni: come inserirle, dove, quando, come, chi, dove visualizzarle
+  * controllo di possibilità per la scrittura della recensione:si può lasciare una recensione solo se tra tutte le scelte che ha fatto un turista, nelle sue vacanze passate,
+ c'è l'attrazione a cui si vuole lasciare una recensione. [andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passato la data scelta]
+*    OPERAZIONI FINE VACANZA: concludere  
+      22)Sistemare ScelteList
 
 {!!!HOT!!!} GESTIONE HOLIDAYPLANNING
 PROBLEMI
@@ -74,6 +83,9 @@ path('', HomeView.as_view(), name='home') con from ciaulaweb.views import HomeVi
 as_view nel path corrispondente in urlpatterns
 11)ripopolare db attrazioni
 
+# RECENSIONI
+    Le recensioni si visualizzano nella pagina di dettaglio di un attrazione
+    sono inseribili tramite form raggiungibile dalla pagina della vacanza: gestisci vacanze -> selziona 1 vacanza -> nella card di una attrazione clicca su bottone recensisci
 
 contatore (globale?) per aggiungere la scelta in fondo alle altre scelte
 controllo degli orari e giorno per la scelta

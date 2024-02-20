@@ -46,9 +46,20 @@ def DetailAttrazioneEntita(request, nome_attr):
         # Se l'attrazione è stata scelta in una vacanza precedente, allora si scrive la recensione
         check = False
         if request.user.is_authenticated:
-            user = UserProfileModel.objects.get(nrSocio=request.user) #aquisisco user
+            user = UserProfileModel.objects.get(email__exact=request.user) #aquisisco user
 
-            if Vacanza.objects.filter(utente=user).exists():
+            if Vacanza.objects.filter(utente=user).exists(): #
+                vacanze=Vacanza.objects.filter(utente=user) #Prendo le vacanze fatte dall'utente
+                for vacanza in vacanze:
+                    for v in vacanza.scelte.all():
+                        if v.attrazione==attrazione: #Se utente ha scelto questa attrazione
+                            check=True
+                return render(request, template_name=templ, context=ctx)
+            else:
+                return HttpResponse("ERROR: nome attrazione non valido")
+
+
+
 
 # CreateView per l'inserimento di un'attrazione da parte dell'admin
 #  @staff_member_required

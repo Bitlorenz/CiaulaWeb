@@ -4,10 +4,8 @@ si può cercare una attrazione/attività,
 si può comprare un'attività singola o più attività
 si può organizzare una vacanza, mettendo insieme più attività
 si può impostare il budget della vacanza
-si possono comprare in blocco le attività collegate in una vacanza
 si possono leggere recensioni riguardo le attività
 si possono scrivere recensioni riguardo le attività
-si possono leggere articoli riguardanti le attività
 si può stampare il piano vacanza in pdf
 si possono visualizzare delle attività consigliate
 si possono visualizzare le attività fatte e le vacanza programmate
