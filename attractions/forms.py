@@ -30,7 +30,7 @@ class CreaAttrazioneForm(forms.ModelForm):
         fields = "__all__"
 
 
-class CreaRecensioneForm:
+class CreaRecensioneForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_id = 'crea_recensione_form'
     helper.form_method = 'POST'
@@ -45,5 +45,3 @@ class CreaRecensioneForm:
             'valutazione'
         ]
 
-    def save(self, commit):
-        pass

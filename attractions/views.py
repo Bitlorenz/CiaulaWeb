@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.views.generic import ListView, UpdateView, CreateView
 
 from profiles.models import UserProfileModel
 from attractions.forms import CreaAttrazioneForm, SearchForm, CreaRecensioneForm
@@ -27,12 +27,6 @@ class AttrazioniList(ListView):
         return context
 
 
-# class detail view per un'attrazione
-#class DetailAttrazioneEntita(DetailView):
-#    model = Attrazione
-#    template_name = "attractions/dettaglioattrazione.html"
-
-
 #  View per la visualizzazione dei dati relativi ad un'attrazione
 #  Possibilità di aggiungere le recensioni se l'attrazione è stata scelta
 def DetailAttrazioneEntita(request, nome_attr):
@@ -40,25 +34,23 @@ def DetailAttrazioneEntita(request, nome_attr):
     if Attrazione.objects.filter(nome=nome_attr).exists():
         templ = "attractions/dettaglioattrazione.html"
         ctx = {}
-        attrazione = Attrazione.objects.get(nome=nome_attr) #Acquisisco attrazione dal nome
+        attrazione = Attrazione.objects.get(nome=nome_attr)  # Acquisisco attrazione dal nome
 
         # Se utente autenticato controllo se ha scelto l'attrazione in
         # Se l'attrazione è stata scelta in una vacanza precedente, allora si scrive la recensione
         check = False
         if request.user.is_authenticated:
-            user = UserProfileModel.objects.get(email__exact=request.user) #aquisisco user
+            user = UserProfileModel.objects.get(email__exact=request.user)  # aquisisco user
 
-            if Vacanza.objects.filter(utente=user).exists(): #
-                vacanze=Vacanza.objects.filter(utente=user) #Prendo le vacanze fatte dall'utente
+            if Vacanza.objects.filter(utente=user).exists():
+                vacanze = Vacanza.objects.filter(utente=user)  # Prendo le vacanze fatte dall'utente
                 for vacanza in vacanze:
                     for v in vacanza.scelte.all():
-                        if v.attrazione==attrazione: #Se utente ha scelto questa attrazione
-                            check=True
+                        if v.attrazione == attrazione:  # Se utente ha scelto questa attrazione
+                            check = True
                 return render(request, template_name=templ, context=ctx)
             else:
                 return HttpResponse("ERROR: nome attrazione non valido")
-
-
 
 
 # CreateView per l'inserimento di un'attrazione da parte dell'admin
@@ -166,4 +158,4 @@ class RecensioneCreateView(LoginRequiredMixin, CreateView):
     #  Restituisce 404 se l'attrazione non è stata trovata
     def dispatch(self, request, *args, **kwargs):
         attrazione = get_object_or_404(Attrazione, pk=self.kwargs['pk'])
-        return  super().dispatch(request, attrazione=attrazione, *args, **kwargs)
+        return super().dispatch(request, attrazione=attrazione, *args, **kwargs)

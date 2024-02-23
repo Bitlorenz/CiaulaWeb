@@ -33,6 +33,7 @@ GLOSSARIO:
 
 # DOING:
 * RECENSIONI ALLE ATTRAZIONI:
+  * Salva recensione AttributeError: NoReverseMatch at /attractions/recensione/ERICE: La pasticceria di Maria Grammatico
   * risolvere bug: quando si clicca sul bottone della recensione bisogna passare la pk che dovrebbe essere quella dell'attrazione non della scelta
   * verifica UI Recensioni: come inserirle, dove, quando, come, chi, dove visualizzarle
   * controllo di possibilità per la scrittura della recensione:si può lasciare una recensione solo se tra tutte le scelte che ha fatto un turista, nelle sue vacanze passate,
