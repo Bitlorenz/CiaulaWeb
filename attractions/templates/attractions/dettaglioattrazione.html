@@ -41,7 +41,7 @@
             {% if check == True %}
             <div>
                 <br>
-                <button type="submit" name="review" class="btn btn-success"> <a href="crea_recensione.html"> Recensisci! </a></button>
+                <button type="submit" name="review" class="btn btn-success"> <a href="{% url 'attractions:crea_recensione' attivita.pk %}"> Recensisci! </a></button>
             </div>
             {% endif %}
     </div>

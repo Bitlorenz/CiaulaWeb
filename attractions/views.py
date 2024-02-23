@@ -33,25 +33,32 @@ def DetailAttrazioneEntita(request, nome_attr):
 
     if Attrazione.objects.filter(nome=nome_attr).exists():
         templ = "attractions/dettaglioattrazione.html"
-        ctx = {}
         attrazione = Attrazione.objects.get(nome=nome_attr)  # Acquisisco attrazione dal nome
         recensioni = Recensione.objects.filter(attrazione=attrazione)
+
         # Se utente autenticato controllo se ha scelto l'attrazione in una delle sua vacanze
         # Se l'attrazione è stata scelta in una vacanza precedente, allora può scrivere la recensione
         check = False
         if request.user.is_authenticated:
             user = UserProfileModel.objects.get(email__exact=request.user)  # aquisisco user
-
             if Vacanza.objects.filter(utente=user).exists():
                 vacanze = Vacanza.objects.filter(utente=user)  # Prendo le vacanze fatte dall'utente
                 for vacanza in vacanze:
                     for v in vacanza.scelte.all():
                         if v.attrazione == attrazione:  # Se utente ha scelto questa attrazione
                             check = True
-                ctx={"attivita":attrazione, "check":check, "recensioni":recensioni}
-                return render(request, template_name=templ, context=ctx)
-            else:
-                return HttpResponse("ERROR: nome attrazione non valido")
+            # Se utente ha già recensito il prodotto (non può recensirlo più volte)
+            #if Recensione.objects.filter().exists():
+            #    for r in recensioni.attrazione.all():
+            #        if r.autore == user:
+            #            check = False
+        ctx = {"attivita": attrazione, "check": check, "recensioni": recensioni}
+        if request.method == "GET":
+            return render(request, template_name=templ, context=ctx)
+        else:
+            return HttpResponse("ERROR: nome attrazione non valido, RICHIESTA POST")
+
+
 
 
 # CreateView per l'inserimento di un'attrazione da parte dell'admin

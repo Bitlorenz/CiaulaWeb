@@ -18,6 +18,7 @@ GLOSSARIO:
     25)TEST: Da url non si può cambiare la pk di una vacanza per modificarla, se l'user è diverso non si può fare.   Provare: cambio utente, creo una vacanza, cosa succede se nell'url cambio l'id della vacanza? se vado nella vacanza dell'altro utente è un problema          
     10)aggiungere campo immagine al UserProfileModel, con anche la cartella upload_to
     19)la registrazioe dell admin avviene dalla pagina /admin/signup e il login da /admin/signin
+    37) una recensione all'attività  andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passato la data scelta
 
     FRONTEND
     35)nel form di aggiunta scelta bisogna ricordare la vacanza
@@ -33,17 +34,17 @@ GLOSSARIO:
 
 # DOING:
 * RECENSIONI ALLE ATTRAZIONI:
-  * verifica UI Recensioni: come inserirle, dove, quando, come, chi, dove visualizzarle
-  * controllo di possibilità per la scrittura della recensione:si può lasciare una recensione solo se tra tutte le scelte che ha fatto un turista, nelle sue vacanze passate,
- c'è l'attrazione a cui si vuole lasciare una recensione. [andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passato la data scelta]
+  * NON SI PUÒ RECENSIRE LA STESSA ATTIVITÀ PIÙ VOLTE 
+  * in crea recensione ci deve essere scritto il riferimento "Recensisci attivita fatta il durante la vacanza..."
 *    OPERAZIONI FINE VACANZA: concludere  
       22)Sistemare ScelteList
 
 # RECENSIONI
     Le recensioni si visualizzano nella pagina di dettaglio di un attrazione
+    Le può inserire soltano un utente registrato che ha compilato una vacanza con quella attivita
     sono inseribili tramite form raggiungibile dalla pagina della vacanza:
     1° modo)gestisci vacanze -> selziona 1 vacanza -> nella card di una attrazione clicca su bottone recensisci
-    (2° modo)home-> dettaglio dell'attrazione-> sopra la finestra delle recensioni Bottone recensisci
+    2° modo)home-> dettaglio dell'attrazione-> sotto la finestra delle recensioni Bottone recensisci
 {!!!HOT!!!} GESTIONE HOLIDAYPLANNING
 PROBLEMI
     La vacanza corrente è vista come il carrello e "Gestisci Vacanze" come una sezione "Miei Ordini"
