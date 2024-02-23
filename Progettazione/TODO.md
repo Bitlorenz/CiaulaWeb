@@ -33,22 +33,22 @@ GLOSSARIO:
 
 # DOING:
 * RECENSIONI ALLE ATTRAZIONI:
-  * Salva recensione AttributeError: NoReverseMatch at /attractions/recensione/ERICE: La pasticceria di Maria Grammatico
-  * risolvere bug: quando si clicca sul bottone della recensione bisogna passare la pk che dovrebbe essere quella dell'attrazione non della scelta
   * verifica UI Recensioni: come inserirle, dove, quando, come, chi, dove visualizzarle
   * controllo di possibilità per la scrittura della recensione:si può lasciare una recensione solo se tra tutte le scelte che ha fatto un turista, nelle sue vacanze passate,
  c'è l'attrazione a cui si vuole lasciare una recensione. [andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passato la data scelta]
 *    OPERAZIONI FINE VACANZA: concludere  
       22)Sistemare ScelteList
 
+# RECENSIONI
+    Le recensioni si visualizzano nella pagina di dettaglio di un attrazione
+    sono inseribili tramite form raggiungibile dalla pagina della vacanza:
+    1° modo)gestisci vacanze -> selziona 1 vacanza -> nella card di una attrazione clicca su bottone recensisci
+    (2° modo)home-> dettaglio dell'attrazione-> sopra la finestra delle recensioni Bottone recensisci
 {!!!HOT!!!} GESTIONE HOLIDAYPLANNING
 PROBLEMI
     La vacanza corrente è vista come il carrello e "Gestisci Vacanze" come una sezione "Miei Ordini"
     Le scelte vengono aggiunte sempre all'ultima vacanza: è corretto oppure dobbiamo scegliere a quale vacanza aggiungere una scelta? La vacanza però non dovrebbe essere già passata
     CancellaVacanza view: è utile cancellare una vacanza? al massimo si può svuotare il carrello, ovvero cancellare tutte le scelte dell'attuale vacanza
-
-
-
 
     DONE:
     OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano
@@ -84,9 +84,7 @@ path('', HomeView.as_view(), name='home') con from ciaulaweb.views import HomeVi
 as_view nel path corrispondente in urlpatterns
 11)ripopolare db attrazioni
 
-# RECENSIONI
-    Le recensioni si visualizzano nella pagina di dettaglio di un attrazione
-    sono inseribili tramite form raggiungibile dalla pagina della vacanza: gestisci vacanze -> selziona 1 vacanza -> nella card di una attrazione clicca su bottone recensisci
+
 
 contatore (globale?) per aggiungere la scelta in fondo alle altre scelte
 controllo degli orari e giorno per la scelta

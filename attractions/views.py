@@ -35,9 +35,9 @@ def DetailAttrazioneEntita(request, nome_attr):
         templ = "attractions/dettaglioattrazione.html"
         ctx = {}
         attrazione = Attrazione.objects.get(nome=nome_attr)  # Acquisisco attrazione dal nome
-
-        # Se utente autenticato controllo se ha scelto l'attrazione in
-        # Se l'attrazione è stata scelta in una vacanza precedente, allora si scrive la recensione
+        recensioni = Recensione.objects.filter(attrazione=attrazione)
+        # Se utente autenticato controllo se ha scelto l'attrazione in una delle sua vacanze
+        # Se l'attrazione è stata scelta in una vacanza precedente, allora può scrivere la recensione
         check = False
         if request.user.is_authenticated:
             user = UserProfileModel.objects.get(email__exact=request.user)  # aquisisco user
@@ -48,6 +48,7 @@ def DetailAttrazioneEntita(request, nome_attr):
                     for v in vacanza.scelte.all():
                         if v.attrazione == attrazione:  # Se utente ha scelto questa attrazione
                             check = True
+                ctx={"attivita":attrazione, "check":check, "recensioni":recensioni}
                 return render(request, template_name=templ, context=ctx)
             else:
                 return HttpResponse("ERROR: nome attrazione non valido")
@@ -144,7 +145,7 @@ class RecensioneCreateView(LoginRequiredMixin, CreateView):
         recensione.autore = UserProfileModel.objects.get(nrSocio=self.request.user.pk)
         recensione.attrazione = Attrazione.objects.get(pk=self.kwargs['pk'])
         recensione.save()
-        self.success_url = reverse_lazy("attractions:dettaglioattr", kwargs={'pk': recensione.attrazione.pk})  # redireziono all'attrazione
+        self.success_url = reverse_lazy("attractions:dettaglioattr", kwargs={'nome_attr': recensione.attrazione.pk})  # redireziono all'attrazione
         return super().form_valid(form)
 
     #  Aggiunge l'attrazione alle variabili di contesto

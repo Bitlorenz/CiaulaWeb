@@ -6,7 +6,7 @@ urlpatterns = [
     #  url per la visualizzazione di più attrazioni
     path("attrazioni/", AttrazioniList.as_view(), name="attrazioni"),
     #  url per mostrare i dettagli di un attrazione
-    path("attrazioni/detattrazione/<str:pk>", DetailAttrazioneEntita, name="dettaglioattr"),
+    path("attrazioni/detattrazione/<str:nome_attr>", DetailAttrazioneEntita, name="dettaglioattr"), #LASCIARE nome_attr
     #  url per cercare un attrazione
     path("cerca/", cerca, name="cerca"),
     #  Url per l'aggiunta di un'attrazione da parte dell'admin

@@ -36,8 +36,8 @@ class Recensione(models.Model):
     contenuto = models.TextField(max_length=1000, verbose_name='Contenuto della recesione')
     valutazione = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(0)],
                                       verbose_name='valutazione della recensione')
-    autore = models.ForeignKey(UserProfileModel, related_name='autore recensione',
-                               on_delete=models.PROTECT),
+    autore = models.ForeignKey(UserProfileModel, related_name='autore_recensione',
+                               on_delete=models.CASCADE)
     # one-to-many (un prodotto ha tante recensioni ma una recensione appartiene a un singolo prodotto)
     attrazione = models.ForeignKey(Attrazione, on_delete=models.CASCADE)
     data_creazione = models.DateTimeField(auto_now=True)

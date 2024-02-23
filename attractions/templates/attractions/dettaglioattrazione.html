@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
-{% block title %}Dettaglio attrazione: {{object.nome}}{% endblock %}
+{% block title %}Dettaglio attrazione: {{attivita.nome}}{% endblock %}
 {% block content %}
 <div class="container">
-    <img src="{{ object.attrazione_image.url | default_if_none:'#' }}" alt="pic attrazione" style="width:auto;height:240px">
-    <p> città: {{ object.citta }}</p>
-    <p> luogo: {{ object.luogo }}</p>
-    <p> via: {{ object.via }}</p>
-    <p> costo: {{ object.costo }}</p>
-    <p> tipo: {{ object.tipo }}</p>
-    <p> Inizia alle: {{ object.oraApertura }}</p>
-    <p> Finisce alle: {{ object.oraChiusura }}</p>
-    <p> Attività: {{ object.descrizione }}</p>
-    <p> id: {{ object.pk }}</p>
+    <img src="{{ attivita.attrazione_image.url | default_if_none:'#' }}" alt="pic attrazione" style="width:auto;height:240px">
+    <p> città: {{ attivita.citta }}</p>
+    <p> luogo: {{ attivita.luogo }}</p>
+    <p> via: {{ attivita.via }}</p>
+    <p> costo: {{ attivita.costo }}</p>
+    <p> tipo: {{ attivita.tipo }}</p>
+    <p> Inizia alle: {{ attivita.oraApertura }}</p>
+    <p> Finisce alle: {{ attivita.oraChiusura }}</p>
+    <p> Attività: {{ attivita.descrizione }}</p>
+    <p> id: {{ attivita.pk }}</p>
 </div>
 
     <br> <br>
@@ -20,11 +20,11 @@
         <br>
         <div class="row align-self-center">
             <h4> <b> Recensioni Attrazione: </b> </h4> <br>
-            {% if recensione.attrazione.count == 0 %} <!-- se nessuna recensione per l'attrazione -->
+            {% if recensioni.count == 0 %} <!-- se nessuna recensione per l'attrazione -->
                 <h4> Nessuna recensione disponibile </h4> <br>
                 <br>
             {% else %}
-                {% for r in recensione.attrazione.all %}
+                {% for r in recensioni %}
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="text-end">
@@ -32,7 +32,7 @@
                             </div>
                             <h5 class="card-title">{{ r.titolo }}</h5>
                             <p class="card-text">{{ r.contenuto }}</p>
-                            <p class="card-text">{{ r.autore }}, il {{ r.data_creazione }} </p>
+                            <p class="card-text">{{ r.autore.first_name }}, il {{ r.data_creazione }} </p>
                         </div>
                     </div>
                 {% endfor %}
@@ -41,7 +41,7 @@
             {% if check == True %}
             <div>
                 <br>
-                <button type="submit" name="review" class="btn btn-success"> <a href="crea_recensione.html"> </a></button>
+                <button type="submit" name="review" class="btn btn-success"> <a href="crea_recensione.html"> Recensisci! </a></button>
             </div>
             {% endif %}
     </div>
