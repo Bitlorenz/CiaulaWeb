@@ -2,7 +2,7 @@ GLOSSARIO:
     TURISTA = UTENTE REGISTRATO E LOGGATO
     
 # REQUISITI FONDAMENTALI:
-* recensioni
+* recensioni --> FATTO
 * tour organizzati
 * ricerca attrazioni
 * piano vacanza scandito per giornate
@@ -34,14 +34,14 @@ GLOSSARIO:
 
 # DOING:
 * RECENSIONI ALLE ATTRAZIONI:
-  * NON SI PUÒ RECENSIRE LA STESSA ATTIVITÀ PIÙ VOLTE 
   * in crea recensione ci deve essere scritto il riferimento "Recensisci attivita fatta il durante la vacanza..."
 *    OPERAZIONI FINE VACANZA: concludere  
       22)Sistemare ScelteList
 
 # RECENSIONI
     Le recensioni si visualizzano nella pagina di dettaglio di un attrazione
-    Le può inserire soltano un utente registrato che ha compilato una vacanza con quella attivita
+    Le può inserire soltanto un utente registrato che ha compilato una vacanza con quella attivita
+    NON SI PUÒ RECENSIRE LA STESSA ATTIVITÀ PIÙ VOLTE
     sono inseribili tramite form raggiungibile dalla pagina della vacanza:
     1° modo)gestisci vacanze -> selziona 1 vacanza -> nella card di una attrazione clicca su bottone recensisci
     2° modo)home-> dettaglio dell'attrazione-> sotto la finestra delle recensioni Bottone recensisci

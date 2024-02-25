@@ -48,10 +48,11 @@ def DetailAttrazioneEntita(request, nome_attr):
                         if v.attrazione == attrazione:  # Se utente ha scelto questa attrazione
                             check = True
             # Se utente ha già recensito il prodotto (non può recensirlo più volte)
-            #if Recensione.objects.filter().exists():
-            #    for r in recensioni.attrazione.all():
-            #        if r.autore == user:
-            #            check = False
+            # if Recensione.objects.filter().exists():
+            for r in recensioni.all():
+                if r.attrazione == attrazione:
+                    if r.autore == user:
+                        check = False
         ctx = {"attivita": attrazione, "check": check, "recensioni": recensioni}
         if request.method == "GET":
             return render(request, template_name=templ, context=ctx)
