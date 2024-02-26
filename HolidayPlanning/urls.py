@@ -14,4 +14,5 @@ urlpatterns = [
     path("vacanza/<pk>/", DettaglioVacanza.as_view(), name="dettagliovacanza"),
     path("vacanza/<pk>/modificavacanza/", ModificaVacanza.as_view(), name="modificavacanza"),
     path("vacanza/<pk>/stampavacanza/", stampaVacanza, name="stampavacanza"),
+    path("tour/", vacanze_by_root, name="tourorganizzati"),
     ]

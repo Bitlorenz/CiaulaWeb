@@ -33,8 +33,10 @@ GLOSSARIO:
     * Migliorare tutto l'aspetto grafico del sito *
 
 # DOING:
-* RECENSIONI ALLE ATTRAZIONI:
-  * in crea recensione ci deve essere scritto il riferimento "Recensisci attivita fatta il durante la vacanza..."
+* Tour organizzati: 
+  * ampliare vacanze del root
+  * vacanze del root sono visualizzabili da tutti nella sezione dedicata
+  * uno può aggiungere direttamente quegli itinerari alla sua lista vacanze
 *    OPERAZIONI FINE VACANZA: concludere  
       22)Sistemare ScelteList
 
@@ -45,6 +47,8 @@ GLOSSARIO:
     sono inseribili tramite form raggiungibile dalla pagina della vacanza:
     1° modo)gestisci vacanze -> selziona 1 vacanza -> nella card di una attrazione clicca su bottone recensisci
     2° modo)home-> dettaglio dell'attrazione-> sotto la finestra delle recensioni Bottone recensisci
+    in crea recensione ci deve essere scritto il riferimento "Recensisci attivita fatta il durante la vacanza..."
+    --> bisogna recensire l'attrazione in quanto tale oppure come scelta e attività svolta con data, costi ecc...
 {!!!HOT!!!} GESTIONE HOLIDAYPLANNING
 PROBLEMI
     La vacanza corrente è vista come il carrello e "Gestisci Vacanze" come una sezione "Miei Ordini"

@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from attractions.models import Attrazione
+from profiles.models import UserProfileModel
 from .forms import *
 from .models import Scelta, Vacanza
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
@@ -119,13 +120,26 @@ class VacanzeList(LoginRequiredMixin, ListView):
         context['vacanze'] = Vacanza.objects.filter(utente=self.request.user)
         return context
 
+def vacanze_by_root(request):
+    try:
+        user = UserProfileModel.objects.get(nrSocio=1)
+        vacanze = Vacanza.objects.filter(utente=user)
+        context = {
+            'title' : "I Nostri Tour Organizzati",
+            'utente': user,
+            'vacanze': vacanze
+        }
+        return render(request, 'HolidayPlanning/vacanze.html', context)
+    except UserProfileModel.DoesNotExist:
+        return HttpResponse("User not found", status=404)
+
 
 # class view per creare una vacanza
 class CreaVacanza(LoginRequiredMixin, CreateView):
     model = Vacanza
     form_class = CreaVacanzaForm
     template_name = "HolidayPlanning/crea_vacanza.html"
-    success_url = reverse_lazy("HolidayPlanning:attrazioni")
+    success_url = reverse_lazy("attractions:attrazioni")
 
     def form_valid(self, form):
         vacanza = form.save(commit=False)
