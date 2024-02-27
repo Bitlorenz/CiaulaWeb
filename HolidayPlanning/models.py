@@ -9,7 +9,8 @@ class Scelta(models.Model):
     oraInizio = models.TimeField(blank=True)  # scelta dall'utente
     oraFine = models.TimeField(blank=True)  # scelta dall'utente
     durata = models.DurationField()  # questi sono i secondi della durata
-
+    tempo_spostamento = models.DurationField(null=True)
+    tipo_spostamento = models.CharField(null=True)
     def __str__(self):
         return "ID: " + str(self.pk) + "scelta: " + str(self.attrazione) + " , il " + str(self.giorno)
 

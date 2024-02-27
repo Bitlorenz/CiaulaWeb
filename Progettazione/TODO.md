@@ -21,24 +21,30 @@ GLOSSARIO:
     37) una recensione all'attività  andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passato la data scelta
 
     FRONTEND
+    39)piano vacanza scandito per giornate: è solo una cosa di frontend? Controlli su orari e giorni: se la giornata è finita non si possono aggiungere più attrazioni
+    per ogni attrazione stampata nella lista o nel piano pdf, se quella successiva è di una giornata seguente si stampa il giorno e il numero della giornata
     38)Migliorare frontend per barra di ricerca e per i risultati della ricerca
     35)nel form di aggiunta scelta bisogna ricordare la vacanza
     34)Il mio itinerario deve ricordare alcuni dettagli della vacanza
     30)sistemare pagina di cancella scelta
     31)In ListaScelte metà pagina mostra la lista delle scelte e l'altra metà mostra i dettaglie del viaggio con il budget che scala
-    24)sistemare deatilview vacanza con scelte raggruppate per giorni
     20)sistemare navbar
     9)Creare homepage.html
-    26)Riempire sezione "I nostri tour" con delle proposte di tour
     27)Riempire la sezione contatti con alcuni contatti (e magari il form per le mail)
     * Migliorare tutto l'aspetto grafico del sito *
 
 # DOING:
-* piano vacanza scandito per giornate
-  * è solo una cosa di frontend? Controlli su orari e giorni
+* calcolare gli spostamenti:
+  * aggiungere campi tipologia spostamento e durata spostamento al modello Scelta, possono essere entrambi null, provare a inserire nuova model class?
+  * sezione nel dettaglio di una vacanza in cui mettere gli spostamenti: bottone tra una attrazione e la successiva
+  * funzione Inserisci spostamento che prende in ingresso una scelta e la modifica per inserire uno spostamento  
 * ampliare vacanze del root
-*    OPERAZIONI FINE VACANZA: concludere  
+* OPERAZIONI FINE VACANZA: concludere  
       22)Sistemare ScelteList
+
+# SPOSTAMENTI: DA INSERIRE A MANO (può essere esteso venendo calcolato dal sistema)
+  * la durata e la tipologia degli spostamenti sono parte di una scelta, definiscono il trasferimento verso un'attrazione
+  * fanno ricalcolare il tempo di una giornata e per la prossima attività
 
 # TOUR organizzati: 
   * vacanze del root sono visualizzabili nella sezione dedicata da tutti
