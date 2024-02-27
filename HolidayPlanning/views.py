@@ -4,19 +4,18 @@ from re import sub
 import io
 
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import FileResponse, HttpResponseForbidden
+from django.http import FileResponse, HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from attractions.models import Attrazione
 from profiles.models import UserProfileModel
 from .forms import *
+from .mixins import LookingTourMixin
 from .models import Scelta, Vacanza
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
@@ -118,16 +117,19 @@ class VacanzeList(LoginRequiredMixin, ListView):
         context['title'] = "Le tue Vacanze"
         context['utente'] = self.request.user
         context['vacanze'] = Vacanza.objects.filter(utente=self.request.user)
+        context['tour'] = False
         return context
 
 def vacanze_by_root(request):
     try:
         user = UserProfileModel.objects.get(nrSocio=1)
         vacanze = Vacanza.objects.filter(utente=user)
+        tour = True
         context = {
             'title' : "I Nostri Tour Organizzati",
             'utente': user,
-            'vacanze': vacanze
+            'vacanze': vacanze,
+            'tour' : tour
         }
         return render(request, 'HolidayPlanning/vacanze.html', context)
     except UserProfileModel.DoesNotExist:
@@ -147,9 +149,40 @@ class CreaVacanza(LoginRequiredMixin, CreateView):
         vacanza.save()
         return super().form_valid(form)
 
+class AggiungiTourVacanza(LoginRequiredMixin, CreateView):
+    model = Vacanza
+    form_class = CreaVacanzaForm
+    template_name = "HolidayPlanning/crea_vacanza.html"
+    success_url = reverse_lazy("attractions:attrazioni")
+
+    def form_valid(self, form):
+        vacanza = form.save(commit=False)
+        vacanza.utente = self.request.user
+        vacanza_id = self.kwargs.get('pk')
+        if vacanza_id is not None:
+            #recupero l'oggetto vacanza
+            vacanza_obj = Vacanza.objects.get(pk=vacanza_id)
+            vacanza.save()
+            for s in vacanza_obj.scelte.all():
+                vacanza.scelte.add(s)
+            vacanza.save()
+        return super().form_valid(form)
+
+    def get_initial(self):
+        initial = super().get_initial()
+        print("esecuzione metodo get_initial")
+        # Controlla se l'oggetto è passato nella richiesta
+        vacanza_id = self.kwargs.get('pk')
+        if vacanza_id is not None:
+            vacanza_obj = Vacanza.objects.get(pk=vacanza_id) # recupero l'oggetto vacanza
+            initial['dataArrivo'] = vacanza_obj.dataArrivo
+            initial['dataPartenza'] = vacanza_obj.dataPartenza
+            initial['budgetDisponibile'] = vacanza_obj.budgetDisponibile
+            return initial
+
 
 # class view per i dettagli di una vacanza
-class DettaglioVacanza(LoginRequiredMixin, DetailView):
+class DettaglioVacanza(LookingTourMixin, DetailView):
     model = Vacanza
     template_name = "HolidayPlanning/dettagliovacanza.html"
 

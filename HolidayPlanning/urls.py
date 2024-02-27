@@ -10,6 +10,7 @@ urlpatterns = [
     path("risultati/<str:stringa>/<str:where>/", RisultatiList.as_view(), name="risultati"),
     path("sceltafatta/<pk>/", SceltaFattaView.as_view(), name="sceltafatta"),
     path("creavacanza/", CreaVacanza.as_view(), name="creavacanza"),
+    path("aggiungitour/<int:pk>", AggiungiTourVacanza.as_view(), name="aggiungitour"),
     path("vacanze/", VacanzeList.as_view(), name="vacanze"),
     path("vacanza/<pk>/", DettaglioVacanza.as_view(), name="dettagliovacanza"),
     path("vacanza/<pk>/modificavacanza/", ModificaVacanza.as_view(), name="modificavacanza"),

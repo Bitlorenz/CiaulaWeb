@@ -3,7 +3,7 @@ GLOSSARIO:
     
 # REQUISITI FONDAMENTALI:
 * recensioni --> FATTO
-* tour organizzati
+* tour organizzati --> FATTO
 * ricerca attrazioni
 * piano vacanza scandito per giornate
 * calcolare gli spostamenti
@@ -33,12 +33,14 @@ GLOSSARIO:
     * Migliorare tutto l'aspetto grafico del sito *
 
 # DOING:
-* Tour organizzati: 
-  * ampliare vacanze del root
-  * vacanze del root sono visualizzabili da tutti nella sezione dedicata
-  * uno può aggiungere direttamente quegli itinerari alla sua lista vacanze
+* ricerca attrazioni: controllare view create e come funzionano, utilizzabili per utenti loggati e non
+* ampliare vacanze del root
 *    OPERAZIONI FINE VACANZA: concludere  
       22)Sistemare ScelteList
+
+# TOUR organizzati: 
+  * vacanze del root sono visualizzabili nella sezione dedicata da tutti
+  * uno può aggiungere direttamente quegli itinerari alla sua lista vacanze, e si possono modificare
 
 # RECENSIONI
     Le recensioni si visualizzano nella pagina di dettaglio di un attrazione
