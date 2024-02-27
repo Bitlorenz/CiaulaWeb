@@ -1,5 +1,6 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -116,20 +117,24 @@ class AggiornaAttrazione(UserPassesTestMixin, UpdateView):
         return reverse("HolidayPlanning:dettaglioattr", kwargs={"pk": self.object.pk})
 
 
-# raggiunta tramite richiesta GET, al click del pulsante submit, i dati inseriti (nei campi definiti dal SearchForm)
-# re-indirizzeranno sul secondo url, i cui parametri sono compilati in funzione di request.POST
-def cerca(request):
-    if request.method == "POST":
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            stringa = form.cleaned_data.get("search_string")
-            where = form.cleaned_data.get("search_where")  # indica la table su cui vogliamo fare la query
-            return redirect("HolidayPlanning:risultati", stringa, where)
-    else:
-        form = SearchForm()  # è il form personalizzato, passato poi in context
+# Ricerca sulle attrazioni da parte dei turisti e utenti anonimi
+class SearchView(ListView):
+    model = Attrazione
+    template_name = 'attractions/cerca.html'
+    context_object_name = 'listaricerca'
 
-    return render(request, template_name="attractions/cerca.html", context={"form": form})
-
+    #Acquisisco i risultati della ricerca
+    def get_queryset(self):
+        result = super(SearchView, self).get_queryset()
+        query = self.request.GET.get('search')
+        if query:
+            postresult = Attrazione.objects.filter(
+                Q(nome__contains=query) | Q(tipo__contains=query) | Q(citta__contains=query) | Q(luogo__contains=query)
+            )
+            result = postresult
+        else:
+            result = None
+        return result
 
 @staff_member_required
 def delete_attrazione(self, nome):

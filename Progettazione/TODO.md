@@ -4,7 +4,7 @@ GLOSSARIO:
 # REQUISITI FONDAMENTALI:
 * recensioni --> FATTO
 * tour organizzati --> FATTO
-* ricerca attrazioni
+* ricerca attrazioni --> FATTO
 * piano vacanza scandito per giornate
 * calcolare gli spostamenti
 * difficoltà prevista della giornata
@@ -21,6 +21,7 @@ GLOSSARIO:
     37) una recensione all'attività  andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passato la data scelta
 
     FRONTEND
+    38)Migliorare frontend per barra di ricerca e per i risultati della ricerca
     35)nel form di aggiunta scelta bisogna ricordare la vacanza
     34)Il mio itinerario deve ricordare alcuni dettagli della vacanza
     30)sistemare pagina di cancella scelta
@@ -33,7 +34,8 @@ GLOSSARIO:
     * Migliorare tutto l'aspetto grafico del sito *
 
 # DOING:
-* ricerca attrazioni: controllare view create e come funzionano, utilizzabili per utenti loggati e non
+* piano vacanza scandito per giornate
+  * è solo una cosa di frontend? Controlli su orari e giorni
 * ampliare vacanze del root
 *    OPERAZIONI FINE VACANZA: concludere  
       22)Sistemare ScelteList
