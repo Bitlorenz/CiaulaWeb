@@ -21,13 +21,14 @@ GLOSSARIO:
     37) una recensione all'attività  andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passato la data scelta
 
     FRONTEND
+    40)inserire dettagli scelta o migliorare scheda della scelta in dettaglio vacanza
     39)piano vacanza scandito per giornate: è solo una cosa di frontend? Controlli su orari e giorni: se la giornata è finita non si possono aggiungere più attrazioni
     per ogni attrazione stampata nella lista o nel piano pdf, se quella successiva è di una giornata seguente si stampa il giorno e il numero della giornata
     38)Migliorare frontend per barra di ricerca e per i risultati della ricerca
     35)nel form di aggiunta scelta bisogna ricordare la vacanza
     34)Il mio itinerario deve ricordare alcuni dettagli della vacanza
     30)sistemare pagina di cancella scelta
-    31)In ListaScelte metà pagina mostra la lista delle scelte e l'altra metà mostra i dettaglie del viaggio con il budget che scala
+    31)In ListaScelte metà pagina mostra la lista delle scelte e l'altra metà mostra i dettagli del viaggio con il budget che scala
     20)sistemare navbar
     9)Creare homepage.html
     27)Riempire la sezione contatti con alcuni contatti (e magari il form per le mail)
@@ -35,9 +36,15 @@ GLOSSARIO:
 
 # DOING:
 * calcolare gli spostamenti:
-  * aggiungere campi tipologia spostamento e durata spostamento al modello Scelta, possono essere entrambi null, provare a inserire nuova model class?
-  * sezione nel dettaglio di una vacanza in cui mettere gli spostamenti: bottone tra una attrazione e la successiva
-  * funzione Inserisci spostamento che prende in ingresso una scelta e la modifica per inserire uno spostamento  
+  * Modello:
+    * provare a inserire nuova model class
+    * aggiungere campi tipologia spostamento e durata spostamento al modello Scelta? possono essere entrambi null 
+  * Template:
+    * sezione nel dettaglio di una vacanza in cui mettere gli spostamenti: bottone tra una attrazione e la successiva
+  * View:
+    * funzione Inserisci spostamento che prende in ingresso due primary key di due scelte e le usa per crearespostamento
+  * Form:
+    * form che inserisce i campi degli orari e del tipo, costo
 * ampliare vacanze del root
 * OPERAZIONI FINE VACANZA: concludere  
       22)Sistemare ScelteList

@@ -9,14 +9,24 @@ class Scelta(models.Model):
     oraInizio = models.TimeField(blank=True)  # scelta dall'utente
     oraFine = models.TimeField(blank=True)  # scelta dall'utente
     durata = models.DurationField()  # questi sono i secondi della durata
-    tempo_spostamento = models.DurationField(null=True)
-    tipo_spostamento = models.CharField(null=True)
+
+    # tempo_spostamento = models.DurationField(null=True)
+    # tipo_spostamento = models.CharField(null=True, max_length=20)
+
     def __str__(self):
         return "ID: " + str(self.pk) + "scelta: " + str(self.attrazione) + " , il " + str(self.giorno)
 
     class Meta:
         verbose_name = "Scelta"
         verbose_name_plural = "Scelte"
+
+    def next_scelta(self):
+        next_scelta = Scelta.objects.filter(giorno=self.giorno, oraInizio__gt=self.oraFine).order_by(
+            'oraInizio').first()
+        if next_scelta:
+            return next_scelta
+        else:
+            return None
 
     # controllo ammissibilità ora inizio e fine, da chiamare nella creazione della scelta
     def orari_ammissibili(self):
@@ -25,6 +35,45 @@ class Scelta(models.Model):
             if self.oraInizio < self.oraFine:
                 ammissibile = True
         return ammissibile
+
+
+class Spostamento(models.Model):
+    scelta_partenza = models.ForeignKey(Scelta, on_delete=models.SET_NULL, null=True, related_name="partenza")
+    scelta_arrivo = models.ForeignKey(Scelta, on_delete=models.SET_NULL, null=True, related_name="arrivo")
+    ora_partenza = models.TimeField(blank=True)
+    ora_arrivo = models.TimeField(blank=True)
+    durata_spostamento = models.DurationField()
+    veicolo = models.CharField(max_length=30, blank=True)
+    tipo_spostamento = models.CharField(max_length=10)
+    costo = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+
+    def __str__(self):
+        return "Spostamento da: "+str(self.scelta_partenza.attrazione.citta)+" a "+str(self.scelta_arrivo.attrazione.citta)
+
+    class Meta:
+        verbose_name = "Spostamento"
+        verbose_name_plural = "Spostamenti"
+
+
+'''
+def get_next_activity(self):
+        if self.tipo_spostamento == self.PARTENZA:
+            next_activities = Attrazione.objects.filter(
+                giorno=self.giorno,
+                oraInizio__gte=self.ora_arrivo,
+                oraInizio__lte=timezone.datetime.combine(self.giorno, self.ora_arrivo) + self.durata_spostamento
+            ).order_by('oraInizio')
+            if next_activities.exists():
+                return next_activities.first()
+        elif self.tipo_spostamento == self.ARRIVO:
+            next_activities = Attrazione.objects.filter(
+                giorno=self.giorno,
+                oraInizio__gte=self.ora_arrivo
+            ).order_by('oraInizio')
+            if next_activities.exists():
+                return next_activities.first()
+        return None
+'''
 
 
 class Vacanza(models.Model):

@@ -25,13 +25,15 @@ class AttrazioniList(ListView):
         context['listaattrazioni'] = Attrazione.objects.all()
         utente = self.request.user
         context['user'] = utente
+        vacanza_id = self.request.GET.get('vacanza_id')
+        if vacanza_id:
+            context['vacanza_id'] = vacanza_id
         return context
 
 
 #  View per la visualizzazione dei dati relativi ad un'attrazione
 #  Possibilità di aggiungere le recensioni se l'attrazione è stata scelta
 def DetailAttrazioneEntita(request, nome_attr):
-
     if Attrazione.objects.filter(nome=nome_attr).exists():
         templ = "attractions/dettaglioattrazione.html"
         attrazione = Attrazione.objects.get(nome=nome_attr)  # Acquisisco attrazione dal nome
@@ -59,8 +61,6 @@ def DetailAttrazioneEntita(request, nome_attr):
             return render(request, template_name=templ, context=ctx)
         else:
             return HttpResponse("ERROR: nome attrazione non valido, RICHIESTA POST")
-
-
 
 
 # CreateView per l'inserimento di un'attrazione da parte dell'admin
@@ -123,7 +123,7 @@ class SearchView(ListView):
     template_name = 'attractions/cerca.html'
     context_object_name = 'listaricerca'
 
-    #Acquisisco i risultati della ricerca
+    # Acquisisco i risultati della ricerca
     def get_queryset(self):
         result = super(SearchView, self).get_queryset()
         query = self.request.GET.get('search')
@@ -135,6 +135,7 @@ class SearchView(ListView):
         else:
             result = None
         return result
+
 
 @staff_member_required
 def delete_attrazione(self, nome):
@@ -158,7 +159,8 @@ class RecensioneCreateView(LoginRequiredMixin, CreateView):
         recensione.autore = UserProfileModel.objects.get(nrSocio=self.request.user.pk)
         recensione.attrazione = Attrazione.objects.get(pk=self.kwargs['pk'])
         recensione.save()
-        self.success_url = reverse_lazy("attractions:dettaglioattr", kwargs={'nome_attr': recensione.attrazione.pk})  # redireziono all'attrazione
+        self.success_url = reverse_lazy("attractions:dettaglioattr",
+                                        kwargs={'nome_attr': recensione.attrazione.pk})  # redireziono all'attrazione
         return super().form_valid(form)
 
     #  Aggiunge l'attrazione alle variabili di contesto
@@ -168,7 +170,7 @@ class RecensioneCreateView(LoginRequiredMixin, CreateView):
         attrazione = Attrazione.objects.get(pk=pk)
         context['attrazione'] = attrazione
         return context
-    
+
     #  Restituisce 404 se l'attrazione non è stata trovata
     def dispatch(self, request, *args, **kwargs):
         attrazione = get_object_or_404(Attrazione, pk=self.kwargs['pk'])

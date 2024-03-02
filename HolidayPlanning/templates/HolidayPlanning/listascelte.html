@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container">
-        <h1 class="text-center"> Ultima Vacanza Creata</h1>
+        <h1 class="text-center"> Itinerario della Vacanza Creata</h1>
         <div class="row">
             <div class="col-md-6">
                 <h1>Riepilogo itinerario</h1>
@@ -24,6 +24,9 @@
                             <p class="card-text hours"> da {{ s.oraInizio }} a {{ s.oraFine }} il {{ s.giorno }}</p>
                             <a href="{% url 'HolidayPlanning:modificascelta' s.pk %}" class="btn btn-primary">Modifica scelta</a>
                             <a href="{% url 'HolidayPlanning:cancellascelta' s.pk %}" class="btn btn-primary">Cancella scelta</a>
+                            <a href="{% url 'HolidayPlanning:spostamento' s.pk s.next_scelta.pk %}" class="btn btn-primary">
+                                Aggiungi spostamento da {{ s.attrazione.citta }} per {{ s.next_scelta.attrazione.citta }}
+                            </a>
                         </div>
                     </div>
                 </div>

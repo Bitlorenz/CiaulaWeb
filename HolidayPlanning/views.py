@@ -16,32 +16,34 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from profiles.models import UserProfileModel
 from .forms import *
 from .mixins import LookingTourMixin
-from .models import Scelta, Vacanza
+from .models import Scelta, Spostamento, Vacanza
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
 
-def scegliattrazione(request, pk):
+def scegliattrazione(request, pk, vacanza_id):
     if request.method == "POST":
         form = ScegliAttrazioneForm(data=request.POST, pk=pk, user=request.user)
         if form.is_valid():
             scelta = form.save(commit=False)
-            rifvacanza = Vacanza.objects.filter(utente=request.user).last()
+            rifvacanza = Vacanza.objects.get(utente=request.user, pk=vacanza_id)
             ini = form.cleaned_data.get("oraInizio")
             fine = form.cleaned_data.get("oraFine")
             scelta.durata = td(hours=fine.hour - ini.hour) + td(minutes=fine.minute - ini.minute)
             # checkSovrapposizione(request, fine, ini)
             scelta.save()
             rifvacanza.scelte.add(scelta)
-            return redirect("HolidayPlanning:scelte")
+            return redirect("HolidayPlanning:scelte", pk=rifvacanza.pk)
     else:
         utente = request.user
+        vacanza = Vacanza.objects.filter(utente=request.user, pk=vacanza_id)
+        print("vacanza in get: "+str(vacanza))
         att = get_object_or_404(Attrazione, pk=pk)
         form = ScegliAttrazioneForm(pk=pk, user=utente)
         # TODO CONTROLLARE SE ESISTE UNA VACANZA PER L'UTENTE, SE NO CREARNE UNA
         if Vacanza.objects.filter(utente=utente).count() == 0:
             return redirect("HolidayPlanning:creavacanza")
         return render(request, template_name="HolidayPlanning/scegli_attrazione.html",
-                      context={"form": form, "att": att, "title": att.nome})
+                      context={"form": form, "att": att, "title": att.nome, "vacanza": vacanza})
     return render(request, template_name="HolidayPlanning/scegli_attrazione.html", context={"form": form})
 
 
@@ -74,12 +76,40 @@ class ScelteList(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['titolo'] = "Itinerario di Viaggio"
         context['utente'] = self.request.user
-        vacanzaCorrente = Vacanza.objects.filter(utente=self.request.user).last()
+        vacanza_id = self.kwargs['pk']
+        if vacanza_id == 0:
+            vacanzaCorrente = Vacanza.objects.filter(utente=self.request.user).last()
+        else:
+            vacanzaCorrente = Vacanza.objects.get(pk=self.kwargs['pk'])
         context['vacanzacorrente'] = vacanzaCorrente
         listaScelte = vacanzaCorrente.scelte.all()
         context['totale'] = self.calcolaTotale(listaScelte)
         context['scelte'] = listaScelte
         return context
+
+
+# class create view per aggiungere lo spsotamento tra due scelte
+# deve controllare che l'ora di partenza sia successiva alla fine della attrazione A
+# e che l'ora di arrivo sia precedente all'inizio dell'attrazione B
+# bisogna scrivhere dei metodi per spostare attrazioni e mandare messaggi su infattibilità viaggi
+# le attrazioni di partenza e arrivo sono mandate via template con le pk delle scelte
+class AggiungiSpostamento(LoginRequiredMixin, CreateView):
+    model = Spostamento
+    form_class = SpostamentoForm
+    template_name = "HolidayPlanning/spostamento.html"
+
+    def get_initial(self, **kwargs):
+        initial = super().get_initial()
+        scelta_partenza = Scelta.objects.get(pk=self.kwargs['par'])
+        initial['scelta_partenza'] = scelta_partenza
+        scelta_arrivo = Scelta.objects.get(pk=self.kwargs['arr'])
+        initial['scelta_arrivo'] = scelta_arrivo
+
+    def form_valid(self, form):
+        spostamento = form.save(commit=False)
+        # checkOrari(form.cleaned_data['ora_partenza'])
+        spostamento.save()
+        return super().form_valid(form)
 
 
 # class per modificare una scelta data la chiave primaria
@@ -126,10 +156,10 @@ def vacanze_by_root(request):
         vacanze = Vacanza.objects.filter(utente=user)
         tour = True
         context = {
-            'title' : "I Nostri Tour Organizzati",
+            'title': "I Nostri Tour Organizzati",
             'utente': user,
             'vacanze': vacanze,
-            'tour' : tour
+            'tour': tour
         }
         return render(request, 'HolidayPlanning/vacanze.html', context)
     except UserProfileModel.DoesNotExist:
@@ -149,6 +179,8 @@ class CreaVacanza(LoginRequiredMixin, CreateView):
         vacanza.save()
         return super().form_valid(form)
 
+
+# classe usata per copiare un tour organizzato e usarlo come vacanza propria
 class AggiungiTourVacanza(LoginRequiredMixin, CreateView):
     model = Vacanza
     form_class = CreaVacanzaForm
@@ -160,7 +192,7 @@ class AggiungiTourVacanza(LoginRequiredMixin, CreateView):
         vacanza.utente = self.request.user
         vacanza_id = self.kwargs.get('pk')
         if vacanza_id is not None:
-            #recupero l'oggetto vacanza
+            # recupero l'oggetto vacanza
             vacanza_obj = Vacanza.objects.get(pk=vacanza_id)
             vacanza.save()
             for s in vacanza_obj.scelte.all():
@@ -174,7 +206,7 @@ class AggiungiTourVacanza(LoginRequiredMixin, CreateView):
         # Controlla se l'oggetto è passato nella richiesta
         vacanza_id = self.kwargs.get('pk')
         if vacanza_id is not None:
-            vacanza_obj = Vacanza.objects.get(pk=vacanza_id) # recupero l'oggetto vacanza
+            vacanza_obj = Vacanza.objects.get(pk=vacanza_id)  # recupero l'oggetto vacanza
             initial['dataArrivo'] = vacanza_obj.dataArrivo
             initial['dataPartenza'] = vacanza_obj.dataPartenza
             initial['budgetDisponibile'] = vacanza_obj.budgetDisponibile
@@ -254,22 +286,6 @@ def stampaVacanza(request, pk):
     return FileResponse(buffer, as_attachment=True, filename='vacanza.pdf')
 
 
-class RisultatiList(ListView):
-    model = Attrazione
-    template_name = "HolidayPlanning/risultati.html"
-
-    def get_queryset(self):
-        stringa = self.request.resolver_match.kwargs["stringa"]
-        where = self.request.resolver_match.kwargs["where"]
-
-        if "Scelta" in where:
-            sc = Scelta.objects.filter(posizioneInGiornata__exact=int(stringa))
-            return sc
-        if "Attrazione" in where:
-            sa = Attrazione.objects.filter(citta__icontains=stringa)
-            return sa
-
-
 class SceltaFattaView(LoginRequiredMixin, DetailView):
     model = Scelta
     template_name = "HolidayPlanning/sceltafatta.html"
@@ -295,3 +311,21 @@ class SceltaFattaView(LoginRequiredMixin, DetailView):
                 self.errore = "Errore nell'operazione di restituzione"
 
         return ctx
+
+'''
+# DEPRECATED: view per la ricerca di attrazioni
+class RisultatiList(ListView):
+    model = Attrazione
+    template_name = "HolidayPlanning/risultati.html"
+
+    def get_queryset(self):
+        stringa = self.request.resolver_match.kwargs["stringa"]
+        where = self.request.resolver_match.kwargs["where"]
+
+        if "Scelta" in where:
+            sc = Scelta.objects.filter(posizioneInGiornata__exact=int(stringa))
+            return sc
+        if "Attrazione" in where:
+            sa = Attrazione.objects.filter(citta__icontains=stringa)
+            return sa
+'''

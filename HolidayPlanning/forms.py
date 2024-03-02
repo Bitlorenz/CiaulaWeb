@@ -78,3 +78,7 @@ class ScegliAttrazioneForm(forms.ModelForm):
     class Meta:
         model = Scelta
         fields = ['attrazione', 'giorno', 'oraInizio', 'oraFine']
+
+
+class SpostamentoForm(forms.ModelForm):
+    pass
