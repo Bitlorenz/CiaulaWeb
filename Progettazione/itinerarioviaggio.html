@@ -1,0 +1,11 @@
+Questo codice andrebbe nella navbar in base.html. La sua funzione sarebbe quella di portare direttamente all'ultima
+vacanza creata o quella che si sta creando, porta più errori che altro, soprattutto nella gestione del mixin,
+fa conflitto con dettaglio vacanza, dovrebbe portare sempre all'ultima vacanza creata ma bisognerebbe prendere la chiave
+della vacanza anche quando non c'è
+                    <li class="nav-item">
+                        {% if v.pk is not None %}
+                            <a class="nav-link" href="{% url 'HolidayPlanning:dettagliovacanza' v.pk %}">Itinerario di Viaggio</a>
+                        {% else %}
+                            <a class="nav-link" href="{% url 'HolidayPlanning:dettagliovacanza' 0 %}">Itinerario di Viaggio</a>
+                        {% endif %}
+                    </li>

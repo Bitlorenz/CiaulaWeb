@@ -1,15 +1,9 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
-{% block head %}
-{% endblock %}
-
-{% block title %}{{object.attrazione}}{% endblock %}
+{% block title %} Modifica Scelta{% endblock %}
 {% block content %}
-    <h1>Modifica Scelta di {{ object.attrazione.nome  }}</h1>
-
-    <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Modifica">
-    </form>
-
+    <h1>Modifica la scelta di {{ object.attrazione.nome  }}</h1>
+    {% crispy form %}
+    <a class="btn" href="{% url 'HolidayPlanning:dettagliovacanza' v_id %}">Cancel</a>
 {% endblock %}

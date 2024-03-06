@@ -80,6 +80,21 @@ class ScegliAttrazioneForm(forms.ModelForm):
         fields = ['attrazione', 'giorno', 'oraInizio', 'oraFine']
 
 
+class ModificaSceltaForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'scelta-crispy-form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Modifica'))
+    helper.inputs[0].field_classes = 'btn btn-success'
+
+    def clean(self):
+        if self.cleaned_data["oraInizio"] > self.cleaned_data["oraFine"]:
+            raise forms.ValidationError(_("Valori non validi: Ora di Inizio precede ora di Arrivo"))
+    class Meta:
+        model = Scelta
+        fields = ['giorno', 'oraInizio', 'oraFine']
+
+
 class SpostamentoForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_id = 'scelta-crispy-form'

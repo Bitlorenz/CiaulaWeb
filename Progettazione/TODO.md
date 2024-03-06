@@ -5,16 +5,18 @@ GLOSSARIO:
 * recensioni --> FATTO
 * tour organizzati --> FATTO
 * ricerca attrazioni --> FATTO
-* piano vacanza scandito per giornate
-* calcolare gli spostamenti
+* piano vacanza scandito per giornate -->Frontend
+* inserire gli spostamenti --> FATTO da testare bene
 * difficoltà prevista della giornata
+  * metodo calcola difficoltà nel modello vacanza, se in una giornata ci sono più di 4 attrazioni allora è difficile
+  * se ce ne sono 2-3 è media, 1 è facile
+* metodo statico che controlla gli orari delle attività
+* messagges framework?
 * recommendation system
 
 
 ## TO-DO:
 	BACKEND
-    42)Aggiustare ModificaScelta, prendere spunto da ProductUpdateView in progetto fillo
-    41)Aggiustare CancellaScelta perchè non ritorna nessun parametro, andrebbe ritornata la pk della vacanza
     36)la lista delle scelte all'interno della vacanza deve sempre essere ordinata
     32)Aggiungere nome alla vacanza, aggiungere stato chiusa alla vacanza
     25)TEST: Da url non si può cambiare la pk di una vacanza per modificarla, se l'user è diverso non si può fare.   Provare: cambio utente, creo una vacanza, cosa succede se nell'url cambio l'id della vacanza? se vado nella vacanza dell'altro utente è un problema          
@@ -76,6 +78,8 @@ PROBLEMI
     CancellaVacanza view: è utile cancellare una vacanza? al massimo si può svuotare il carrello, ovvero cancellare tutte le scelte dell'attuale vacanza
 
     DONE:
+    41)Aggiustare CancellaScelta perchè non ritorna nessun parametro, andrebbe ritornata la pk della vacanza
+    42)Aggiustare ModificaScelta, prendere spunto da ProductUpdateView in progetto fillo
     43)aggiustare itinerario di viaggio perchè nel mixin quando viene chiamato con pk==0 non viene trovata attrazione
     OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano
     37)Immettere interfacce di gestione per cancellare attrazioni

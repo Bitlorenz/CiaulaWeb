@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block head %}
+{% block title %}
+    Cancella Scelta
 {% endblock %}
 
-{% block title %}Cancellazione Scelta {{ entita }}{% endblock %}
 {% block content %}
-    <h1>Modifica Scelta di {{ entita }}</h1>
-<br>
-    <form method="post">{% csrf_token %}
-    <p>Sicuro di voler cancellare {{ object }}?</p>
-    <input type="submit" value="Conferma">
+    <h1>Cancella la scelta di {{ object.attrazione.nome  }}</h1>
+    <h3>Stai cancellando qesta scelta, sei sicuro?</h3>
+    <form method="post">
+        {% csrf_token %}
+        <a href="{% url 'HolidayPlanning:dettagliovacanza' v_id %}">Annulla</a>
+        <input type="submit" value="Conferma">
     </form>
-
 {% endblock %}

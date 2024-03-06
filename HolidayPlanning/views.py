@@ -92,12 +92,41 @@ class AggiungiSpostamento(LoginRequiredMixin, CreateView):
 class ModificaScelta(LoginRequiredMixin, UpdateView):
     model = Scelta
     template_name = "HolidayPlanning/modificascelta.html"
-    fields = ['giorno', 'oraInizio', 'oraFine']
+    form_class = ModificaSceltaForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        attivita_pk = self.kwargs['pk']
+        attivita = Scelta.objects.get(pk=attivita_pk)
+        vacanza_pk = self.kwargs['vacanza_id']
+        context["v_id"] = vacanza_pk
+        context["ora inizio attr"] = attivita.attrazione.oraApertura
+        context["ora fine attr"] = attivita.attrazione.oraChiusura
+        return context
+    def form_valid(self, form):
+        scelta = form.save(commit=False)
+        attivita_pk = self.kwargs['pk']
+        attivita = Scelta.objects.get(pk=attivita_pk)
+        attr = attivita.attrazione
+        if form.cleaned_data["oraInizio"] < attr.oraApertura or form.cleaned_data["oraInizio"] > attr.oraChiusura:
+            return self.form_invalid(form, 1)
+        if form.cleaned_data["oraFine"] < attr.oraApertura or form.cleaned_data["oraFine"] > attr.oraChiusura:
+            return self.form_invalid(form, 2)
+            #TODO controllare che non ci siano sovrapposizioni con altre attrazioni nello stesso giorno
+        scelta.save()
+        return super().form_valid(form)
+
+
+    def form_invalid(self, form, error_code):
+        if error_code==1:
+            form.add_error('oraInizio', "L'ora di inizio non rispetta i limiti d'orario dell'attrazione")
+        if error_code==2:
+            form.add_error('oraFine', "L'ora di fine non rispetta i limiti d'orario dell'attrazione")
+        return super().form_invalid(form)
     def get_success_url(self):
         vacanza_id = self.kwargs["vacanza_id"]
         print("Vacanza_id in get_success_url di modificascelta: "+vacanza_id)
-        return redirect("HolidayPlanning:dettagliovacanza", vacanza_id)
+        return reverse("HolidayPlanning:dettagliovacanza", kwargs={'pk':vacanza_id})
 
 
 # class delete view per eliminare una scelta
@@ -115,6 +144,21 @@ class CancellaScelta(LoginRequiredMixin, DeleteView):
         vacanza_id = self.kwargs["vacanza_id"]
         print("Vacanza_id in get_success_url di cancellascelta: "+vacanza_id)
         return reverse("HolidayPlanning:dettagliovacanza", args=[vacanza_id])
+    model = Scelta
+    template_name = "HolidayPlanning/cancellascelta.html"
+
+    def delete(self, request, *args, **kwargs):
+        return super(CancellaScelta, self).delete(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vacanza_pk = self.kwargs['vacanza_id']
+        context["v_id"] = vacanza_pk
+        return context
+    def get_success_url(self):
+        vacanza_id = self.kwargs["vacanza_id"]
+        print("Vacanza_id in get_success_url di cancellascelta: "+vacanza_id)
+        return reverse("HolidayPlanning:dettagliovacanza", kwargs={'pk':vacanza_id})
 
 
 # API VACANZA
