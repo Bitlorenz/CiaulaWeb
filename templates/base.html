@@ -99,7 +99,11 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'HolidayPlanning:dettagliovacanza' 0 %}">Itinerario di Viaggio</a>
+                        {% if v.pk is not None %}
+                            <a class="nav-link" href="{% url 'HolidayPlanning:dettagliovacanza' v.pk %}">Itinerario di Viaggio</a>
+                        {% else %}
+                            <a class="nav-link" href="{% url 'HolidayPlanning:dettagliovacanza' 0 %}">Itinerario di Viaggio</a>
+                        {% endif %}
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Modifica scelta</a>

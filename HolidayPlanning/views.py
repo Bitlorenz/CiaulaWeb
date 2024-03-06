@@ -131,6 +131,8 @@ class VacanzeList(LoginRequiredMixin, ListView):
         return context
 
 
+# view che elenca le vacanze fatte dal root, dato che anche gli utenti anonimi possono vedere i tour vengono rimandati
+# ad un altra view
 def vacanze_by_root(request):
     try:
         user = UserProfileModel.objects.get(nrSocio=1)
@@ -145,6 +147,22 @@ def vacanze_by_root(request):
         return render(request, 'HolidayPlanning/vacanze.html', context)
     except UserProfileModel.DoesNotExist:
         return HttpResponse("User not found", status=404)
+
+
+# DetailView per vedere il toru organizzato
+class TourDetail(DetailView):
+    model = Vacanza
+    template_name = "HolidayPlanning/dettagliovacanza.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Tour Organizzato"
+        context['tour'] = True
+        vacanza = Vacanza.objects.get(pk=kwargs['object'].id)
+        context['vacanza'] = vacanza
+        context['scelte'] = vacanza.scelte.all().reverse()  # l'ultima aggiunta viene mostrata per prima
+        context['totale'] = vacanza.calcolaTotaleAttrazioni()
+        return context
 
 
 # class view per creare una vacanza
@@ -202,6 +220,7 @@ class DettaglioVacanza(LookingTourMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Dettagli Vacanza"
+        context['tour'] = False
         context['utente'] = self.request.user
         vacanza = Vacanza.objects.get(pk=kwargs['object'].id)
         context['vacanza'] = vacanza

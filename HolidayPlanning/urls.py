@@ -11,8 +11,9 @@ urlpatterns = [
     path("creavacanza/", CreaVacanza.as_view(), name="creavacanza"),
     path("aggiungitour/<int:pk>", AggiungiTourVacanza.as_view(), name="aggiungitour"),
     path("vacanze/", VacanzeList.as_view(), name="vacanze"),
-    path("vacanza/<pk>/", DettaglioVacanza.as_view(), name="dettagliovacanza"),
+    path("vacanza/<int:pk>/", DettaglioVacanza.as_view(), name="dettagliovacanza"),
     path("vacanza/<pk>/modificavacanza/", ModificaVacanza.as_view(), name="modificavacanza"),
     path("vacanza/<pk>/stampavacanza/", stampaVacanza, name="stampavacanza"),
     path("tour/", vacanze_by_root, name="tourorganizzati"),
+    path("dettour/<int:pk>", TourDetail.as_view(), name="dettagliotour")
     ]

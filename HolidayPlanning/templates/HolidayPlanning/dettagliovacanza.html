@@ -31,6 +31,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ s.attrazione.nome }}</h5>
                     <p class="card-text hours"> da {{ s.oraInizio }} a {{ s.oraFine }} il {{ s.giorno }}</p>
+                {% if tour %}
                     <a href="{% url 'HolidayPlanning:modificascelta' s.pk vacanza.pk %}" class="btn btn-primary">Modifica
                         scelta</a>
                     <a href="{% url 'HolidayPlanning:cancellascelta' s.pk vacanza.pk %}" class="btn btn-primary">Cancella
@@ -58,6 +59,7 @@
                     </div>
                 </div>
             {% endfor %}
+        {% endif %}
         </div>
         {% empty %}
         <p class="col-12">L'itinerario è ancora vuoto</p>

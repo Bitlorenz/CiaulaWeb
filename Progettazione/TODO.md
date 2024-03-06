@@ -13,7 +13,6 @@ GLOSSARIO:
 
 ## TO-DO:
 	BACKEND
-    43)aggiustare itinerario di viaggio perchè nel mixin quando viene chiamato con pk==0 non viene trovata attrazione
     42)Aggiustare ModificaScelta, prendere spunto da ProductUpdateView in progetto fillo
     41)Aggiustare CancellaScelta perchè non ritorna nessun parametro, andrebbe ritornata la pk della vacanza
     36)la lista delle scelte all'interno della vacanza deve sempre essere ordinata
@@ -51,8 +50,7 @@ GLOSSARIO:
   * Form:
     * form che inserisce i campi degli orari e del tipo, costo
 * ampliare vacanze del root
-* OPERAZIONI FINE VACANZA: concludere  
-      22)Sistemare ScelteList
+
 
 # SPOSTAMENTI: DA INSERIRE A MANO (può essere esteso venendo calcolato dal sistema)
   * la durata e la tipologia degli spostamenti sono parte di una scelta, definiscono il trasferimento verso un'attrazione
@@ -78,38 +76,39 @@ PROBLEMI
     CancellaVacanza view: è utile cancellare una vacanza? al massimo si può svuotare il carrello, ovvero cancellare tutte le scelte dell'attuale vacanza
 
     DONE:
+    43)aggiustare itinerario di viaggio perchè nel mixin quando viene chiamato con pk==0 non viene trovata attrazione
     OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano
-37)Immettere interfacce di gestione per cancellare attrazioni
-38)Refactoring separando views di gestione dell'attrazione in nuova app attractions (cambiare urls, views, forms, tempalates...)
-37)Immettere interfacce di gestione per aggiungere, modificare attrazioni
-21)AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
-    Navbar piccola sotto quella principale che aggiunge qualche link se il turista ha già creato una vacanza oppure
-    mostra un messaggio "Inizia a Creare la tua vacanza! Clicca su HolidayPlanning"
-29)pulsante di logut quando l'utente è entrato
-16)sistemare detailview attrazione con tutti i campi e la foto
-23)API per le vacanze: VacanzeList, VacanzaDetail, VacanzaEdit
-19)fare detail view della vacanza con tutte le scelte
-17)mettere mixin login required nella lista di attrazioni da scegliere e nella pagina della scelta
-9)aggiungere campo foto al modello di attrazione
-18)aggiungere controllo sui giorni di creazione della vacanza direttamente nel form
-3)consistenza scelte
-    quando si fa una scelta si controlla che la data sia nel periodo della vacanza
-    quando si fa una scelta si controlla che non si sovrapponga ad altre
-14)ListView lista attrazioni che mostra le attrazioni in prima pagina (home) e rimanda nella detail view di ogni
- attrazione, a differenza della pagina attrazioni è raggiungibile senza il login
-5)unione login e creazione vacanza
-        inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
-6)aggiustare file ciaulaweb\views.py: dare a template_name un valore esistente e in ciaulaweb\urls.py aggiungere il
-path('', HomeView.as_view(), name='home') con from ciaulaweb.views import HomeView
-!!!RISOLVERE InconsistentMigrationHistory !!!
-4)creazione login
-        cosa fanno le variabili in settings.py: LOGIN_REDIRECT_URL, LOGIN_URL, AUTH_USER_MODEL
-        registrazione di un profilo utente
-        recuperare la schermata di admin
-        admin.py aggiustamento
-7)nell'app profiles fare dei template appositi per login e logout e inserire l'argomento template_name nella funzione
-as_view nel path corrispondente in urlpatterns
-11)ripopolare db attrazioni
+    37)Immettere interfacce di gestione per cancellare attrazioni
+    38)Refactoring separando views di gestione dell'attrazione in nuova app attractions (cambiare urls, views, forms, tempalates...)
+    37)Immettere interfacce di gestione per aggiungere, modificare attrazioni
+    21)AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
+        Navbar piccola sotto quella principale che aggiunge qualche link se il turista ha già creato una vacanza oppure
+        mostra un messaggio "Inizia a Creare la tua vacanza! Clicca su HolidayPlanning"
+    29)pulsante di logut quando l'utente è entrato
+    16)sistemare detailview attrazione con tutti i campi e la foto
+    23)API per le vacanze: VacanzeList, VacanzaDetail, VacanzaEdit
+    19)fare detail view della vacanza con tutte le scelte
+    17)mettere mixin login required nella lista di attrazioni da scegliere e nella pagina della scelta
+    9)aggiungere campo foto al modello di attrazione
+    18)aggiungere controllo sui giorni di creazione della vacanza direttamente nel form
+    3)consistenza scelte
+        quando si fa una scelta si controlla che la data sia nel periodo della vacanza
+        quando si fa una scelta si controlla che non si sovrapponga ad altre
+    14)ListView lista attrazioni che mostra le attrazioni in prima pagina (home) e rimanda nella detail view di ogni
+     attrazione, a differenza della pagina attrazioni è raggiungibile senza il login
+    5)unione login e creazione vacanza
+            inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
+    6)aggiustare file ciaulaweb\views.py: dare a template_name un valore esistente e in ciaulaweb\urls.py aggiungere il
+    path('', HomeView.as_view(), name='home') con from ciaulaweb.views import HomeView
+    !!!RISOLVERE InconsistentMigrationHistory !!!
+    4)creazione login
+            cosa fanno le variabili in settings.py: LOGIN_REDIRECT_URL, LOGIN_URL, AUTH_USER_MODEL
+            registrazione di un profilo utente
+            recuperare la schermata di admin
+            admin.py aggiustamento
+    7)nell'app profiles fare dei template appositi per login e logout e inserire l'argomento template_name nella funzione
+    as_view nel path corrispondente in urlpatterns
+    11)ripopolare db attrazioni
 
 
 
