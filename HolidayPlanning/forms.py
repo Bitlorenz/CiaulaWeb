@@ -2,7 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.shortcuts import get_object_or_404
-from .models import Vacanza, Scelta
+from .models import Vacanza, Scelta, Spostamento
 from attractions.models import Attrazione
 import gettext
 _ = gettext.gettext
@@ -81,4 +81,12 @@ class ScegliAttrazioneForm(forms.ModelForm):
 
 
 class SpostamentoForm(forms.ModelForm):
-    pass
+    helper = FormHelper()
+    helper.form_id = 'scelta-crispy-form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Aggiungi'))
+    helper.inputs[0].field_classes = 'btn btn-success'
+
+    class Meta:
+        model = Spostamento
+        fields = ['ora_partenza', 'ora_arrivo', 'durata_spostamento', 'veicolo', 'tipo_spostamento', 'costo']

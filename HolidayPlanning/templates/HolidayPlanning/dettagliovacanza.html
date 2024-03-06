@@ -31,13 +31,33 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ s.attrazione.nome }}</h5>
                     <p class="card-text hours"> da {{ s.oraInizio }} a {{ s.oraFine }} il {{ s.giorno }}</p>
-                    <a href="{% url 'HolidayPlanning:modificascelta' s.pk %}" class="btn btn-primary">Modifica
+                    <a href="{% url 'HolidayPlanning:modificascelta' s.pk vacanza.pk %}" class="btn btn-primary">Modifica
                         scelta</a>
-                    <a href="{% url 'HolidayPlanning:cancellascelta' s.pk %}" class="btn btn-primary">Cancella
+                    <a href="{% url 'HolidayPlanning:cancellascelta' s.pk vacanza.pk %}" class="btn btn-primary">Cancella
                         scelta</a>
                     <a href="{% url 'attractions:crea_recensione' s.attrazione.pk %}" class="btn btn-primary">Recensisci</a>
+                    {% if s.next_scelta is not None %}
+                     <a href="{% url 'HolidayPlanning:spostamento' s.pk vacanza.pk %}" class="btn btn-primary">
+                         Aggiungi spostamento da {{ s.attrazione.citta }} per {{ s.next_scelta.attrazione.citta }}
+                     </a>
+                    {% endif %}
                 </div>
             </div>
+            {% for i in spostamenti %}
+                <div class="card mb-12 spostamento-card">
+                    <div class="card-body">
+                        <h4 class="card-title">SPOSTAMENTO</h4>
+                        <p class="card-text">Scelta Partenza: {{ spostamento.scelta_partenza }}</p>
+                        <p class="card-text">Scelta Arrivo: {{ spostamento.scelta_arrivo }}</p>
+                        <p class="card-text">Ora Partenza: {{ spostamento.ora_partenza }}</p>
+                        <p class="card-text">Ora Arrivo: {{ spostamento.ora_arrivo }}</p>
+                        <p class="card-text">Durata Spostamento: {{ spostamento.durata_spostamento }}</p>
+                        <p class="card-text">Veicolo: {{ spostamento.veicolo }}</p>
+                        <p class="card-text">Tipo Spostamento: {{ spostamento.tipo_spostamento }}</p>
+                        <p class="card-text">Costo: {{ spostamento.costo }}</p>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
         {% empty %}
         <p class="col-12">L'itinerario è ancora vuoto</p>

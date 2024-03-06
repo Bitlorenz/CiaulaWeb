@@ -13,6 +13,9 @@ GLOSSARIO:
 
 ## TO-DO:
 	BACKEND
+    43)aggiustare itinerario di viaggio perchè nel mixin quando viene chiamato con pk==0 non viene trovata attrazione
+    42)Aggiustare ModificaScelta, prendere spunto da ProductUpdateView in progetto fillo
+    41)Aggiustare CancellaScelta perchè non ritorna nessun parametro, andrebbe ritornata la pk della vacanza
     36)la lista delle scelte all'interno della vacanza deve sempre essere ordinata
     32)Aggiungere nome alla vacanza, aggiungere stato chiusa alla vacanza
     25)TEST: Da url non si può cambiare la pk di una vacanza per modificarla, se l'user è diverso non si può fare.   Provare: cambio utente, creo una vacanza, cosa succede se nell'url cambio l'id della vacanza? se vado nella vacanza dell'altro utente è un problema          
@@ -37,12 +40,14 @@ GLOSSARIO:
 # DOING:
 * calcolare gli spostamenti:
   * Modello:
-    * provare a inserire nuova model class
-    * aggiungere campi tipologia spostamento e durata spostamento al modello Scelta? possono essere entrambi null 
+    * provare a inserire nuova model class -> fatto
+    * inserire metodi per controllare i vari campi
+    * inserire alcune entità di spostamento nel db
   * Template:
     * sezione nel dettaglio di una vacanza in cui mettere gli spostamenti: bottone tra una attrazione e la successiva
   * View:
-    * funzione Inserisci spostamento che prende in ingresso due primary key di due scelte e le usa per crearespostamento
+    * riceve il riferimento alla vacanza 
+    * view AggiungiSpostamento che prende in ingresso due primary key di due scelte e le usa per crearespostamento
   * Form:
     * form che inserisce i campi degli orari e del tipo, costo
 * ampliare vacanze del root

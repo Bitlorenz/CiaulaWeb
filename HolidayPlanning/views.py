@@ -32,7 +32,7 @@ def scegliattrazione(request, pk, vacanza_id):
             # checkSovrapposizione(request, fine, ini)
             scelta.save()
             rifvacanza.scelte.add(scelta)
-            return redirect("HolidayPlanning:scelte", pk=rifvacanza.pk)
+            return redirect("HolidayPlanning:dettagliovacanza", pk=rifvacanza.pk)
     else:
         utente = request.user
         vacanza = Vacanza.objects.filter(utente=request.user, pk=vacanza_id)
@@ -59,35 +59,6 @@ def checkSovrapposizione(request, fine, ini):
     return False
 
 
-class ScelteList(LoginRequiredMixin, ListView):
-    model = Scelta
-    template_name = "HolidayPlanning/listascelte.html"
-
-    def get_model_name(self):
-        return self.model._meta.verbose_name_plural
-
-    def calcolaTotale(self, listaScelte):
-        totale = 0
-        for s in listaScelte:
-            totale = totale + s.attrazione.costo
-        return totale
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['titolo'] = "Itinerario di Viaggio"
-        context['utente'] = self.request.user
-        vacanza_id = self.kwargs['pk']
-        if vacanza_id == 0:
-            vacanzaCorrente = Vacanza.objects.filter(utente=self.request.user).last()
-        else:
-            vacanzaCorrente = Vacanza.objects.get(pk=self.kwargs['pk'])
-        context['vacanzacorrente'] = vacanzaCorrente
-        listaScelte = vacanzaCorrente.scelte.all()
-        context['totale'] = self.calcolaTotale(listaScelte)
-        context['scelte'] = listaScelte
-        return context
-
-
 # class create view per aggiungere lo spsotamento tra due scelte
 # deve controllare che l'ora di partenza sia successiva alla fine della attrazione A
 # e che l'ora di arrivo sia precedente all'inizio dell'attrazione B
@@ -102,12 +73,17 @@ class AggiungiSpostamento(LoginRequiredMixin, CreateView):
         initial = super().get_initial()
         scelta_partenza = Scelta.objects.get(pk=self.kwargs['par'])
         initial['scelta_partenza'] = scelta_partenza
-        scelta_arrivo = Scelta.objects.get(pk=self.kwargs['arr'])
+        scelta_arrivo = scelta_partenza.next_scelta()
         initial['scelta_arrivo'] = scelta_arrivo
 
     def form_valid(self, form):
         spostamento = form.save(commit=False)
-        # checkOrari(form.cleaned_data['ora_partenza'])
+        # checkOrari(form.cleaned_data['ora_partenza'], form.cleaned_data['ora_arrivo'])
+        if form.cleaned_data['durata_spostamento'] in [None, '']:
+            spostamento.durata_spostamento = form.cleaned_data['ora_arrivo'] - form.cleaned_data['ora_partenza']
+        if form.cleaned_data['costo'] not in [None, '']:
+            vacanza = Vacanza.objects.get(pk=self.kwargs['vac'])
+            vacanza.costo += form.cleaned_data['costo']
         spostamento.save()
         return super().form_valid(form)
 
@@ -119,7 +95,9 @@ class ModificaScelta(LoginRequiredMixin, UpdateView):
     fields = ['giorno', 'oraInizio', 'oraFine']
 
     def get_success_url(self):
-        return reverse("HolidayPlanning:scelte")
+        vacanza_id = self.kwargs["vacanza_id"]
+        print("Vacanza_id in get_success_url di modificascelta: "+vacanza_id)
+        return redirect("HolidayPlanning:dettagliovacanza", vacanza_id)
 
 
 # class delete view per eliminare una scelta
@@ -134,7 +112,9 @@ class CancellaScelta(LoginRequiredMixin, DeleteView):
         return ctx
 
     def get_success_url(self):
-        return reverse("HolidayPlanning:scelte")
+        vacanza_id = self.kwargs["vacanza_id"]
+        print("Vacanza_id in get_success_url di cancellascelta: "+vacanza_id)
+        return reverse("HolidayPlanning:dettagliovacanza", args=[vacanza_id])
 
 
 # API VACANZA
@@ -149,6 +129,7 @@ class VacanzeList(LoginRequiredMixin, ListView):
         context['vacanze'] = Vacanza.objects.filter(utente=self.request.user)
         context['tour'] = False
         return context
+
 
 def vacanze_by_root(request):
     try:
@@ -218,12 +199,6 @@ class DettaglioVacanza(LookingTourMixin, DetailView):
     model = Vacanza
     template_name = "HolidayPlanning/dettagliovacanza.html"
 
-    def calcolaTotale(self, listaScelte):
-        totale = 0
-        for s in listaScelte:
-            totale = totale + s.attrazione.costo
-        return totale
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Dettagli Vacanza"
@@ -231,7 +206,7 @@ class DettaglioVacanza(LookingTourMixin, DetailView):
         vacanza = Vacanza.objects.get(pk=kwargs['object'].id)
         context['vacanza'] = vacanza
         context['scelte'] = vacanza.scelte.all().reverse()  # l'ultima aggiunta viene mostrata per prima
-        context['totale'] = self.calcolaTotale(vacanza.scelte.all())
+        context['totale'] = vacanza.calcolaTotaleAttrazioni()
         return context
 
 
@@ -284,48 +259,3 @@ def stampaVacanza(request, pk):
     p.save()
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='vacanza.pdf')
-
-
-class SceltaFattaView(LoginRequiredMixin, DetailView):
-    model = Scelta
-    template_name = "HolidayPlanning/sceltafatta.html"
-    errore = "NO_ERRORS"
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        c = ctx["object"]
-
-        if c.giorno is not None:
-            if c.utente.pk != self.request.user.pk:
-                self.errore = "Non hai scelto attività per questo giorno"
-        else:
-            self.errore = "Attività ancora non scelta"
-
-        if self.errore == "NO_ERRORS":
-            try:
-                c.giorno = None
-                c.utente = None
-                c.save()
-            except Exception as e:
-                print("Errore! " + str(e))
-                self.errore = "Errore nell'operazione di restituzione"
-
-        return ctx
-
-'''
-# DEPRECATED: view per la ricerca di attrazioni
-class RisultatiList(ListView):
-    model = Attrazione
-    template_name = "HolidayPlanning/risultati.html"
-
-    def get_queryset(self):
-        stringa = self.request.resolver_match.kwargs["stringa"]
-        where = self.request.resolver_match.kwargs["where"]
-
-        if "Scelta" in where:
-            sc = Scelta.objects.filter(posizioneInGiornata__exact=int(stringa))
-            return sc
-        if "Attrazione" in where:
-            sa = Attrazione.objects.filter(citta__icontains=stringa)
-            return sa
-'''

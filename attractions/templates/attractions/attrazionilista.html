@@ -11,7 +11,9 @@
                         <div class="card-body">
                             <a href="{% url 'attractions:dettaglioattr' l.pk%}"><h5 class="card-title">{{ l.nome }}</h5></a>
                             {% if user.is_authenticated %}
-                                <a href="{% url 'HolidayPlanning:scegli' l.pk vacanza_id %}" class="btn btn-primary">Aggiungi alla Vacanza</a>
+                                {% if vacanza_id %}
+                                    <a href="{% url 'HolidayPlanning:aggiungi' l.pk vacanza_id %}" class="btn btn-primary">Aggiungi alla Vacanza</a>
+                                {% endif %}
                             {% endif %}
                         </div>
                     </div>

@@ -10,9 +10,6 @@ class Scelta(models.Model):
     oraFine = models.TimeField(blank=True)  # scelta dall'utente
     durata = models.DurationField()  # questi sono i secondi della durata
 
-    # tempo_spostamento = models.DurationField(null=True)
-    # tipo_spostamento = models.CharField(null=True, max_length=20)
-
     def __str__(self):
         return "ID: " + str(self.pk) + "scelta: " + str(self.attrazione) + " , il " + str(self.giorno)
 
@@ -42,10 +39,10 @@ class Spostamento(models.Model):
     scelta_arrivo = models.ForeignKey(Scelta, on_delete=models.SET_NULL, null=True, related_name="arrivo")
     ora_partenza = models.TimeField(blank=True)
     ora_arrivo = models.TimeField(blank=True)
-    durata_spostamento = models.DurationField()
+    durata_spostamento = models.DurationField(blank=True, null=True)  # può essere omesso, in tal caso viene calcolato
     veicolo = models.CharField(max_length=30, blank=True)
     tipo_spostamento = models.CharField(max_length=10)
-    costo = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    costo = models.DecimalField(max_digits=10, decimal_places=2, blank=True)  # dovrebbe influenzare il budget della vacanza
 
     def __str__(self):
         return "Spostamento da: "+str(self.scelta_partenza.attrazione.citta)+" a "+str(self.scelta_arrivo.attrazione.citta)
@@ -83,6 +80,7 @@ class Vacanza(models.Model):
     budgetDisponibile = models.FloatField()
     utente = models.ForeignKey(UserProfileModel, related_name='Utente', on_delete=models.PROTECT)
     scelte = models.ManyToManyField(Scelta, related_name='vacanze')
+    spostamenti = models.ManyToManyField(Spostamento, related_name='spostamenti')
 
     def __str__(self):
         return "ID: " + str(self.pk) + " , inizio: " + str(self.dataArrivo) + " , fine: " + str(self.dataPartenza)
@@ -95,9 +93,9 @@ class Vacanza(models.Model):
         totNotti = abs(self.dataPartenza - self.dataPartenza)
         return totNotti.days
 
-    def calcolaTotale(self):
+    def calcolaTotaleAttrazioni(self):
         totale = 0
-        for s in self.scelte:
+        for s in self.scelte.all():
             totale = totale + s.attrazione.costo
         return totale
 

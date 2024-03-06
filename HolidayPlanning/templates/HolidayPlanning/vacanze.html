@@ -12,11 +12,13 @@
                         <h5 class="card-title">Vacanza {{forloop.counter }}</h5>
                         <p class="card-text">Itinerario dal {{ v.dataArrivo }} al {{ v.dataPartenza }}</p>
                         <a href="{% url "HolidayPlanning:dettagliovacanza" v.pk %}" class="btn btn-primary">Dettagli Vacanza</a>
+                    {% if not tour %}
                         <a href="{% url "HolidayPlanning:modificavacanza" v.pk %}" class="btn btn-primary">Modifica Vacanza</a>
                         <a href="{% url "attractions:attrazioni" %}?vacanza_id={{v.pk}}" class="btn btn-primary">Aggiungi Attrazioni</a>
-			{% if tour %} <!-- si stanno visualizzando i tour organizzati -->
-			<a href="{% url "HolidayPlanning:aggiungitour" v.pk %}" class="btn btn-primary">Aggiungi Vacanza</a>
-			{% endif %}
+                    {% endif %}
+                    {% if tour %} <!-- si stanno visualizzando i tour organizzati -->
+			            <a href="{% url "HolidayPlanning:aggiungitour" v.pk %}" class="btn btn-primary">Aggiungi Vacanza</a>
+			        {% endif %}
                     </div>
                 </div>
             </div>
