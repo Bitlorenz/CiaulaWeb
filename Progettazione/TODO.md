@@ -10,7 +10,7 @@ GLOSSARIO:
 * difficoltà prevista della giornata
   * metodo calcola difficoltà nel modello vacanza, se in una giornata ci sono più di 4 attrazioni allora è difficile
   * se ce ne sono 2-3 è media, 1 è facile
-* metodo statico che controlla gli orari delle attività
+* metodo statico che controlla gli orari delle attività per le sovrapposizioni e per gli spostamenti
 * messagges framework?
 * recommendation system
 
@@ -45,10 +45,15 @@ GLOSSARIO:
     * inserire metodi per controllare i vari campi
     * inserire alcune entità di spostamento nel db
   * Template:
-    * sezione nel dettaglio di una vacanza in cui mettere gli spostamenti: bottone tra una attrazione e la successiva
+    * sezione nel dettaglio di una vacanza in cui mettere gli spostamenti --> fatto
+      * bottone tra una attrazione e la successiva -->fatto
   * View:
-    * riceve il riferimento alla vacanza 
-    * view AggiungiSpostamento che prende in ingresso due primary key di due scelte e le usa per crearespostamento
+    * riceve il riferimento alla vacanza -->fatto
+    * calcola durata --> fatto da testare
+    * calcola il costo e lo aggiunge alla vacanza
+      * la vacanza ha già il metodo per calcolare il parziale totale, bisogna estenderlo per calcolare anche gli spostamenti 
+    * checkorari con attrazioni
+    * view AggiungiSpostamento, con in ingresso due pk della prima scelta e della vacanza --> fatto
   * Form:
     * form che inserisce i campi degli orari e del tipo, costo
 * ampliare vacanze del root
