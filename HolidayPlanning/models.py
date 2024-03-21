@@ -77,7 +77,7 @@ class Vacanza(models.Model):
     dataArrivo = models.DateField()
     dataPartenza = models.DateField()
     nrPersone = models.IntegerField()
-    budgetDisponibile = models.FloatField()
+    budgetDisponibile = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     utente = models.ForeignKey(UserProfileModel, related_name='Utente', on_delete=models.PROTECT)
     scelte = models.ManyToManyField(Scelta, related_name='vacanze')
     spostamenti = models.ManyToManyField(Spostamento, related_name='spostamenti')
@@ -94,10 +94,39 @@ class Vacanza(models.Model):
         return totNotti.days
 
     def calcolaTotaleAttrazioni(self):
-        totale = 0
+        totaleScelte = 0
+        totaleSpostamenti = 0
         for s in self.scelte.all():
-            totale = totale + s.attrazione.costo
-        return totale
+            totaleScelte = totaleScelte + s.attrazione.costo
+        for s in self.spostamenti.all():
+            totaleSpostamenti = totaleSpostamenti + s.costo
+        return totaleScelte+totaleSpostamenti
+
+    # metodo per calcolare il livello di difficoltà di una giornata basato sul numero di scelte in una giornata
+    def difficolta_giornata(self):
+        # Group scelte objects by day
+        scelte_per_giorno = {}
+        for scelta in self.scelte.all():
+            giorno_scelta = scelta.giorno.day
+            if giorno_scelta not in scelte_per_giorno:
+                scelte_per_giorno[giorno_scelta] = []
+            scelte_per_giorno[giorno_scelta].append(scelta)
+
+        # Determine difficulty level for each day
+        difficulty_levels = {}
+        for giorno_scelta, scelte_nel_giorno in scelte_per_giorno.items():
+            count = len(scelte_nel_giorno)
+            if count > 4:
+                difficulty_levels[giorno_scelta] = "Difficile"
+            elif count == 2 or count == 3:
+                difficulty_levels[giorno_scelta] = "Media"
+            else:
+                difficulty_levels[giorno_scelta] = "Facile"
+
+        return difficulty_levels
+
+    def sort_scelte(self):
+        return self.scelte.all().order_by('giorno', 'oraInizio', 'oraFine')
 
     class Meta:
         verbose_name = "Vacanza"

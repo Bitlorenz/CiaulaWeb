@@ -9,7 +9,7 @@ class Attrazione(models.Model):
     luogo = models.CharField(max_length=300)
     via = models.CharField(max_length=500)
     citta = models.CharField(max_length=200)
-    costo = models.FloatField()
+    costo = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     tipo = models.CharField(max_length=200)
     oraApertura = models.TimeField('ora apertura')
     oraChiusura = models.TimeField('ora chiusura')

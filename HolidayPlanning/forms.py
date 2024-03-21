@@ -90,6 +90,7 @@ class ModificaSceltaForm(forms.ModelForm):
     def clean(self):
         if self.cleaned_data["oraInizio"] > self.cleaned_data["oraFine"]:
             raise forms.ValidationError(_("Valori non validi: Ora di Inizio precede ora di Arrivo"))
+
     class Meta:
         model = Scelta
         fields = ['giorno', 'oraInizio', 'oraFine']
@@ -102,6 +103,18 @@ class SpostamentoForm(forms.ModelForm):
     helper.add_input(Submit('submit', 'Aggiungi'))
     helper.inputs[0].field_classes = 'btn btn-success'
 
+    def __init__(self, *args, **kwargs):
+        super(SpostamentoForm, self).__init__(*args, **kwargs)
+        self.fields['scelta_partenza'].widget.attrs['readonly'] = True
+        self.fields['scelta_arrivo'].widget.attrs['readonly'] = True
+        self.fields['scelta_partenza'].disabled = True
+        self.fields['scelta_arrivo'].disabled = True
+
+    def clean(self):
+        if self.cleaned_data['ora_arrivo'] < self.cleaned_data['ora_partenza']:
+            raise forms.ValidationError("L'orario di arrivo anticipa l' orario di partenza.")
+
     class Meta:
         model = Spostamento
-        fields = ['ora_partenza', 'ora_arrivo', 'durata_spostamento', 'veicolo', 'tipo_spostamento', 'costo']
+        fields = ['scelta_partenza', 'scelta_arrivo', 'ora_partenza', 'ora_arrivo', 'durata_spostamento', 'veicolo',
+                  'tipo_spostamento', 'costo']

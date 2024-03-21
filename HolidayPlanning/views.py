@@ -1,9 +1,10 @@
 from cgitb import text
-from datetime import timedelta as td
+from datetime import timedelta as td, datetime
 from re import sub
 import io
 
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.exceptions import ValidationError
 from django.http import FileResponse, HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
@@ -28,7 +29,7 @@ def scegliattrazione(request, pk, vacanza_id):
             rifvacanza = Vacanza.objects.get(utente=request.user, pk=vacanza_id)
             ini = form.cleaned_data.get("oraInizio")
             fine = form.cleaned_data.get("oraFine")
-            scelta.durata = td(hours=fine.hour - ini.hour) + td(minutes=fine.minute - ini.minute)
+            scelta.durata = td(hours=fine.hour - ini.hour, minutes=fine.minute - ini.minute)
             # checkSovrapposizione(request, fine, ini)
             scelta.save()
             rifvacanza.scelte.add(scelta)
@@ -72,20 +73,41 @@ class AggiungiSpostamento(LoginRequiredMixin, CreateView):
     def get_initial(self, **kwargs):
         initial = super().get_initial()
         scelta_partenza = Scelta.objects.get(pk=self.kwargs['par'])
+        print("scelta partenza in get_initial: "+str(scelta_partenza))
         initial['scelta_partenza'] = scelta_partenza
         scelta_arrivo = scelta_partenza.next_scelta()
+        print("scelta arrivo in get_initial: " + str(scelta_arrivo))
         initial['scelta_arrivo'] = scelta_arrivo
+        return initial
 
     def form_valid(self, form):
         spostamento = form.save(commit=False)
         # checkOrari(form.cleaned_data['ora_partenza'], form.cleaned_data['ora_arrivo'])
         if form.cleaned_data['durata_spostamento'] in [None, '']:
-            spostamento.durata_spostamento = form.cleaned_data['ora_arrivo'] - form.cleaned_data['ora_partenza']
-        if form.cleaned_data['costo'] not in [None, '']:
-            vacanza = Vacanza.objects.get(pk=self.kwargs['vac'])
-            vacanza.costo += form.cleaned_data['costo']
+            arr = form.cleaned_data['ora_arrivo']
+            par = form.cleaned_data['ora_partenza']
+            spostamento.durata_spostamento = td(hours=(arr.hour-par.hour), minutes=(arr.minute-par.minute))
+        scelta_partenza = Scelta.objects.get(pk=self.kwargs['par'])
+        spostamento.scelta_partenza = scelta_partenza
+        spostamento.scelta_arrivo = scelta_partenza.next_scelta()
+        if spostamento.ora_arrivo > scelta_partenza.next_scelta().oraInizio:
+            raise ValidationError("L'orario di arrivo si sovrappone con la successiva.")
+        if spostamento.ora_partenza < scelta_partenza.oraFine:
+            raise ValidationError("L'orario di partenza anticipa l'orario di fine attrazione")
         spostamento.save()
+        rifvacanza = Vacanza.objects.get(pk=self.kwargs['vac'])
+        rifvacanza.spostamenti.add(spostamento)
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        scelta_partenza = Scelta.objects.get(pk=self.kwargs['par'])
+        context['sugg_oraPartenza'] = scelta_partenza.oraFine
+        context['sugg_oraArrivo'] = scelta_partenza.next_scelta().oraInizio
+        return context
+
+    def get_success_url(self):
+        return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": self.kwargs['vac']})
 
 
 # class per modificare una scelta data la chiave primaria
@@ -103,6 +125,7 @@ class ModificaScelta(LoginRequiredMixin, UpdateView):
         context["ora inizio attr"] = attivita.attrazione.oraApertura
         context["ora fine attr"] = attivita.attrazione.oraChiusura
         return context
+
     def form_valid(self, form):
         scelta = form.save(commit=False)
         attivita_pk = self.kwargs['pk']
@@ -112,8 +135,10 @@ class ModificaScelta(LoginRequiredMixin, UpdateView):
             return self.form_invalid(form, 1)
         if form.cleaned_data["oraFine"] < attr.oraApertura or form.cleaned_data["oraFine"] > attr.oraChiusura:
             return self.form_invalid(form, 2)
-            #TODO controllare che non ci siano sovrapposizioni con altre attrazioni nello stesso giorno
+            # TODO controllare che non ci siano sovrapposizioni con altre attrazioni nello stesso giorno
         scelta.save()
+        vacanza_id = self.kwargs["vacanza_id"]
+        vacanza = Vacanza.objects.get(pk=vacanza_id)
         return super().form_valid(form)
 
 
@@ -123,6 +148,7 @@ class ModificaScelta(LoginRequiredMixin, UpdateView):
         if error_code==2:
             form.add_error('oraFine', "L'ora di fine non rispetta i limiti d'orario dell'attrazione")
         return super().form_invalid(form)
+
     def get_success_url(self):
         vacanza_id = self.kwargs["vacanza_id"]
         print("Vacanza_id in get_success_url di modificascelta: "+vacanza_id)
@@ -134,19 +160,6 @@ class CancellaScelta(LoginRequiredMixin, DeleteView):
     model = Scelta
     template_name = "HolidayPlanning/cancellascelta.html"
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data()
-        entita = "Scelta"
-        ctx["entita"] = entita
-        return ctx
-
-    def get_success_url(self):
-        vacanza_id = self.kwargs["vacanza_id"]
-        print("Vacanza_id in get_success_url di cancellascelta: "+vacanza_id)
-        return reverse("HolidayPlanning:dettagliovacanza", args=[vacanza_id])
-    model = Scelta
-    template_name = "HolidayPlanning/cancellascelta.html"
-
     def delete(self, request, *args, **kwargs):
         return super(CancellaScelta, self).delete(request, *args, **kwargs)
 
@@ -155,6 +168,7 @@ class CancellaScelta(LoginRequiredMixin, DeleteView):
         vacanza_pk = self.kwargs['vacanza_id']
         context["v_id"] = vacanza_pk
         return context
+
     def get_success_url(self):
         vacanza_id = self.kwargs["vacanza_id"]
         print("Vacanza_id in get_success_url di cancellascelta: "+vacanza_id)
@@ -268,7 +282,8 @@ class DettaglioVacanza(LookingTourMixin, DetailView):
         context['utente'] = self.request.user
         vacanza = Vacanza.objects.get(pk=kwargs['object'].id)
         context['vacanza'] = vacanza
-        context['scelte'] = vacanza.scelte.all().reverse()  # l'ultima aggiunta viene mostrata per prima
+        context['scelte'] = vacanza.sort_scelte()
+        context['spostamenti'] = vacanza.spostamenti.all()
         context['totale'] = vacanza.calcolaTotaleAttrazioni()
         return context
 

@@ -5,19 +5,20 @@ GLOSSARIO:
 * recensioni --> FATTO
 * tour organizzati --> FATTO
 * ricerca attrazioni --> FATTO
-* piano vacanza scandito per giornate -->Frontend
-* inserire gli spostamenti --> FATTO da testare bene
-* difficoltà prevista della giornata
+* piano vacanza scandito per giornate --> frontend
+* calcolare gli spostamenti --> FATTO
+* difficoltà prevista della giornata --> FATTO
   * metodo calcola difficoltà nel modello vacanza, se in una giornata ci sono più di 4 attrazioni allora è difficile
   * se ce ne sono 2-3 è media, 1 è facile
-* metodo statico che controlla gli orari delle attività per le sovrapposizioni e per gli spostamenti
-* messagges framework?
 * recommendation system
 
 
 ## TO-DO:
 	BACKEND
-    36)la lista delle scelte all'interno della vacanza deve sempre essere ordinata
+    43)aggiustare itinerario di viaggio perchè nel mixin quando viene chiamato con pk==0 non viene trovata attrazione
+    42)Aggiustare ModificaScelta, prendere spunto da ProductUpdateView in progetto fillo
+    41)Aggiustare CancellaScelta perchè non ritorna nessun parametro, andrebbe ritornata la pk della vacanza
+    
     32)Aggiungere nome alla vacanza, aggiungere stato chiusa alla vacanza
     25)TEST: Da url non si può cambiare la pk di una vacanza per modificarla, se l'user è diverso non si può fare.   Provare: cambio utente, creo una vacanza, cosa succede se nell'url cambio l'id della vacanza? se vado nella vacanza dell'altro utente è un problema          
     10)aggiungere campo immagine al UserProfileModel, con anche la cartella upload_to
@@ -39,29 +40,45 @@ GLOSSARIO:
     * Migliorare tutto l'aspetto grafico del sito *
 
 # DOING:
-* calcolare gli spostamenti:
-  * Modello:
-    * provare a inserire nuova model class -> fatto
-    * inserire metodi per controllare i vari campi
-    * inserire alcune entità di spostamento nel db
-  * Template:
-    * sezione nel dettaglio di una vacanza in cui mettere gli spostamenti --> fatto
-      * bottone tra una attrazione e la successiva -->fatto
-  * View:
-    * riceve il riferimento alla vacanza -->fatto
-    * calcola durata --> fatto da testare
-    * calcola il costo e lo aggiunge alla vacanza
-      * la vacanza ha già il metodo per calcolare il parziale totale, bisogna estenderlo per calcolare anche gli spostamenti 
-    * checkorari con attrazioni
-    * view AggiungiSpostamento, con in ingresso due pk della prima scelta e della vacanza --> fatto
-  * Form:
-    * form che inserisce i campi degli orari e del tipo, costo
+* recommendation system
 * ampliare vacanze del root
 
+# RECOMMENDATION SYSTEM
+* raccomandazioni basate sulla tipologia e durata e costo
+* differenze tra turista e utente anonimo
+  * se utente anonimo gli posso raccomandare i più popolari che sono le attrazioni più presenti nelle varie vacanze
+  * se utente è turista
+    * che ha fatto già vacanze con altre scelte: 
+      * posso raccomandare delle scelte che sono presenti in vacanze di altri utenti che hanno fatto almeno una scelta uguale
+    * non ha ancora fatto vacanze o scelte:
+      * prendo le vacanze degli altri utenti e restituisco le attrazioni scelte di più
+  * se non esistono attività di altri turisti si presentano tutte le attrazioni oppure non si consiglia niente 
+
+# difficoltà prevista della giornata
+  * metodo calcola difficoltà nel modello vacanza, se in una giornata ci sono più di 4 attrazioni allora è difficile
+  * se ce ne sono 2-3 è media, 1 è facile
 
 # SPOSTAMENTI: DA INSERIRE A MANO (può essere esteso venendo calcolato dal sistema)
   * la durata e la tipologia degli spostamenti sono parte di una scelta, definiscono il trasferimento verso un'attrazione
   * fanno ricalcolare il tempo di una giornata e per la prossima attività
+  * calcolare gli spostamenti:
+  * Modello:
+    * provare a inserire nuova model class -> fatto
+    * inserire metodi per controllare i vari campi
+      * durata da calcolare e correggere --> fatto
+      * lo spostamento deve essere compreso tra un attrazione e l'altra altrimenti non si può salvare --> fatto by design
+      * se lo spostamento si sovrappone totalmente o parzialmente ad un'altra attività allora non va bene --> fatto
+    * inserire alcune entità di spostamento nel db --> fatto
+  * Template:
+    * sezione nel dettaglio di una vacanza in cui mettere gli spostamenti: bottone tra una attrazione e la successiva --> fatto
+    * card in cui appaiono i dettagli dello spostamento --> fatto
+    * bisogna mettere dei suggerimenti nel form per gli orari e il giorno --> fatto migliorabile
+  * View:
+    * riceve il riferimento alla vacanza --> fattp
+    * view AggiungiSpostamento che prende in ingresso due primary key di una scelta e vacanza --> fatto
+  * Form:
+    * form che inserisce i campi degli orari e del tipo, costo --> fatto
+    * le due scelte non devono essere modificabili --> fatto
 
 # TOUR organizzati: 
   * vacanze del root sono visualizzabili nella sezione dedicata da tutti
@@ -83,41 +100,40 @@ PROBLEMI
     CancellaVacanza view: è utile cancellare una vacanza? al massimo si può svuotare il carrello, ovvero cancellare tutte le scelte dell'attuale vacanza
 
     DONE:
-    41)Aggiustare CancellaScelta perchè non ritorna nessun parametro, andrebbe ritornata la pk della vacanza
-    42)Aggiustare ModificaScelta, prendere spunto da ProductUpdateView in progetto fillo
-    43)aggiustare itinerario di viaggio perchè nel mixin quando viene chiamato con pk==0 non viene trovata attrazione
-    OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano
-    37)Immettere interfacce di gestione per cancellare attrazioni
-    38)Refactoring separando views di gestione dell'attrazione in nuova app attractions (cambiare urls, views, forms, tempalates...)
-    37)Immettere interfacce di gestione per aggiungere, modificare attrazioni
-    21)AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
-        Navbar piccola sotto quella principale che aggiunge qualche link se il turista ha già creato una vacanza oppure
-        mostra un messaggio "Inizia a Creare la tua vacanza! Clicca su HolidayPlanning"
-    29)pulsante di logut quando l'utente è entrato
-    16)sistemare detailview attrazione con tutti i campi e la foto
-    23)API per le vacanze: VacanzeList, VacanzaDetail, VacanzaEdit
-    19)fare detail view della vacanza con tutte le scelte
-    17)mettere mixin login required nella lista di attrazioni da scegliere e nella pagina della scelta
-    9)aggiungere campo foto al modello di attrazione
-    18)aggiungere controllo sui giorni di creazione della vacanza direttamente nel form
-    3)consistenza scelte
-        quando si fa una scelta si controlla che la data sia nel periodo della vacanza
-        quando si fa una scelta si controlla che non si sovrapponga ad altre
-    14)ListView lista attrazioni che mostra le attrazioni in prima pagina (home) e rimanda nella detail view di ogni
-     attrazione, a differenza della pagina attrazioni è raggiungibile senza il login
-    5)unione login e creazione vacanza
-            inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
-    6)aggiustare file ciaulaweb\views.py: dare a template_name un valore esistente e in ciaulaweb\urls.py aggiungere il
-    path('', HomeView.as_view(), name='home') con from ciaulaweb.views import HomeView
-    !!!RISOLVERE InconsistentMigrationHistory !!!
-    4)creazione login
-            cosa fanno le variabili in settings.py: LOGIN_REDIRECT_URL, LOGIN_URL, AUTH_USER_MODEL
-            registrazione di un profilo utente
-            recuperare la schermata di admin
-            admin.py aggiustamento
-    7)nell'app profiles fare dei template appositi per login e logout e inserire l'argomento template_name nella funzione
-    as_view nel path corrispondente in urlpatterns
-    11)ripopolare db attrazioni
+44) difficoltà prevista della giornata
+39) la lista delle scelte all'interno della vacanza deve sempre essere ordinata in dettagliovacanza: metodo all'interno della classe model Vacanza 
+40) OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano
+37) Immettere interfacce di gestione per cancellare attrazioni
+38) Refactoring separando views di gestione dell'attrazione in nuova app attractions (cambiare urls, views, forms, tempalates...)
+37) Immettere interfacce di gestione per aggiungere, modificare attrazioni
+21) AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
+    Navbar piccola sotto quella principale che aggiunge qualche link se il turista ha già creato una vacanza oppure
+    mostra un messaggio "Inizia a Creare la tua vacanza! Clicca su HolidayPlanning"
+29) pulsante di logut quando l'utente è entrato
+16) sistemare detailview attrazione con tutti i campi e la foto
+23) API per le vacanze: VacanzeList, VacanzaDetail, VacanzaEdit
+19) fare detail view della vacanza con tutte le scelte
+17) mettere mixin login required nella lista di attrazioni da scegliere e nella pagina della scelta
+9) aggiungere campo foto al modello di attrazione
+18) aggiungere controllo sui giorni di creazione della vacanza direttamente nel form
+3) consistenza scelte
+    quando si fa una scelta si controlla che la data sia nel periodo della vacanza
+    quando si fa una scelta si controlla che non si sovrapponga ad altre
+14) ListView lista attrazioni che mostra le attrazioni in prima pagina (home) e rimanda nella detail view di ogni
+ attrazione, a differenza della pagina attrazioni è raggiungibile senza il login
+5) unione login e creazione vacanza
+        inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
+6) aggiustare file ciaulaweb\views.py: dare a template_name un valore esistente e in ciaulaweb\urls.py aggiungere il
+path('', HomeView.as_view(), name='home') con from ciaulaweb.views import HomeView
+!!!RISOLVERE InconsistentMigrationHistory !!!
+4) creazione login
+        cosa fanno le variabili in settings.py: LOGIN_REDIRECT_URL, LOGIN_URL, AUTH_USER_MODEL
+        registrazione di un profilo utente
+        recuperare la schermata di admin
+        admin.py aggiustamento
+7) nell'app profiles fare dei template appositi per login e logout e inserire l'argomento template_name nella funzione
+as_view nel path corrispondente in urlpatterns
+11) ripopolare db attrazioni
 
 
 
