@@ -1,8 +1,10 @@
 import operator
 
+from django.db.models import Q
 from django.shortcuts import render
 from attractions.models import Attrazione
-from HolidayPlanning.models import Vacanza, Scelta
+from HolidayPlanning.models import Vacanza
+from profiles.models import UserProfileModel
 
 
 # Metodo per ottenere la quantità di scelte fatte per ogni attrazione in ordine di quantità
@@ -30,6 +32,21 @@ def mostpopular(popular, request):
         for scelte in scelte_utente:
             del popular_ord[scelte]
 
+        popular_ord = dict(list(popular_ord.items())[:9]) # Massimo 9 elementi
+        return popular_ord
+    else:
+        vacanze = Vacanza.objects.filter() # prendo tutte le vacanze di tutti gli utenti
+        # Metto in un dizionario la coppia prodotto-quantità acquistata
+        for vacanza in vacanze:
+            for s in vacanza.scelte.all():
+                if s.attrazione in popular:
+                    popular[s.attrazione] += 1
+                else:
+                    popular[s.attrazione] = 1
+        # Ordino elementi sulla base della quantità acquistata
+        popular_ord = dict(sorted(popular.items(), key=operator.itemgetter(1), reverse=True))
+        popular_ord = dict(list(popular_ord.items())[:9])  # Massimo 9 elementi
+        return popular_ord
 
 def recommend(user):
 
@@ -69,25 +86,25 @@ def all_attrazioni():
 
 # View per la homepage
 def home(request):
-
     ctx = {}
 
     # caso Turista (utente loggato)
     if request.user.is_authenticated:
-        if not request.user.is_staff:
+        if not request.user.is_staff:  #superfluo?
             # Se il Turista ha creato vacanze
-            if Vacanza.objects.filter(user=request.user).exists():
+            if Vacanza.objects.filter(utente=request.user).exists():
                 recommended = recommend(request.user)  # Acquisisco attrazioni consigliate per l'utente
                 if len(recommended) > 0:  # Se ho almeno un' attrazione consigliata
                     ctx = {"listaattrazioni": recommended, "title": "Attrazioni consigliate in base alle tue scelte"}  # listaattrazioni contiene le attrazioni consigliate
                 else:  # Se non ho attrazioni da consigliare
-                    if Vacanza.objects.exclude(user=request.user).exists():  # Se esistono vacanza fatte da altri utenti
+                    admin = UserProfileModel.objects.get(is_admin=True)
+                    if Vacanza.objects.exclude(Q(utente=request.user) | Q(utente=admin)).exists():  # Se esistono vacanza fatte da altri utenti
                         popular = {}
                         popular_ord = mostpopular(popular, request)  # Acquisisco attrazioni più popolari in ordine di quantità acquistata
                         # Se ho attrazioni popolari non scelte dall'utente
                         if len(popular_ord) > 0:
                             ctx = {"listaattrazioni": popular_ord, "title": "Attrazioni popolari"} # listaattrazioni contiene le attrazioni più popolari
-                        # Se non ho attrazioni popolari scelte dall'utente
+                        # Se non ho attrazioni popolari non scelte dall'utente
                         else:
                             attrazioni = all_attrazioni()  # Acquisisco tutte le vacanze
                             ctx = {"listaattrazioni": attrazioni, "title": "Tutte le Attrazioni"}

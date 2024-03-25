@@ -18,8 +18,8 @@
             <div class="col-4">
 		        <div class="card" style="border-radius:25px;">
 	                <br>
-                    <a href="detattrazione/{{ att.nome }}" style="color:black;"> <h3> <b> {{ att.nome }} </b> </h3> </a>
-                    <a href="detattrazione/{{ att.nome }}"> <img src="{{ att.image.url }}" alt="pic attrazione" style="width:auto;height:240px"> </a>  <!-- collegamento a specifiche attrazione -->
+                    <a href="{% url "attractions:dettaglioattr" l.pk %}" style="color:black;"> <h3> <b> {{ l.nome }} </b> </h3> </a>
+                    <a href="{% url "attractions:dettaglioattr" l.pk %}"> <img src="{{ l.attrazione_image.url }}" alt="pic attrazione" style="width:auto;height:240px"> </a>  <!-- collegamento a specifiche attrazione -->
 	            </div>
                 <br>
 	        </div>

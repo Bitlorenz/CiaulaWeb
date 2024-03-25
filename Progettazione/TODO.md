@@ -10,22 +10,21 @@ GLOSSARIO:
 * difficoltà prevista della giornata --> FATTO
   * metodo calcola difficoltà nel modello vacanza, se in una giornata ci sono più di 4 attrazioni allora è difficile
   * se ce ne sono 2-3 è media, 1 è facile
-* recommendation system
+* recommendation system --> FATTO, va testato e documentato bene
 
 
 ## TO-DO:
 	BACKEND
-    43)aggiustare itinerario di viaggio perchè nel mixin quando viene chiamato con pk==0 non viene trovata attrazione
-    42)Aggiustare ModificaScelta, prendere spunto da ProductUpdateView in progetto fillo
-    41)Aggiustare CancellaScelta perchè non ritorna nessun parametro, andrebbe ritornata la pk della vacanza
-    
-    32)Aggiungere nome alla vacanza, aggiungere stato chiusa alla vacanza
+    45)decidere quale sia la home page principale, se quella definita dal recommendation system o semplicemente tutte le attrazioni
+    46) aggiungere stato chiusa alla vacanza (NECESSARIO)?
     25)TEST: Da url non si può cambiare la pk di una vacanza per modificarla, se l'user è diverso non si può fare.   Provare: cambio utente, creo una vacanza, cosa succede se nell'url cambio l'id della vacanza? se vado nella vacanza dell'altro utente è un problema          
     10)aggiungere campo immagine al UserProfileModel, con anche la cartella upload_to
     19)la registrazioe dell admin avviene dalla pagina /admin/signup e il login da /admin/signin
     37) una recensione all'attività  andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passato la data scelta
 
     FRONTEND
+    47) inserire nome_vacanza nel dettaglio di una vacanza e nella lista di vacanze
+    44) inserire metodo difficolta_vacanza nel dettaglio di una vacanza e nel template
     40)inserire dettagli scelta o migliorare scheda della scelta in dettaglio vacanza
     39)piano vacanza scandito per giornate: è solo una cosa di frontend? Controlli su orari e giorni: se la giornata è finita non si possono aggiungere più attrazioni
     per ogni attrazione stampata nella lista o nel piano pdf, se quella successiva è di una giornata seguente si stampa il giorno e il numero della giornata
@@ -40,7 +39,7 @@ GLOSSARIO:
     * Migliorare tutto l'aspetto grafico del sito *
 
 # DOING:
-* recommendation system
+* 
 * ampliare vacanze del root
 
 # RECOMMENDATION SYSTEM
@@ -100,6 +99,10 @@ PROBLEMI
     CancellaVacanza view: è utile cancellare una vacanza? al massimo si può svuotare il carrello, ovvero cancellare tutte le scelte dell'attuale vacanza
 
     DONE:
+32) Aggiungere nome alla vacanza
+41) Aggiustare CancellaScelta perchè non ritorna nessun parametro, andrebbe ritornata la pk della vacanza
+42) Aggiustare ModificaScelta, prendere spunto da ProductUpdateView in progetto fillo
+44) aggiustare itinerario di viaggio perchè nel mixin quando viene chiamato con pk==0 non viene trovata attrazione
 44) difficoltà prevista della giornata
 39) la lista delle scelte all'interno della vacanza deve sempre essere ordinata in dettagliovacanza: metodo all'interno della classe model Vacanza 
 40) OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano

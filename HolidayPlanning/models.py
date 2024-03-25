@@ -74,6 +74,7 @@ def get_next_activity(self):
 
 
 class Vacanza(models.Model):
+    nome = models.CharField(max_length=300, blank=True)
     dataArrivo = models.DateField()
     dataPartenza = models.DateField()
     nrPersone = models.IntegerField()
