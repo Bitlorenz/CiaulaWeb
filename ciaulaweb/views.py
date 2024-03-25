@@ -1,3 +1,5 @@
+import operator
+
 from django.shortcuts import render
 from attractions.models import Attrazione
 from HolidayPlanning.models import Vacanza, Scelta
@@ -8,12 +10,32 @@ def mostpopular(popular, request):
     if request.user.is_authenticated:
         vacanze = Vacanza.objects.filter()  # Acquisisco tutte le vacanze
         vacanze_utente = Vacanza.objects.filter(utente=request.user)
+        # Acquisisco scelte fatte dall'utente
+        scelte_utente = []
+        for vu in vacanze_utente:
+            for sc in vu.scelte.all():
+                scelte_utente.append(sc.attrazione)
+        scelte_utente=list(set(scelte_utente)) # Rimozione duplicati
+
+        # metto in un dizionario la coppia scelta-quantità acquistata
+        for vacanza in vacanze:
+            for s in vacanza.scelte.all():
+                if s.attrazione in popular:
+                    popular[s.attrazione] += 1
+                else:
+                    popular[s.attrazione] = 1
+        popular_ord = dict(sorted(popular.items(), key=operator.itemgetter(1), reverse=True))  # Ordino elementi sulla base di quante volte sono stati scelti
+
+        # rimuovo dal dizionario scelte già fatte dall'utente
+        for scelte in scelte_utente:
+            del popular_ord[scelte]
+
 
 def recommend(user):
 
     vacanze_utente = Vacanza.objects.filter(utente=user) # Acquisisco vacanze fatte dal turista
 
-    scelte_utente = [] #lista con scelte fatte dall'utente
+    scelte_utente = []  # lista con scelte fatte dall'utente
     for vac in vacanze_utente:
         for s in vac.scelte.all():
             scelte_utente.append(s.attrazione)  # Acquisisco scelte fatte dall'utente
