@@ -13,10 +13,10 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = UserProfileModel
-        fields = ['first_name', 'last_name', 'email', 'codiceFiscale', 'telefono', 'dataDiNascita']
+        fields = ['first_name', 'last_name', 'email', 'codiceFiscale', 'telefono', 'dataDiNascita', 'profile_image']
         labels = {'first_name': _('Nome'), 'last_name': _('Cognome'),
                   'codiceFiscale': _('Codice Fiscale'), 'telefono': _('Telefono'),
-                  'dataDiNascita': _('Data di Nascita')}
+                  'dataDiNascita': _('Data di Nascita'), 'profile_image': _('Immagine Profilo')}
 
     def clean_password2(self):
         # Check that the two password entries match

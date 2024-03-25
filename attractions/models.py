@@ -28,7 +28,7 @@ class Attrazione(models.Model):
         if self.attrazione_image and hasattr(self.attrazione_image, 'url'):
             return self.attrazione_image.url
         else:
-            return "/static/img/erice.jpg"
+            return "Immagine non disponibile"
 
 
 class Recensione(models.Model):

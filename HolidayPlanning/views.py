@@ -16,7 +16,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from profiles.models import UserProfileModel
 from .forms import *
-from .mixins import LookingTourMixin
+from .mixins import LookingTourMixin, IsVacanzaUserOwnedMixin
 from .models import Scelta, Spostamento, Vacanza
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
@@ -37,7 +37,6 @@ def scegliattrazione(request, pk, vacanza_id):
     else:
         utente = request.user
         vacanza = Vacanza.objects.filter(utente=request.user, pk=vacanza_id)
-        print("vacanza in get: "+str(vacanza))
         att = get_object_or_404(Attrazione, pk=pk)
         form = ScegliAttrazioneForm(pk=pk, user=utente)
         # TODO CONTROLLARE SE ESISTE UNA VACANZA PER L'UTENTE, SE NO CREARNE UNA
@@ -65,7 +64,7 @@ def checkSovrapposizione(request, fine, ini):
 # e che l'ora di arrivo sia precedente all'inizio dell'attrazione B
 # bisogna scrivhere dei metodi per spostare attrazioni e mandare messaggi su infattibilità viaggi
 # le attrazioni di partenza e arrivo sono mandate via template con le pk delle scelte
-class AggiungiSpostamento(LoginRequiredMixin, CreateView):
+class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
     model = Spostamento
     form_class = SpostamentoForm
     template_name = "HolidayPlanning/spostamento.html"
@@ -73,10 +72,8 @@ class AggiungiSpostamento(LoginRequiredMixin, CreateView):
     def get_initial(self, **kwargs):
         initial = super().get_initial()
         scelta_partenza = Scelta.objects.get(pk=self.kwargs['par'])
-        print("scelta partenza in get_initial: "+str(scelta_partenza))
         initial['scelta_partenza'] = scelta_partenza
         scelta_arrivo = scelta_partenza.next_scelta()
-        print("scelta arrivo in get_initial: " + str(scelta_arrivo))
         initial['scelta_arrivo'] = scelta_arrivo
         return initial
 
@@ -111,7 +108,7 @@ class AggiungiSpostamento(LoginRequiredMixin, CreateView):
 
 
 # class per modificare una scelta data la chiave primaria
-class ModificaScelta(LoginRequiredMixin, UpdateView):
+class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
     model = Scelta
     template_name = "HolidayPlanning/modificascelta.html"
     form_class = ModificaSceltaForm
@@ -156,7 +153,7 @@ class ModificaScelta(LoginRequiredMixin, UpdateView):
 
 
 # class delete view per eliminare una scelta
-class CancellaScelta(LoginRequiredMixin, DeleteView):
+class CancellaScelta(IsVacanzaUserOwnedMixin, DeleteView):
     model = Scelta
     template_name = "HolidayPlanning/cancellascelta.html"
 
@@ -190,7 +187,7 @@ class VacanzeList(LoginRequiredMixin, ListView):
 
 
 # view che elenca le vacanze fatte dal root, dato che anche gli utenti anonimi possono vedere i tour vengono rimandati
-# ad un altra view
+# a un altra view
 def vacanze_by_root(request):
     try:
         user = UserProfileModel.objects.get(nrSocio=1)
@@ -207,7 +204,7 @@ def vacanze_by_root(request):
         return HttpResponse("User not found", status=404)
 
 
-# DetailView per vedere il toru organizzato
+# DetailView per vedere il tour organizzato
 class TourDetail(DetailView):
     model = Vacanza
     template_name = "HolidayPlanning/dettagliovacanza.html"
@@ -289,12 +286,10 @@ class DettaglioVacanza(LookingTourMixin, DetailView):
 
 
 # class view per modificare una vacanza
-class ModificaVacanza(LoginRequiredMixin, UpdateView):
+class ModificaVacanza(IsVacanzaUserOwnedMixin, UpdateView):
     model = Vacanza
     template_name = "HolidayPlanning/modificavacanza.html"
     form_class = ModificaVacanzaForm
-
-    # fields = ['dataArrivo', 'dataPartenza', 'nrPersone', 'budgetDisponibile']
 
     def get_success_url(self):
         return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": self.object.pk})
@@ -312,8 +307,7 @@ def stampaVacanza(request, pk):
     textob.setFont("Helvetica", 14)
 
     # recupera l'oggetto vacanza data la chiave primaria
-    vacanza = Vacanza.objects.get(pk=pk)
-    print(vacanza)
+    vacanza = Vacanza.objects.get(pk=pk, utente=request.user)
     righeTesto = ["Vacanza di " + vacanza.utente.first_name + " " + vacanza.utente.last_name,
                   "Data di arrivo: " + str(vacanza.dataArrivo), "Data di partenza: " + str(vacanza.dataPartenza),
                   "Numero di persone: " + str(vacanza.nrPersone),
