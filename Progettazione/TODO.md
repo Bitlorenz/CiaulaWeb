@@ -15,29 +15,43 @@ GLOSSARIO:
 
 ## TO-DO:
 BACKEND
-2) aggiungere stato chiusa alla vacanza (NECESSARIO)?
-3) la registrazione dell admin avviene dalla pagina /admin/signup e il login da /admin/signin
-4) una recensione all'attività andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passata la data scelta
+1) url dinamici: se cambio padre non devo cambiare gli url delle view che ereditano
+2) controllare cold start recommendation system
+3) l'url è sbagliato quando si clicca sul titolo immagine dei risultati
+4) sistemare pannello scelta, deve funzionare anche per root
+5) aggiungere cancella attrazione per l'admin
+6) fare form e template modifica attrazione accessibile solo all'admin
+7) aggiungere stato chiusa alla vacanza (NECESSARIO)?
+8) la registrazione dell admin avviene dalla pagina /admin/signup e il login da /admin/signin, devo farlo io
+9) una recensione all'attività andrebbe lasciata dopo che si è fatta l'attrazione, quindi dopo che è passata la data scelta
 
 FRONTEND
-1) inserire la foto dell'utente nella navbar o in altro posto
-2) inserire nome_vacanza nel dettaglio di una vacanza e nella lista di vacanze
-3) inserire metodo difficolta_vacanza nel dettaglio di una vacanza e nel template
-4) inserire dettagli scelta o migliorare scheda della scelta in dettaglio vacanza
-5) piano vacanza scandito per giornate: è solo una cosa di frontend? Controlli su orari e giorni: se la giornata è finita non si possono aggiungere più attrazioni
+1) inserire bottone creaattrazione e modifica attrazione per l'admin
+2) inserire la foto dell'utente nella navbar o in altro posto
+3) inserire nome_vacanza nel dettaglio di una vacanza e nella lista di vacanze
+4) inserire metodo difficolta_vacanza nel dettaglio di una vacanza e nel template
+5) inserire dettagli scelta o migliorare scheda della scelta in dettaglio vacanza
+6) piano vacanza scandito per giornate: è solo una cosa di frontend? Controlli su orari e giorni: se la giornata è finita non si possono aggiungere più attrazioni
 per ogni attrazione stampata nella lista o nel piano pdf, se quella successiva è di una giornata seguente si stampa il giorno e il numero della giornata
-6) Migliorare frontend per barra di ricerca e per i risultati della ricerca
-7) nel form di aggiunta scelta bisogna ricordare la vacanza
-8) Il mio itinerario deve ricordare alcuni dettagli della vacanza
-9) sistemare pagina di cancella scelta
-10) In ListaScelte metà pagina mostra la lista delle scelte e l'altra metà mostra i dettagli del viaggio con il budget che scala
-11) sistemare navbar
-12) Creare homepage.html
-13) Riempire la sezione contatti con alcuni contatti (e magari il form per le mail)
+7) Migliorare frontend per barra di ricerca e per i risultati della ricerca
+8) nel form di aggiunta scelta bisogna ricordare la vacanza
+9) Il mio itinerario deve ricordare alcuni dettagli della vacanza
+10) sistemare pagina di cancella scelta
+11) In ListaScelte metà pagina mostra la lista delle scelte e l'altra metà mostra i dettagli del viaggio con il budget che scala
+12) sistemare navbar
+13) Creare homepage.html
+14) Riempire la sezione contatti con alcuni contatti (e magari il form per le mail)
     * Migliorare tutto l'aspetto grafico del sito *
 
 # DOING:
-* 
+* testing delle view di HolidayPlanning (soprattutto quelle protette dal mixin)
+  * aggiungi spostamento: 
+    * funzionante per un Turista
+    * migliorare i messaggi di errore ad esempio quello della sovrapposizione
+    * funzionante per admin
+  * ModificaVacanza:
+    * funzionante per Admin e Turista
+  * ModificaScelta:  
 * ampliare vacanze del root
 
 # RECOMMENDATION SYSTEM

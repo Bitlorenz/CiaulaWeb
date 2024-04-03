@@ -83,7 +83,7 @@ class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
         if form.cleaned_data['durata_spostamento'] in [None, '']:
             arr = form.cleaned_data['ora_arrivo']
             par = form.cleaned_data['ora_partenza']
-            spostamento.durata_spostamento = td(hours=(arr.hour-par.hour), minutes=(arr.minute-par.minute))
+            spostamento.durata_spostamento = td(hours=(arr.hour - par.hour), minutes=(arr.minute - par.minute))
         scelta_partenza = Scelta.objects.get(pk=self.kwargs['par'])
         spostamento.scelta_partenza = scelta_partenza
         spostamento.scelta_arrivo = scelta_partenza.next_scelta()
@@ -115,9 +115,9 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        attivita_pk = self.kwargs['pk']
+        attivita_pk = self.kwargs['att_pk']
         attivita = Scelta.objects.get(pk=attivita_pk)
-        vacanza_pk = self.kwargs['vacanza_id']
+        vacanza_pk = self.kwargs['pk']
         context["v_id"] = vacanza_pk
         context["ora inizio attr"] = attivita.attrazione.oraApertura
         context["ora fine attr"] = attivita.attrazione.oraChiusura
@@ -125,7 +125,7 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
 
     def form_valid(self, form):
         scelta = form.save(commit=False)
-        attivita_pk = self.kwargs['pk']
+        attivita_pk = self.kwargs['att_pk']
         attivita = Scelta.objects.get(pk=attivita_pk)
         attr = attivita.attrazione
         if form.cleaned_data["oraInizio"] < attr.oraApertura or form.cleaned_data["oraInizio"] > attr.oraChiusura:
@@ -134,22 +134,21 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
             return self.form_invalid(form, 2)
             # TODO controllare che non ci siano sovrapposizioni con altre attrazioni nello stesso giorno
         scelta.save()
-        vacanza_id = self.kwargs["vacanza_id"]
+        vacanza_id = self.kwargs['pk']
         vacanza = Vacanza.objects.get(pk=vacanza_id)
         return super().form_valid(form)
 
-
     def form_invalid(self, form, error_code):
-        if error_code==1:
+        if error_code == 1:
             form.add_error('oraInizio', "L'ora di inizio non rispetta i limiti d'orario dell'attrazione")
-        if error_code==2:
+        if error_code == 2:
             form.add_error('oraFine', "L'ora di fine non rispetta i limiti d'orario dell'attrazione")
         return super().form_invalid(form)
 
     def get_success_url(self):
-        vacanza_id = self.kwargs["vacanza_id"]
-        print("Vacanza_id in get_success_url di modificascelta: "+vacanza_id)
-        return reverse("HolidayPlanning:dettagliovacanza", kwargs={'pk':vacanza_id})
+        vacanza_id = self.kwargs['pk']
+        print("Vacanza_id in get_success_url di modificascelta: " + vacanza_id)
+        return reverse("HolidayPlanning:dettagliovacanza", kwargs={'pk': vacanza_id})
 
 
 # class delete view per eliminare una scelta
@@ -168,8 +167,8 @@ class CancellaScelta(IsVacanzaUserOwnedMixin, DeleteView):
 
     def get_success_url(self):
         vacanza_id = self.kwargs["vacanza_id"]
-        print("Vacanza_id in get_success_url di cancellascelta: "+vacanza_id)
-        return reverse("HolidayPlanning:dettagliovacanza", kwargs={'pk':vacanza_id})
+        print("Vacanza_id in get_success_url di cancellascelta: " + vacanza_id)
+        return reverse("HolidayPlanning:dettagliovacanza", kwargs={'pk': vacanza_id})
 
 
 # API VACANZA

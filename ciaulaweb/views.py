@@ -17,7 +17,7 @@ def mostpopular(popular, request):
         for vu in vacanze_utente:
             for sc in vu.scelte.all():
                 scelte_utente.append(sc.attrazione)
-        scelte_utente=list(set(scelte_utente)) # Rimozione duplicati
+        scelte_utente = list(set(scelte_utente))  # Rimozione duplicati
 
         # metto in un dizionario la coppia scelta-quantità acquistata
         for vacanza in vacanze:
@@ -26,16 +26,17 @@ def mostpopular(popular, request):
                     popular[s.attrazione] += 1
                 else:
                     popular[s.attrazione] = 1
-        popular_ord = dict(sorted(popular.items(), key=operator.itemgetter(1), reverse=True))  # Ordino elementi sulla base di quante volte sono stati scelti
+        popular_ord = dict(sorted(popular.items(), key=operator.itemgetter(1),
+                                  reverse=True))  # Ordino elementi sulla base di quante volte sono stati scelti
 
         # rimuovo dal dizionario scelte già fatte dall'utente
         for scelte in scelte_utente:
             del popular_ord[scelte]
 
-        popular_ord = dict(list(popular_ord.items())[:9]) # Massimo 9 elementi
+        popular_ord = dict(list(popular_ord.items())[:9])  # Massimo 9 elementi
         return popular_ord
     else:
-        vacanze = Vacanza.objects.filter() # prendo tutte le vacanze di tutti gli utenti
+        vacanze = Vacanza.objects.filter()  # prendo tutte le vacanze di tutti gli utenti
         # Metto in un dizionario la coppia prodotto-quantità acquistata
         for vacanza in vacanze:
             for s in vacanza.scelte.all():
@@ -48,9 +49,9 @@ def mostpopular(popular, request):
         popular_ord = dict(list(popular_ord.items())[:9])  # Massimo 9 elementi
         return popular_ord
 
-def recommend(user):
 
-    vacanze_utente = Vacanza.objects.filter(utente=user) # Acquisisco vacanze fatte dal turista
+def recommend(user):
+    vacanze_utente = Vacanza.objects.filter(utente=user)  # Acquisisco vacanze fatte dal turista
 
     scelte_utente = []  # lista con scelte fatte dall'utente
     for vac in vacanze_utente:
@@ -58,7 +59,7 @@ def recommend(user):
             scelte_utente.append(s.attrazione)  # Acquisisco scelte fatte dall'utente
 
     # rimuovo duplicati dalla lista
-    scelte_utente_nd = list(set(scelte_utente)) # nuova lista contenente le scelte delle vacanze senza duplicati
+    scelte_utente_nd = list(set(scelte_utente))  # nuova lista contenente le scelte delle vacanze senza duplicati
 
     vacanze = Vacanza.objects.exclude(utente=user)  # Acquisisco tutte le vacanze degli altri turisti
     recommend = []
@@ -84,26 +85,31 @@ def all_attrazioni():
     attrazioni = Attrazione.objects.filter()  # Acquisisco tutte le attrazioni
     return attrazioni
 
+
 # View per la homepage
 def home(request):
     ctx = {}
 
     # caso Turista (utente loggato)
     if request.user.is_authenticated:
-        if not request.user.is_staff:  #superfluo?
+        if not request.user.is_staff:  # superfluo?
             # Se il Turista ha creato vacanze
             if Vacanza.objects.filter(utente=request.user).exists():
                 recommended = recommend(request.user)  # Acquisisco attrazioni consigliate per l'utente
                 if len(recommended) > 0:  # Se ho almeno un' attrazione consigliata
-                    ctx = {"listaattrazioni": recommended, "title": "Attrazioni consigliate in base alle tue scelte"}  # listaattrazioni contiene le attrazioni consigliate
+                    ctx = {"listaattrazioni": recommended,
+                           "title": "Attrazioni consigliate in base alle tue scelte"}  # listaattrazioni contiene le attrazioni consigliate
                 else:  # Se non ho attrazioni da consigliare
                     admin = UserProfileModel.objects.get(is_admin=True)
-                    if Vacanza.objects.exclude(Q(utente=request.user) | Q(utente=admin)).exists():  # Se esistono vacanza fatte da altri utenti
+                    if Vacanza.objects.exclude(Q(utente=request.user) | Q(
+                            utente=admin)).exists():  # Se esistono vacanza fatte da altri utenti
                         popular = {}
-                        popular_ord = mostpopular(popular, request)  # Acquisisco attrazioni più popolari in ordine di quantità acquistata
+                        popular_ord = mostpopular(popular,
+                                                  request)  # Acquisisco attrazioni più popolari in ordine di quantità acquistata
                         # Se ho attrazioni popolari non scelte dall'utente
                         if len(popular_ord) > 0:
-                            ctx = {"listaattrazioni": popular_ord, "title": "Attrazioni popolari"} # listaattrazioni contiene le attrazioni più popolari
+                            ctx = {"listaattrazioni": popular_ord,
+                                   "title": "Attrazioni popolari"}  # listaattrazioni contiene le attrazioni più popolari
                         # Se non ho attrazioni popolari non scelte dall'utente
                         else:
                             attrazioni = all_attrazioni()  # Acquisisco tutte le vacanze
@@ -116,8 +122,10 @@ def home(request):
                 # Se esistono vacanze di altri turisti
                 if Vacanza.objects.filter().exists():
                     popular = {}
-                    popular_ord = mostpopular(popular, request)  # Acquisisco attrazioni più popolari in ordine di quantità acquistata
-                    ctx = {"listaattrazioni": popular_ord, "title": "Attrazioni popolari"}  # listaattrazioni contiene le attrazioni più popolari
+                    popular_ord = mostpopular(popular,
+                                              request)  # Acquisisco attrazioni più popolari in ordine di quantità acquistata
+                    ctx = {"listaattrazioni": popular_ord,
+                           "title": "Attrazioni popolari"}  # listaattrazioni contiene le attrazioni più popolari
                 # Se non esistono vacanze di altri utenti
                 else:
                     attrazioni = all_attrazioni()
@@ -136,5 +144,4 @@ def home(request):
             attrazioni = all_attrazioni()
             ctx = {"listaattrazioni": attrazioni, "title": "Tutte le Attrazioni"}
 
-    return render(request, template_name="homepage.html", context=ctx) # restituisco il template
-
+    return render(request, template_name="homepage.html", context=ctx)  # restituisco il template

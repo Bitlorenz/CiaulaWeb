@@ -9,9 +9,9 @@ from HolidayPlanning.models import Vacanza
 class LookingTourMixin(LoginRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
         vacanza = Vacanza.objects.get(pk=kwargs['pk'])
-        if not request.user.is_authenticated: #se l'utente è anonimo
+        if not request.user.is_authenticated:  # se l'utente è anonimo
             if not vacanza.utente.pk == 1:  # se il creatore della vacanza non è root (non è un tour organizzato)
-                return self.handle_no_permission() # allora lo buttiamo fuori
+                return self.handle_no_permission()  # allora lo buttiamo fuori
         if request.user != vacanza.utente:
             raise Http404("Non hai il permesso per accedere a questa vacanza.")
         return super().dispatch(request, *args, **kwargs)
@@ -21,7 +21,7 @@ class LookingTourMixin(LoginRequiredMixin):
 class IsVacanzaUserOwnedMixin(LoginRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
         vacanza = Vacanza.objects.get(pk=kwargs['pk'])
-        if Vacanza.utente != self.request.user:
+        if vacanza.utente != request.user:
             raise Http404("Non hai il permesso per accedere a questa vacanza.")
         return super().dispatch(request, *args, **kwargs)
 
