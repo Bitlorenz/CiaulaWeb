@@ -9,7 +9,11 @@
             <div class="col-md-3 mb-4">
                 <div class="card">
                     <div class="card-body">
+                    {% if v.nome != "" %}
+                        <h5 class="card-title">{{ v.nome }}</h5>
+                    {% else %}
                         <h5 class="card-title">Vacanza {{forloop.counter }}</h5>
+                    {% endif %}
                         <p class="card-text">Itinerario dal {{ v.dataArrivo }} al {{ v.dataPartenza }}</p>
                     {% if tour %}
                         <a href="{% url "HolidayPlanning:dettagliotour" v.pk %}" class="btn btn-primary">Dettagli Tour</a>

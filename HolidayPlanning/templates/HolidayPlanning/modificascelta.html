@@ -3,7 +3,17 @@
 
 {% block title %} Modifica Scelta{% endblock %}
 {% block content %}
-    <h1>Modifica la scelta di {{ object.attrazione.nome  }}</h1>
-    {% crispy form %}
-    <a class="btn" href="{% url 'HolidayPlanning:dettagliovacanza' v_id %}">Cancel</a>
+    <div style="display: flex;">
+        <div style="flex: 1; margin-left: 20px;">
+            <h2>Modifica la scelta di {{ attivita.attrazione.nome }}</h2>
+            <p>Giorno attuale: {{ attivita.giorno }}</p>
+            <p>Ora inizio attuale: {{ attivita.oraInizio }}</p>
+            <p>Ora fine attuale: {{ attivita.oraFine }}</p>
+            <p>Vacanza dal {{ vacanza.dataArrivo }} al {{ vacanza.dataPartenza }}</p>
+        </div>
+        <div style="flex: 1; margin-right: 20px">
+            {% crispy form %}
+            <a class="btn" href="{% url 'HolidayPlanning:dettagliovacanza' v_id %}">Cancel</a>
+        </div>
+    </div>
 {% endblock %}

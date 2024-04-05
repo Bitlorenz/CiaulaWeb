@@ -15,6 +15,10 @@
                                     <a href="{% url 'HolidayPlanning:aggiungi' l.pk vacanza_id %}" class="btn btn-primary">Aggiungi alla Vacanza</a>
                                 {% endif %}
                             {% endif %}
+                            {% if user.is_staff %}
+                                <a href="{% url 'attractions:modifica_attrazione' l.pk %}" class="btn btn-primary"> Modifica Atttrazione</a>
+                                <a href="{% url 'attractions:cancella_attrazione' l.pk %}" class="btn btn-primary"> Cancella Attrazione</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

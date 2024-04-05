@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, UpdateView, CreateView
+from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 
 from profiles.models import UserProfileModel
 from attractions.forms import CreaAttrazioneForm, SearchForm, CreaRecensioneForm
@@ -109,12 +109,33 @@ class AggiornaAttrazione(UserPassesTestMixin, UpdateView):
         if not self.request.user.is_staff:
             return reverse("profiles:user-login")
         attrazione = form.save(commit=False)
-        # aggiungere altre modifiche da fare sull'attrazione in fase di salvataggio
+        # aggiungere controlli da fare sull'attrazione in fase di salvataggio
         attrazione.save()
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("HolidayPlanning:dettaglioattr", kwargs={"pk": self.object.pk})
+        attrazione = Attrazione.objects.get(pk = self.kwargs["pk"])
+        return reverse("attractions:dettaglioattr", kwargs={"nome_attr": attrazione.nome})
+
+class CancellaAttrazione(UserPassesTestMixin, DeleteView):
+    model = Attrazione
+    template_name = "attractions/cancellaattr.html"
+    success_url = reverse("attractions:attrazioni")
+    def delete(self, request, *args, **kwargs):
+        return super(CancellaAttrazione, self).delete(request, *args, **kwargs)
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        return HttpResponseForbidden("Non sei un amministratore, non puoi modificare attrazioni")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        attr_pk = self.kwargs['pk']
+        attr = Attrazione.objects.get(pk=attr_pk)
+        context["attr"] = attr
+        return context
 
 
 # Ricerca sulle attrazioni da parte dei turisti e utenti anonimi

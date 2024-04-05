@@ -6,7 +6,7 @@
 
 {% block content %}
     <h1>Cancella la scelta di {{ object.attrazione.nome  }}</h1>
-    <h3>Stai cancellando qesta scelta, sei sicuro?</h3>
+    <h3>Stai cancellando questa scelta, sei sicuro?</h3>
     <form method="post">
         {% csrf_token %}
         <a href="{% url 'HolidayPlanning:dettagliovacanza' v_id %}">Annulla</a>

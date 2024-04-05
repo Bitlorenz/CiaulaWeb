@@ -112,12 +112,21 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
     model = Scelta
     template_name = "HolidayPlanning/modificascelta.html"
     form_class = ModificaSceltaForm
+    slug_url_kwarg = "att_pk"
+
+    def get_object(self, queryset=None):
+        attivita_pk = self.kwargs.get(self.slug_url_kwarg)
+        attivita = Scelta.objects.get(pk=attivita_pk)
+        return attivita
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         attivita_pk = self.kwargs['att_pk']
         attivita = Scelta.objects.get(pk=attivita_pk)
+        context["attivita"] = attivita
         vacanza_pk = self.kwargs['pk']
+        vacanza = Vacanza.objects.get(pk=vacanza_pk)
+        context["vacanza"] = vacanza
         context["v_id"] = vacanza_pk
         context["ora inizio attr"] = attivita.attrazione.oraApertura
         context["ora fine attr"] = attivita.attrazione.oraChiusura
@@ -125,17 +134,16 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
 
     def form_valid(self, form):
         scelta = form.save(commit=False)
-        attivita_pk = self.kwargs['att_pk']
-        attivita = Scelta.objects.get(pk=attivita_pk)
-        attr = attivita.attrazione
+        attr =  scelta.attrazione
         if form.cleaned_data["oraInizio"] < attr.oraApertura or form.cleaned_data["oraInizio"] > attr.oraChiusura:
             return self.form_invalid(form, 1)
         if form.cleaned_data["oraFine"] < attr.oraApertura or form.cleaned_data["oraFine"] > attr.oraChiusura:
             return self.form_invalid(form, 2)
             # TODO controllare che non ci siano sovrapposizioni con altre attrazioni nello stesso giorno
+        ini = form.cleaned_data["oraInizio"]
+        fine = form.cleaned_data["oraFine"]
+        scelta.durata = td(hours=fine.hour - ini.hour, minutes=fine.minute - ini.minute)
         scelta.save()
-        vacanza_id = self.kwargs['pk']
-        vacanza = Vacanza.objects.get(pk=vacanza_id)
         return super().form_valid(form)
 
     def form_invalid(self, form, error_code):
@@ -155,18 +163,24 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
 class CancellaScelta(IsVacanzaUserOwnedMixin, DeleteView):
     model = Scelta
     template_name = "HolidayPlanning/cancellascelta.html"
+    slug_url_kwarg = "att_pk"
+
+    def get_object(self, queryset=None):
+        attivita_pk = self.kwargs.get(self.slug_url_kwarg)
+        attivita = Scelta.objects.get(pk=attivita_pk)
+        return attivita
 
     def delete(self, request, *args, **kwargs):
         return super(CancellaScelta, self).delete(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        vacanza_pk = self.kwargs['vacanza_id']
+        vacanza_pk = self.kwargs['pk']
         context["v_id"] = vacanza_pk
         return context
 
     def get_success_url(self):
-        vacanza_id = self.kwargs["vacanza_id"]
+        vacanza_id = self.kwargs["pk"]
         print("Vacanza_id in get_success_url di cancellascelta: " + vacanza_id)
         return reverse("HolidayPlanning:dettagliovacanza", kwargs={'pk': vacanza_id})
 

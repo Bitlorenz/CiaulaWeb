@@ -18,7 +18,7 @@ class CreaAttrazioneForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_id = 'attrazione-crispy-form'
     helper.form_method = 'POST'
-    helper.add_input(Submit('submit', 'Crea'))
+    helper.add_input(Submit('submit', 'Salva'))
     helper.inputs[0].field_classes = 'btn btn-success'
 
     def clean(self):

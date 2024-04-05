@@ -20,8 +20,8 @@
                 <div class="col-3">
                     <div class="card" style="border-radius: 25px;">
                         <br>
-                        <a href="/dettaglioattrazione/{{l.pk}}" style="color:black;"> <h3> <b> {{ l.nome }}</b></h3></a>
-                        <a href="/dettaglioattrazione/{{l.pk}}"> <img src="{{ l.image.url }}" style="width: auto; height: 240px"></a> <!--collegamento a specifiche attrazione -->
+                        <a href="{% url 'attractions:dettaglioattr' l.pk %}" style="color:black;"> <h3> <b> {{ l.nome }}</b></h3></a>
+                        <a href="{% url 'attractions:dettaglioattr' l.pk %}"> <img src="{{ l.image.url }}" style="width: auto; height: 240px"></a> <!--collegamento a specifiche attrazione -->
                         <br>
                     </div>
                 </div>
