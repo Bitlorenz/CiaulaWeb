@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.db.models import Q
@@ -5,11 +7,11 @@ from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView
-
+from datetime import datetime
 from profiles.models import UserProfileModel
 from attractions.forms import CreaAttrazioneForm, SearchForm, CreaRecensioneForm
 from attractions.models import Attrazione, Recensione
-from HolidayPlanning.models import Vacanza
+from HolidayPlanning.models import Vacanza, Scelta
 
 
 # class view per vedere tutte le attrazioni presenti
@@ -31,7 +33,7 @@ class AttrazioniList(ListView):
         return context
 
 
-#  View per la visualizzazione dei dati relativi ad un'attrazione
+#  View per la visualizzazione dei dati relativi a un'attrazione
 #  Possibilità di aggiungere le recensioni se l'attrazione è stata scelta
 def DetailAttrazioneEntita(request, nome_attr):
     if Attrazione.objects.filter(nome=nome_attr).exists():
@@ -68,7 +70,7 @@ def DetailAttrazioneEntita(request, nome_attr):
 class AttrazioneCreateView(UserPassesTestMixin, CreateView):
     model = Attrazione
     template_name = 'attractions/attrazione_form.html'
-    success_url = reverse_lazy("HolidayPlanning:attrazioni")
+    success_url = reverse_lazy("attractions:attrazioni")
     login_url = '../../profiles/registration/signin'
     form_class = CreaAttrazioneForm
 
@@ -117,10 +119,12 @@ class AggiornaAttrazione(UserPassesTestMixin, UpdateView):
         attrazione = Attrazione.objects.get(pk = self.kwargs["pk"])
         return reverse("attractions:dettaglioattr", kwargs={"nome_attr": attrazione.nome})
 
+
 class CancellaAttrazione(UserPassesTestMixin, DeleteView):
     model = Attrazione
     template_name = "attractions/cancellaattr.html"
-    success_url = reverse("attractions:attrazioni")
+    success_url = reverse_lazy("attractions:attrazioni")
+
     def delete(self, request, *args, **kwargs):
         return super(CancellaAttrazione, self).delete(request, *args, **kwargs)
 
@@ -158,27 +162,22 @@ class SearchView(ListView):
         return result
 
 
-@staff_member_required
-def delete_attrazione(self, nome):
-    if Attrazione.objects.filter(nome=nome).exists():
-        attrazione = get_object_or_404(Attrazione, nome=nome)
-        attrazione.delete()  # elimina oggetto dal db
-        return redirect("attractions:attrazioni")
-    else:
-        return HttpResponse("ERROR: Nome Attrazione non trovato")
-
-
 class RecensioneCreateView(LoginRequiredMixin, CreateView):
     model = Recensione
     form_class = CreaRecensioneForm
     template_name = 'attractions/crea_recensione.html'
     success_message = 'Recensione Creata correttamente!'
+    slug_url_kwarg = "scelta_pk"
 
     #  controllo validità campi form
     def form_valid(self, form):
         recensione = form.save(commit=False)
         recensione.autore = UserProfileModel.objects.get(nrSocio=self.request.user.pk)
-        recensione.attrazione = Attrazione.objects.get(pk=self.kwargs['pk'])
+        scelta = Scelta.objects.get(pk=self.kwargs[self.slug_url_kwarg])
+        if scelta.giorno > datetime.now().date():
+            form.add_error(None, error=ValueError("Recensione inseribile solo dopo aver fatto l'attività"))
+            return self.form_invalid(form)
+        recensione.attrazione = scelta.attrazione
         recensione.save()
         self.success_url = reverse_lazy("attractions:dettaglioattr",
                                         kwargs={'nome_attr': recensione.attrazione.pk})  # redireziono all'attrazione
@@ -187,12 +186,11 @@ class RecensioneCreateView(LoginRequiredMixin, CreateView):
     #  Aggiunge l'attrazione alle variabili di contesto
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        pk = self.kwargs['pk']
-        attrazione = Attrazione.objects.get(pk=pk)
-        context['attrazione'] = attrazione
+        scelta = Scelta.objects.get(pk=self.kwargs['scelta_pk'])
+        context['attrazione'] = scelta
         return context
 
     #  Restituisce 404 se l'attrazione non è stata trovata
     def dispatch(self, request, *args, **kwargs):
-        attrazione = get_object_or_404(Attrazione, pk=self.kwargs['pk'])
-        return super().dispatch(request, attrazione=attrazione, *args, **kwargs)
+        scelta = get_object_or_404(Scelta, pk=self.kwargs[self.slug_url_kwarg])
+        return super().dispatch(request, scelta=scelta, *args, **kwargs)

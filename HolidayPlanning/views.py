@@ -21,32 +21,6 @@ from .models import Scelta, Spostamento, Vacanza
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
 
-def scegliattrazione(request, pk, vacanza_id):
-    if request.method == "POST":
-        form = ScegliAttrazioneForm(data=request.POST, pk=pk, user=request.user)
-        if form.is_valid():
-            scelta = form.save(commit=False)
-            rifvacanza = Vacanza.objects.get(utente=request.user, pk=vacanza_id)
-            ini = form.cleaned_data.get("oraInizio")
-            fine = form.cleaned_data.get("oraFine")
-            scelta.durata = td(hours=fine.hour - ini.hour, minutes=fine.minute - ini.minute)
-            # checkSovrapposizione(request, fine, ini)
-            scelta.save()
-            rifvacanza.scelte.add(scelta)
-            return redirect("HolidayPlanning:dettagliovacanza", pk=rifvacanza.pk)
-    else:
-        utente = request.user
-        vacanza = Vacanza.objects.filter(utente=request.user, pk=vacanza_id)
-        att = get_object_or_404(Attrazione, pk=pk)
-        form = ScegliAttrazioneForm(pk=pk, user=utente)
-        # TODO CONTROLLARE SE ESISTE UNA VACANZA PER L'UTENTE, SE NO CREARNE UNA
-        if Vacanza.objects.filter(utente=utente).count() == 0:
-            return redirect("HolidayPlanning:creavacanza")
-        return render(request, template_name="HolidayPlanning/scegli_attrazione.html",
-                      context={"form": form, "att": att, "title": att.nome, "vacanza": vacanza})
-    return render(request, template_name="HolidayPlanning/scegli_attrazione.html", context={"form": form})
-
-
 # TODO non ritornare T/F, ma stampare un messaggio avvertendo che c'è sovrapposizione con la specifica scelta
 def checkSovrapposizione(request, fine, ini):
     rifvacanza = Vacanza.objects.filter(utente=request.user).last()
@@ -60,9 +34,9 @@ def checkSovrapposizione(request, fine, ini):
 
 
 # class create view per aggiungere lo spsotamento tra due scelte
-# deve controllare che l'ora di partenza sia successiva alla fine della attrazione A
+# controlla che l'ora di partenza sia successiva alla fine della attrazione A
 # e che l'ora di arrivo sia precedente all'inizio dell'attrazione B
-# bisogna scrivhere dei metodi per spostare attrazioni e mandare messaggi su infattibilità viaggi
+# bisogna scrivere dei metodi per spostare attrazioni e mandare messaggi su infattibilità viaggi
 # le attrazioni di partenza e arrivo sono mandate via template con le pk delle scelte
 class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
     model = Spostamento
@@ -107,6 +81,34 @@ class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
         return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": self.kwargs['vac']})
 
 
+# API SCELTE
+# Funzione per creare una scelta data un attrazione
+def scegliattrazione(request, pk, vacanza_id):
+    if request.method == "POST":
+        form = ScegliAttrazioneForm(data=request.POST, pk=pk, user=request.user)
+        if form.is_valid():
+            scelta = form.save(commit=False)
+            rifvacanza = Vacanza.objects.get(utente=request.user, pk=vacanza_id)
+            ini = form.cleaned_data.get("oraInizio")
+            fine = form.cleaned_data.get("oraFine")
+            scelta.durata = td(hours=fine.hour - ini.hour, minutes=fine.minute - ini.minute)
+            # checkSovrapposizione(request, fine, ini)
+            scelta.save()
+            rifvacanza.scelte.add(scelta)
+            return redirect("HolidayPlanning:dettagliovacanza", pk=rifvacanza.pk)
+    else:
+        utente = request.user
+        vacanza = Vacanza.objects.filter(utente=request.user, pk=vacanza_id)
+        att = get_object_or_404(Attrazione, pk=pk)
+        form = ScegliAttrazioneForm(pk=pk, user=utente)
+        # TODO CONTROLLARE SE ESISTE UNA VACANZA PER L'UTENTE, SE NO CREARNE UNA
+        if Vacanza.objects.filter(utente=utente).count() == 0:
+            return redirect("HolidayPlanning:creavacanza")
+        return render(request, template_name="HolidayPlanning/scegli_attrazione.html",
+                      context={"form": form, "att": att, "title": att.nome, "vacanza": vacanza})
+    return render(request, template_name="HolidayPlanning/scegli_attrazione.html", context={"form": form})
+
+
 # class per modificare una scelta data la chiave primaria
 class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
     model = Scelta
@@ -134,7 +136,7 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
 
     def form_valid(self, form):
         scelta = form.save(commit=False)
-        attr =  scelta.attrazione
+        attr = scelta.attrazione
         if form.cleaned_data["oraInizio"] < attr.oraApertura or form.cleaned_data["oraInizio"] > attr.oraChiusura:
             return self.form_invalid(form, 1)
         if form.cleaned_data["oraFine"] < attr.oraApertura or form.cleaned_data["oraFine"] > attr.oraChiusura:
@@ -186,6 +188,7 @@ class CancellaScelta(IsVacanzaUserOwnedMixin, DeleteView):
 
 
 # API VACANZA
+# class view per mostrare la lista delle vacanze di un utente
 class VacanzeList(LoginRequiredMixin, ListView):
     model = Vacanza
     template_name = "HolidayPlanning/vacanze.html"
@@ -291,6 +294,7 @@ class DettaglioVacanza(LookingTourMixin, DetailView):
         context['tour'] = False
         context['utente'] = self.request.user
         vacanza = Vacanza.objects.get(pk=kwargs['object'].id)
+        context["giorno"] = datetime.now().date()
         context['vacanza'] = vacanza
         context['scelte'] = vacanza.sort_scelte()
         context['spostamenti'] = vacanza.spostamenti.all()
