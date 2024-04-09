@@ -54,26 +54,9 @@ class ScegliAttrazioneForm(forms.ModelForm):
         self.user = user
         a = get_object_or_404(Attrazione, pk=pk)
         self.attrazione = a
-        self.fields['attrazione'].initial = a
+        self.fields['attrazione'].initial = a.citta
         self.fields['attrazione'].disabled = True
         self.fields['attrazione'].widget.attrs["readonly"] = True
-
-    def clean(self):
-        a = self.attrazione
-        ini = self.cleaned_data["oraInizio"]
-        fine = self.cleaned_data["oraFine"]
-        if fine < ini:
-            raise forms.ValidationError(_("Valori non validi: Ora di Inizio precede Ora di Fine"))
-        if not a.oraApertura <= ini <= a.oraChiusura:
-            self.add_error("oraInizio",
-                           "Inserire orario compreso tra: " + str(a.oraApertura) + " e " + str(a.oraChiusura))
-
-            raise forms.ValidationError(_("Orario di Inizio non valido"))
-        if not a.oraApertura <= fine <= a.oraChiusura:
-            self.add_error("oraFine",
-                           "Inserire orario compreso tra: " + str(a.oraApertura) + " e " + str(a.oraChiusura))
-            raise forms.ValidationError(_("Orario di Fine non valido"))
-        return self.cleaned_data
 
     class Meta:
         model = Scelta
@@ -86,10 +69,6 @@ class ModificaSceltaForm(forms.ModelForm):
     helper.form_method = 'POST'
     helper.add_input(Submit('submit', 'Modifica'))
     helper.inputs[0].field_classes = 'btn btn-success'
-
-    def clean(self):
-        if self.cleaned_data["oraInizio"] > self.cleaned_data["oraFine"]:
-            raise forms.ValidationError(_("Valori non validi: Ora di Inizio precede ora di Arrivo"))
 
     class Meta:
         model = Scelta
@@ -109,10 +88,6 @@ class SpostamentoForm(forms.ModelForm):
         self.fields['scelta_arrivo'].widget.attrs['readonly'] = True
         self.fields['scelta_partenza'].disabled = True
         self.fields['scelta_arrivo'].disabled = True
-
-    def clean(self):
-        if self.cleaned_data['ora_arrivo'] < self.cleaned_data['ora_partenza']:
-            raise forms.ValidationError("L'orario di arrivo anticipa l' orario di partenza.")
 
     class Meta:
         model = Spostamento

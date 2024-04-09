@@ -16,8 +16,10 @@ GLOSSARIO:
 ## TO-DO:
 BACKEND
 1) url dinamici: se cambio padre non devo cambiare gli url delle view che ereditano
-2) controllare cold start recommendation system
-3) la registrazione dell admin avviene dalla pagina /admin/signup e il login da /admin/signin, devo farlo io
+2) aggiungere modifica spostamento 
+3) aggiungere cancella spostamento
+4) controllare cold start recommendation system
+5) la registrazione dell admin avviene dalla pagina /admin/signup e il login da /admin/signin, devo farlo io
 
 FRONTEND
 1) homepage per admin deve essere tutti i prodotti (quella senza views)
@@ -40,6 +42,14 @@ per ogni attrazione stampata nella lista o nel piano pdf, se quella successiva Ã
 
 # DOING:
 * funzione controlla orari e giorni
+  * funzioni comuni: controlla che l'ora di fine sia posteriore a quella di inizio 
+  * per aggiungispostamento: 
+    * l'ora di arrivo dello spostamento sia antecedente all'inizio della seguente scelta
+    * l'ora di partenza dello spostamento sia posteriore all'ora di fine della scelta precedente
+  *  per scegliattrazione: modifica attrazione
+    * gli orari devono essere ammissibili 
+    * controlla che la scelta non si sovrapponga ad altre scelte, nello stesso giorno
+    * 
 * testing delle view di HolidayPlanning (soprattutto quelle protette dal mixin)
   * aggiungi spostamento: 
     * funzionante per Admin e Turista

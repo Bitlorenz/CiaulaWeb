@@ -1,9 +1,6 @@
-from cgitb import text
 from datetime import timedelta as td, datetime
-from re import sub
 import io
-
-from django.contrib.admin.views.decorators import staff_member_required
+from gettext import gettext as _
 from django.core.exceptions import ValidationError
 from django.http import FileResponse, HttpResponse
 from reportlab.pdfgen import canvas
@@ -13,7 +10,6 @@ from reportlab.lib.units import inch
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from profiles.models import UserProfileModel
 from .forms import *
 from .mixins import LookingTourMixin, IsVacanzaUserOwnedMixin
@@ -21,16 +17,51 @@ from .models import Scelta, Spostamento, Vacanza
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
 
-# TODO non ritornare T/F, ma stampare un messaggio avvertendo che c'è sovrapposizione con la specifica scelta
-def checkSovrapposizione(request, fine, ini):
-    rifvacanza = Vacanza.objects.filter(utente=request.user).last()
-    scelteFatte = rifvacanza.scelte
-    for i in scelteFatte:
-        if i.oraInizio < ini and fine < i.oraFine:  # sovrapposizione totale
-            sovrapposta = i
-        if i.oraInizio < ini < i.oraFine or i.oraInizio < fine < i.oraFine:  # sovrapposizione parziale
-            return True
-    return False
+# ritornare T/F, ma stampare un messaggio avvertendo che c'è sovrapposizione con la specifica scelta
+# oggetto vacanza può essere un parametro
+# lo spostamento è un altro parametro che è null se si tratta di un controllo sulla scelta
+
+def checkOrariGiorno(vacanza, scelta, spostamento):
+    if spostamento is None: # caso modifica o aggiungi scelta
+        # controllo se il giorno rientra nella vacanza
+        if scelta.giorno > vacanza.dataPartenza or scelta.giorno < vacanza.dataArrivo:
+            raise ValidationError(_("Giorno non valido: %(valore)s"),
+                                  code="invalid", params={"valore": scelta.giorno.strftime("%d-%m-%Y")})
+        # controlli ammissibilità orari
+        if scelta.oraInizio >= scelta.oraFine:
+            raise ValidationError(_("Orario di Inizio precede Orario di fine: %(valore)s"),
+                                  code="invalid", params={"valore": scelta.oraInzio.isoformat()})
+        if scelta.oraInizio < scelta.attrazione.oraApertura:
+            raise ValidationError(_("Orario di Inizio precede Orario di Apertura: %(valore)s"),
+                                  code="invalid", params={"valore": scelta.oraInzio.isoformat()})
+        if scelta.oraFine > scelta.attrazione.oraChiusura:
+            raise ValidationError(_("Orario di Fine successivo a Orario di Chiusura: %(valore)s"),
+                                  code="invalid", params={"valore": scelta.oraFine.isoformat()})
+        # controllo sovrapposizione con tutte le scelte presenti
+        if vacanza.scelte.exists():
+            for s in vacanza.scelte:
+                if s.oraInizio <= scelta.oraInizio <= s.oraFine:
+                    raise ValidationError(
+                        _("Orario di Inizio si sovrappone con la scelta: %(nome)s che inizia alle %(inizio)s"),
+                        code="invalid", params={"inizio": scelta.oraInzio.isoformat(), "nome": scelta.attrazione.nome})
+                if s.oraInizio <= scelta.oraFine <= s.oraFine:
+                    raise ValidationError(
+                        _("Orario di Fine si sovrappone con la scelta: %(nome)s che inizia alle %(inizio)s"),
+                        code="invalid", params={"inizio": scelta.oraFine.isoformat(), "nome": scelta.attrazione.nome})
+    else: # caso aggiungi o modifica spostamento
+        if spostamento.ora_arrivo < spostamento.ora_partenza:
+            raise ValidationError(_("Orario di Arrivo precede Orario di Partenza: %(valore)s"),
+                                  code="invalid", params={"valore": spostamento.ora_arrivo.isoformat()})
+        if spostamento.ora_arrivo > spostamento.scelta_arrivo.oraInizio:
+            raise ValidationError(_("Orario di Arrivo %(valore)s posteriore a Orario di inizio attività successiva: %(scelta)s"),
+                                  code="invalid",
+                                  params={"valore": spostamento.ora_arrivo.isoformat(), "scelta": spostamento.scelta_arrivo.oraInizio.isoformat()})
+        if spostamento.ora_partenza < spostamento.scelta_partenza.oraFine:
+            raise ValidationError(
+                _("Orario di Partenza %(valore)s precedente a Orario di fine attività precedente: %(scelta)s"),
+                code="invalid",
+                params={"valore": spostamento.ora_partenza.isoformat(),
+                        "scelta": spostamento.scelta_partenza.oraFine.isoformat()})
 
 
 # class create view per aggiungere lo spsotamento tra due scelte
@@ -53,7 +84,6 @@ class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
 
     def form_valid(self, form):
         spostamento = form.save(commit=False)
-        # checkOrari(form.cleaned_data['ora_partenza'], form.cleaned_data['ora_arrivo'])
         if form.cleaned_data['durata_spostamento'] in [None, '']:
             arr = form.cleaned_data['ora_arrivo']
             par = form.cleaned_data['ora_partenza']
@@ -61,12 +91,9 @@ class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
         scelta_partenza = Scelta.objects.get(pk=self.kwargs['par'])
         spostamento.scelta_partenza = scelta_partenza
         spostamento.scelta_arrivo = scelta_partenza.next_scelta()
-        if spostamento.ora_arrivo > scelta_partenza.next_scelta().oraInizio:
-            raise ValidationError("L'orario di arrivo si sovrappone con la successiva.")
-        if spostamento.ora_partenza < scelta_partenza.oraFine:
-            raise ValidationError("L'orario di partenza anticipa l'orario di fine attrazione")
-        spostamento.save()
         rifvacanza = Vacanza.objects.get(pk=self.kwargs['vac'])
+        checkOrariGiorno(rifvacanza, None, spostamento)
+        spostamento.save()
         rifvacanza.spostamenti.add(spostamento)
         return super().form_valid(form)
 
@@ -92,7 +119,7 @@ def scegliattrazione(request, pk, vacanza_id):
             ini = form.cleaned_data.get("oraInizio")
             fine = form.cleaned_data.get("oraFine")
             scelta.durata = td(hours=fine.hour - ini.hour, minutes=fine.minute - ini.minute)
-            # checkSovrapposizione(request, fine, ini)
+            checkOrariGiorno(rifvacanza, scelta, None)
             scelta.save()
             rifvacanza.scelte.add(scelta)
             return redirect("HolidayPlanning:dettagliovacanza", pk=rifvacanza.pk)
@@ -101,7 +128,6 @@ def scegliattrazione(request, pk, vacanza_id):
         vacanza = Vacanza.objects.filter(utente=request.user, pk=vacanza_id)
         att = get_object_or_404(Attrazione, pk=pk)
         form = ScegliAttrazioneForm(pk=pk, user=utente)
-        # TODO CONTROLLARE SE ESISTE UNA VACANZA PER L'UTENTE, SE NO CREARNE UNA
         if Vacanza.objects.filter(utente=utente).count() == 0:
             return redirect("HolidayPlanning:creavacanza")
         return render(request, template_name="HolidayPlanning/scegli_attrazione.html",
@@ -136,24 +162,13 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
 
     def form_valid(self, form):
         scelta = form.save(commit=False)
-        attr = scelta.attrazione
-        if form.cleaned_data["oraInizio"] < attr.oraApertura or form.cleaned_data["oraInizio"] > attr.oraChiusura:
-            return self.form_invalid(form, 1)
-        if form.cleaned_data["oraFine"] < attr.oraApertura or form.cleaned_data["oraFine"] > attr.oraChiusura:
-            return self.form_invalid(form, 2)
-            # TODO controllare che non ci siano sovrapposizioni con altre attrazioni nello stesso giorno
+        rifvacanza = get_object_or_404(Vacanza, pk=self.kwargs['pk'])
         ini = form.cleaned_data["oraInizio"]
         fine = form.cleaned_data["oraFine"]
         scelta.durata = td(hours=fine.hour - ini.hour, minutes=fine.minute - ini.minute)
+        checkOrariGiorno(rifvacanza, scelta, None)
         scelta.save()
         return super().form_valid(form)
-
-    def form_invalid(self, form, error_code):
-        if error_code == 1:
-            form.add_error('oraInizio', "L'ora di inizio non rispetta i limiti d'orario dell'attrazione")
-        if error_code == 2:
-            form.add_error('oraFine', "L'ora di fine non rispetta i limiti d'orario dell'attrazione")
-        return super().form_invalid(form)
 
     def get_success_url(self):
         vacanza_id = self.kwargs['pk']
