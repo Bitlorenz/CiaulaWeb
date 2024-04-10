@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Modifica Spostamento{% endblock %}
+{% block content %}
+    <div style="display: flex;">
+        <div style="flex: 1; margin-left: 20px;">
+            <h2>Modifica lo {{ spostamento }}</h2>
+            <p>Giorno attuale: {{ spostamento.scelta_partenza.giorno }}</p>
+            <p>Ora partenza attuale: {{ spostamento.ora_partenza }}</p>
+            <p>Ora arrivo attuale: {{ spostamento.ora_arrivo }}</p>
+            <p>Costo attuale: {{ spostamento.costo }}</p>
+            <p>Veicolo attuale: {{ spostamento.veicolo }}</p>
+            <p>Durata attuale: {{ spostamento.durata }}</p>
+        </div>
+        <div style="flex: 1; margin-right: 20px">
+            {% crispy form %}
+            {% if v_pk %}
+                <a class="btn" href="{% url 'HolidayPlanning:dettagliovacanza' v_pk %}">Cancel</a>
+            {% endif %}
+            <a class="btn" href="{% url 'HolidayPlanning:vacanze' %}"></a>
+        </div>
+    </div>
+{% endblock %}

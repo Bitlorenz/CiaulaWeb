@@ -58,6 +58,8 @@
                         <p class="card-text">Veicolo: {{ i.veicolo }}</p>
                         <p class="card-text">Tipo Spostamento: {{ i.tipo_spostamento }}</p>
                         <p class="card-text">Costo: {{ i.costo }}</p>
+                        <a href="{% url 'HolidayPlanning:modificaspostamento' i.pk %}" class="btn btn-primary">Modifica</a>
+                        <a href="{% url 'HolidayPlanning:cancellaspostamento' i.pk %}" class="btn btn-primary">Cancella</a>
                     </div>
                 </div>
                 {% endif %}

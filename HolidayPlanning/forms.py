@@ -77,7 +77,7 @@ class ModificaSceltaForm(forms.ModelForm):
 
 class SpostamentoForm(forms.ModelForm):
     helper = FormHelper()
-    helper.form_id = 'scelta-crispy-form'
+    helper.form_id = 'spostamento-crispy-form'
     helper.form_method = 'POST'
     helper.add_input(Submit('submit', 'Aggiungi'))
     helper.inputs[0].field_classes = 'btn btn-success'
@@ -93,3 +93,15 @@ class SpostamentoForm(forms.ModelForm):
         model = Spostamento
         fields = ['scelta_partenza', 'scelta_arrivo', 'ora_partenza', 'ora_arrivo', 'durata_spostamento', 'veicolo',
                   'tipo_spostamento', 'costo']
+
+
+class ModificaSpostamentoForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'spostamento-crispy-form'
+    helper.form_method = "POST"
+    helper.add_input(Submit('submit', 'Modifica'))
+    helper.inputs[0].field_classes = 'btn btn-success'
+
+    class Meta:
+        model = Spostamento
+        fields = ['ora_partenza', 'ora_arrivo', 'durata_spostamento', 'veicolo', 'tipo_spostamento', 'costo']

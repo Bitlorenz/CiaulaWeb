@@ -22,7 +22,7 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView, D
 # lo spostamento è un altro parametro che è null se si tratta di un controllo sulla scelta
 
 def checkOrariGiorno(vacanza, scelta, spostamento):
-    if spostamento is None: # caso modifica o aggiungi scelta
+    if spostamento is None:  # caso modifica o aggiungi scelta
         # controllo se il giorno rientra nella vacanza
         if scelta.giorno > vacanza.dataPartenza or scelta.giorno < vacanza.dataArrivo:
             raise ValidationError(_("Giorno non valido: %(valore)s"),
@@ -48,14 +48,16 @@ def checkOrariGiorno(vacanza, scelta, spostamento):
                     raise ValidationError(
                         _("Orario di Fine si sovrappone con la scelta: %(nome)s che inizia alle %(inizio)s"),
                         code="invalid", params={"inizio": scelta.oraFine.isoformat(), "nome": scelta.attrazione.nome})
-    else: # caso aggiungi o modifica spostamento
+    else:  # caso aggiungi o modifica spostamento
         if spostamento.ora_arrivo < spostamento.ora_partenza:
             raise ValidationError(_("Orario di Arrivo precede Orario di Partenza: %(valore)s"),
                                   code="invalid", params={"valore": spostamento.ora_arrivo.isoformat()})
         if spostamento.ora_arrivo > spostamento.scelta_arrivo.oraInizio:
-            raise ValidationError(_("Orario di Arrivo %(valore)s posteriore a Orario di inizio attività successiva: %(scelta)s"),
-                                  code="invalid",
-                                  params={"valore": spostamento.ora_arrivo.isoformat(), "scelta": spostamento.scelta_arrivo.oraInizio.isoformat()})
+            raise ValidationError(
+                _("Orario di Arrivo %(valore)s posteriore a Orario di inizio attività successiva: %(scelta)s"),
+                code="invalid",
+                params={"valore": spostamento.ora_arrivo.isoformat(),
+                        "scelta": spostamento.scelta_arrivo.oraInizio.isoformat()})
         if spostamento.ora_partenza < spostamento.scelta_partenza.oraFine:
             raise ValidationError(
                 _("Orario di Partenza %(valore)s precedente a Orario di fine attività precedente: %(scelta)s"),
@@ -64,11 +66,10 @@ def checkOrariGiorno(vacanza, scelta, spostamento):
                         "scelta": spostamento.scelta_partenza.oraFine.isoformat()})
 
 
+# API SPOSTAMENTO
+
 # class create view per aggiungere lo spsotamento tra due scelte
-# controlla che l'ora di partenza sia successiva alla fine della attrazione A
-# e che l'ora di arrivo sia precedente all'inizio dell'attrazione B
-# bisogna scrivere dei metodi per spostare attrazioni e mandare messaggi su infattibilità viaggi
-# le attrazioni di partenza e arrivo sono mandate via template con le pk delle scelte
+# l' attrazione di partenza e la vacnza sono mandate via url
 class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
     model = Spostamento
     form_class = SpostamentoForm
@@ -106,6 +107,41 @@ class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
 
     def get_success_url(self):
         return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": self.kwargs['vac']})
+
+
+# class view per modificare gli orari e altri campi di uno spostamento
+class ModificaSpostamento(LoginRequiredMixin, UpdateView):
+    model = Spostamento
+    template_name = "HolidayPlanning/modificaspostamento.html"
+    form_class = ModificaSpostamentoForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        spostamento = self.get_object()
+        context['spostamento'] = spostamento
+        vacanzeutente = Vacanza.objects.filter(user=self.request.user)
+        for v in vacanzeutente:
+            if v.spostamenti.contains(self.get_object()):
+                context['v_pk'] = v.pk
+        return context
+
+    def form_valid(self, form):
+        spostamento = form.save(commit=False)
+        checkOrariGiorno(None, None, spostamento)
+        spostamento.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        vacanzeutente = Vacanza.objects.filter(user=self.request.user)
+        for v in vacanzeutente:
+            if v.spostamenti.contains(self.get_object()):
+                return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": v.pk})
+        return reverse("HolidayPlanning:vacanze")
+
+
+class CancellaSpostamento(LoginRequiredMixin, UpdateView):
+    model = Spostamento
+    template_name = 'HolidayPlanning/cancellaspostamento.html'
 
 
 # API SCELTE
@@ -172,7 +208,6 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
 
     def get_success_url(self):
         vacanza_id = self.kwargs['pk']
-        print("Vacanza_id in get_success_url di modificascelta: " + vacanza_id)
         return reverse("HolidayPlanning:dettagliovacanza", kwargs={'pk': vacanza_id})
 
 
