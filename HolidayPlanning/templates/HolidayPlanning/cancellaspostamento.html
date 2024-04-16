@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Cancella Spostamento
+{% endblock %}
+
+{% block content %}
+    <h1>Cancella lo  {{ object.attrazione.nome  }}</h1>
+    <h3>Stai cancellando questo spostamento, sei sicuro?</h3>
+    <form method="post">
+        {% csrf_token %}
+        <a href="{% url 'HolidayPlanning:dettagliovacanza' v_id %}">Annulla</a>
+        <input type="submit" value="Conferma">
+    </form>
+{% endblock %}

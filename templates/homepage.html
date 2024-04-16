@@ -1,18 +1,13 @@
 {% extends 'base.html' %}
 
-{% block head %}
-
-{% endblock %}
-
 {% block title %} Ciaula Web {% endblock %}
 
 {% block content %} 
 
-<center>
-    <div class="container">
-        <br>	
-	<h3> {{title}} </h3><br>
-
+<div class="container">
+    <br>	
+	<h3> {{title}} </h3>
+    <br>
 	<div class="row">
 	    {% for l in listaattrazioni %}
             <div class="col-4">
@@ -25,7 +20,6 @@
 	        </div>
         {% endfor %}
 	</div>
-    </div>
-</center>
+</div>
 
 {%  endblock %}

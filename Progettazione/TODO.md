@@ -16,10 +16,8 @@ GLOSSARIO:
 ## TO-DO:
 BACKEND
 1) url dinamici: se cambio padre non devo cambiare gli url delle view che ereditano
-2) aggiungere modifica spostamento 
-3) aggiungere cancella spostamento
-4) controllare cold start recommendation system
-5) la registrazione dell admin avviene dalla pagina /admin/signup e il login da /admin/signin, devo farlo io
+2) controllare cold start recommendation system
+3) la registrazione dell admin avviene dalla pagina /admin/signup e il login da /admin/signin, devo farlo io
 
 FRONTEND
 1) homepage per admin deve essere tutti i prodotti (quella senza views)
@@ -41,21 +39,8 @@ per ogni attrazione stampata nella lista o nel piano pdf, se quella successiva Ã
     * Migliorare tutto l'aspetto grafico del sito *
 
 # DOING:
-* testing delle view di HolidayPlanning (soprattutto quelle protette dal mixin)
-  * aggiungi spostamento: 
-    * funzionante per Admin e Turista
-    * migliorare i messaggi di errore ad esempio quello della sovrapposizione
-  * ModificaVacanza: funzionante per Admin e Turista
-  * ModificaScelta: funzionante per Turista e Admin
-  * CancellaScelta: funzionante per Admin e Turista
-  * CreaVacanza: funzionante per Admin e Turista
-  * AggiungiTourVacanza: funzionante per turista
-  * ModificaVacanza: funzionante per turista e admin
-  * stampavacanza: funzionante per turista e admin
-  * AggiornaAttrazione per admin: controlli se esiste un attrazione uguale, se gli orari sono corretti, fare template
-  * Creaattrazione: funzionante per admin
-  * CancellaAttrazione: funzionante per admin, una vacanza con un attrazione, poi cancellare l'attrazione, la vacanza rimane senza scelte
-  * SearchView funziona per Turista e admin
+* FRONTEND: 
+  * Creare homepage.html
 * ampliare vacanze del root
 
 # RECOMMENDATION SYSTEM
@@ -167,6 +152,21 @@ as_view nel path corrispondente in urlpatterns
 33) ripopolare db attrazioni
 
 
+* testing delle view di HolidayPlanning (soprattutto quelle protette dal mixin)
+  * aggiungi spostamento: 
+    * funzionante per Admin e Turista
+    * migliorare i messaggi di errore ad esempio quello della sovrapposizione
+  * ModificaVacanza: funzionante per Admin e Turista
+  * ModificaScelta: funzionante per Turista e Admin
+  * CancellaScelta: funzionante per Admin e Turista
+  * CreaVacanza: funzionante per Admin e Turista
+  * AggiungiTourVacanza: funzionante per turista
+  * ModificaVacanza: funzionante per turista e admin
+  * stampavacanza: funzionante per turista e admin
+  * AggiornaAttrazione per admin: controlli se esiste un attrazione uguale, se gli orari sono corretti, fare template
+  * Creaattrazione: funzionante per admin
+  * CancellaAttrazione: funzionante per admin, una vacanza con un attrazione, poi cancellare l'attrazione, la vacanza rimane senza scelte
+  * SearchView funziona per Turista e admin
 
 contatore (globale?) per aggiungere la scelta in fondo alle altre scelte
 controllo degli orari e giorno per la scelta

@@ -17,10 +17,6 @@ from .models import Scelta, Spostamento, Vacanza
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
 
-# ritornare T/F, ma stampare un messaggio avvertendo che c'è sovrapposizione con la specifica scelta
-# oggetto vacanza può essere un parametro
-# lo spostamento è un altro parametro che è null se si tratta di un controllo sulla scelta
-
 def checkOrariGiorno(vacanza, scelta, spostamento):
     if spostamento is None:  # caso modifica o aggiungi scelta
         # controllo se il giorno rientra nella vacanza
@@ -109,6 +105,13 @@ class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
         return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": self.kwargs['vac']})
 
 
+def getVacanzapkFromSpostamento(user, spostamento):
+    vacanzeutente = Vacanza.objects.filter(user=user)
+    for v in vacanzeutente:
+        if v.spostamenti.contains(spostamento):
+            return v.pk
+
+
 # class view per modificare gli orari e altri campi di uno spostamento
 class ModificaSpostamento(LoginRequiredMixin, UpdateView):
     model = Spostamento
@@ -119,10 +122,7 @@ class ModificaSpostamento(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         spostamento = self.get_object()
         context['spostamento'] = spostamento
-        vacanzeutente = Vacanza.objects.filter(user=self.request.user)
-        for v in vacanzeutente:
-            if v.spostamenti.contains(self.get_object()):
-                context['v_pk'] = v.pk
+        context['v_pk'] = getVacanzapkFromSpostamento(self.request.user, spostamento)
         return context
 
     def form_valid(self, form):
@@ -132,16 +132,25 @@ class ModificaSpostamento(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        vacanzeutente = Vacanza.objects.filter(user=self.request.user)
-        for v in vacanzeutente:
-            if v.spostamenti.contains(self.get_object()):
-                return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": v.pk})
-        return reverse("HolidayPlanning:vacanze")
+        return reverse("HolidayPlanning:dettagliovacanza",
+                       kwargs={"pk": getVacanzapkFromSpostamento(self.request.user, self.get_object())})
 
 
-class CancellaSpostamento(LoginRequiredMixin, UpdateView):
+class CancellaSpostamento(LoginRequiredMixin, DeleteView):
     model = Spostamento
     template_name = 'HolidayPlanning/cancellaspostamento.html'
+
+    def delete(self, request, *args, **kwargs):
+        return super(CancellaSpostamento, self).delete(request, *args,**kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['v_pk'] = getVacanzapkFromSpostamento(self.request.user, self.get_object())
+        return context
+
+    def get_success_url(self):
+        return reverse("HolidayPlanning:dettagliovacanza",
+                       kwargs={"pk": getVacanzapkFromSpostamento(self.request.user, self.get_object())})
 
 
 # API SCELTE
@@ -227,13 +236,11 @@ class CancellaScelta(IsVacanzaUserOwnedMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        vacanza_pk = self.kwargs['pk']
-        context["v_id"] = vacanza_pk
+        context["v_id"] = self.kwargs['pk']
         return context
 
     def get_success_url(self):
         vacanza_id = self.kwargs["pk"]
-        print("Vacanza_id in get_success_url di cancellascelta: " + vacanza_id)
         return reverse("HolidayPlanning:dettagliovacanza", kwargs={'pk': vacanza_id})
 
 
