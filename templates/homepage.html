@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %} Ciaula Web {% endblock %}
+{% block head %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+{% endblock %}
+
+{% block title %}{% endblock %}
 
 {% block content %} 
-
-<div class="container">
-    <br>	
-	<h3> {{title}} </h3>
-    <br>
+{% include "header.html" %}
+<br>
+<h3>{{ title }}</h3>
+<br>
 	<div class="row">
 	    {% for l in listaattrazioni %}
             <div class="col-4">
@@ -21,5 +25,4 @@
         {% endfor %}
 	</div>
 </div>
-
 {%  endblock %}

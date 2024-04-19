@@ -33,14 +33,17 @@ per ogni attrazione stampata nella lista o nel piano pdf, se quella successiva �
 10) Il mio itinerario deve ricordare alcuni dettagli della vacanza
 11) sistemare pagina di cancella scelta
 12) In ListaScelte metà pagina mostra la lista delle scelte e l'altra metà mostra i dettagli del viaggio con il budget che scala
-13) sistemare navbar
-14) Creare homepage.html
-15) Riempire la sezione contatti con alcuni contatti (e magari il form per le mail)
-    * Migliorare tutto l'aspetto grafico del sito *
+13) Riempire la sezione contatti con alcuni contatti (e magari il form per le mail)
+    
 
 # DOING:
+* BACKEND:
+  * controllare views profili e completare view per modificare utente 
 * FRONTEND: 
-  * Creare homepage.html
+  * sistemare header.html ->navbar
+    * scaricare png images mail.png e phone.png
+  * inserire in css
+    * class: top_bar, top_bar_contact_item, top_bar_icon, top_bar_content, top_bar_menu, top_bar_user, user_icon
 * ampliare vacanze del root
 
 # RECOMMENDATION SYSTEM
@@ -52,7 +55,9 @@ per ogni attrazione stampata nella lista o nel piano pdf, se quella successiva �
       * posso raccomandare delle scelte che sono presenti in vacanze di altri utenti che hanno fatto almeno una scelta uguale
     * non ha ancora fatto vacanze o scelte:
       * prendo le vacanze degli altri utenti e restituisco le attrazioni scelte di più
-  * se non esistono attività di altri turisti si presentano tutte le attrazioni oppure non si consiglia niente 
+  * se non esistono attività di altri turisti si presentano tutte le attrazioni oppure non si consiglia niente
+* Test:
+  * Turista coccobello: caso "non ho attrazioni popolari scelte dall'utente"
 
 # Difficoltà prevista della giornata
   * metodo calcola difficoltà nel modello vacanza, se in una giornata ci sono più di 4 attrazioni allora è difficile

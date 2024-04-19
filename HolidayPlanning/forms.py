@@ -39,7 +39,7 @@ class ModificaVacanzaForm(forms.ModelForm):
 
     class Meta:
         model = Vacanza
-        fields = ['dataArrivo', 'dataPartenza', 'nrPersone', 'budgetDisponibile']
+        fields = ['dataArrivo', 'dataPartenza', 'nrPersone', 'budgetDisponibile', 'nome']
 
 
 class ScegliAttrazioneForm(forms.ModelForm):

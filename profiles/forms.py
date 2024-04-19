@@ -26,6 +26,13 @@ class UserCreationForm(forms.ModelForm):
             raise ValidationError("Passwords don't match")
         return password2
 
+    # Imposta immagine del profilo di default nel caso non venga inserita
+    def clean_profile_image(self):
+        profile_image = self.cleaned_data['profile_image']
+        if not profile_image:
+            profile_image = 'defaultuser.png'  # Imposta l'immagine di default
+        return profile_image
+
     def save(self, commit=True):
         # Save the provided password in hashed format
         print("chiamata la funzione save di UserCreationForm ")
