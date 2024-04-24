@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
 {% load crispy_forms_tags %}
+{% endblock %}
 
 {% block title %} Crea Attrazione {% endblock %}
 {% block content %}

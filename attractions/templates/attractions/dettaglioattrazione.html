@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
+{% block head %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+{% block title %}{{ title }} : {{ attivita.nome }} {% endblock %}
+{% endblock %}
 
-{% block title %}Dettaglio attrazione: {{attivita.nome}}{% endblock %}
 {% block content %}
 <div class="container">
     <img src="{{ attivita.attrazione_image.url | default_if_none:'#' }}" alt="pic attrazione" style="width:auto;height:240px">
-    <p> città: {{ attivita.citta }}</p>
-    <p> luogo: {{ attivita.luogo }}</p>
-    <p> via: {{ attivita.via }}</p>
+    <p> Città: {{ attivita.citta }}</p>
+    <p> Luogo: {{ attivita.luogo }}</p>
+    <p> Via: {{ attivita.via }}</p>
     <p> costo: {{ attivita.costo }}</p>
     <p> tipo: {{ attivita.tipo }}</p>
     <p> Inizia alle: {{ attivita.oraApertura }}</p>

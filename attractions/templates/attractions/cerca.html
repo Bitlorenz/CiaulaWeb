@@ -1,5 +1,9 @@
 {% extends "base.html" %}
-{% block title %} Form di ricerca {% endblock %}
+{% block head %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+{% endblock %}
+{% block title %} {{ title }} {% endblock %}
 
 {% block content %}
 <h1>Pagina di Ricerca</h1>

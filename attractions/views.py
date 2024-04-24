@@ -58,7 +58,7 @@ def DetailAttrazioneEntita(request, nome_attr):
                 if r.attrazione == attrazione:
                     if r.autore == user:
                         check = False
-        ctx = {"attivita": attrazione, "check": check, "recensioni": recensioni}
+        ctx = {"attivita": attrazione, "check": check, "recensioni": recensioni, "title": "Dettaglio Attrazione "}
         if request.method == "GET":
             return render(request, template_name=templ, context=ctx)
         else:
@@ -115,6 +115,11 @@ class AggiornaAttrazione(UserPassesTestMixin, UpdateView):
         attrazione.save()
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Aggiorna attrazione"
+        return context
+
     def get_success_url(self):
         attrazione = Attrazione.objects.get(pk = self.kwargs["pk"])
         return reverse("attractions:dettaglioattr", kwargs={"nome_attr": attrazione.nome})
@@ -139,6 +144,7 @@ class CancellaAttrazione(UserPassesTestMixin, DeleteView):
         attr_pk = self.kwargs['pk']
         attr = Attrazione.objects.get(pk=attr_pk)
         context["attr"] = attr
+        context["title"] = "Cancella Attrazione"
         return context
 
 
@@ -160,6 +166,11 @@ class SearchView(ListView):
         else:
             result = None
         return result
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Risultati Ricerca"
+        return context
 
 
 class RecensioneCreateView(LoginRequiredMixin, CreateView):
@@ -188,6 +199,7 @@ class RecensioneCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         scelta = Scelta.objects.get(pk=self.kwargs['scelta_pk'])
         context['attrazione'] = scelta
+        context['title'] = "Recensisci l'attività"
         return context
 
     #  Restituisce 404 se l'attrazione non è stata trovata
