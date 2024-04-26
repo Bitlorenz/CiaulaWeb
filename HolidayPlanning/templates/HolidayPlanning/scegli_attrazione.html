@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
+{% block head %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
 {% load crispy_forms_tags %}
-{% block title %} Scegli Attrazione {% endblock %}
+{% endblock %}
 
+{% block title %}{{ title }}{% endblock %}
 {% block content %}
+    {% include "header.html" %}
 <h1> Scegli Attrazione </h1>
     <p>Attrazione {{ title }}</p>
     {% crispy form %}

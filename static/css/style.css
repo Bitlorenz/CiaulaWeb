@@ -80,6 +80,7 @@ body {
 }
 
 .hours {
+	text-align: center;
   font-weight: bold;
   color: #007bff;
 }
@@ -98,9 +99,35 @@ body {
     flex: 1;
     margin-left: 20px;
 }
+/*********************************
+Spostamento
+*********************************/
+.spostamento-card{
+	background-color: #F9E0BB;
+}
+.spostamento-card-buttons{
+	display:flex;
+	justify-content: center;
+	gap: 20px;
+}
+.spostamento-card-title {
+	color: red;
+	text-align: center;
+}
+
 
 /*********************************
-3.1 Top Bar
+Header
+*********************************/
+
+.header
+{
+	position: relative;
+	width: 100%;
+	z-index: 10;
+}
+/*********************************
+Top Bar
 *********************************/
 
 .top_bar

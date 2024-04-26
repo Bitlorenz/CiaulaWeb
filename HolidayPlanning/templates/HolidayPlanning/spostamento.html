@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
-{% block title %} Aggiungi spostamento {% endblock %}
+{% block head %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+{% load crispy_forms_tags %}
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
 {% block content %}
+    {% include "header.html" %}
     <h2>Inserisci i dati per iniziare a pianfificare la tua vacanza!</h2>
     {% crispy form %}
     <!-- Display form-level errors -->

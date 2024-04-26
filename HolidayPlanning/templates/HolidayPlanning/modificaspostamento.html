@@ -1,8 +1,14 @@
 {% extends "base.html" %}
+{% block head %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
 {% load crispy_forms_tags %}
+{% endblock %}
 
-{% block title %} Modifica Spostamento{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 {% block content %}
+    {% include "header.html" %}
+
     <div style="display: flex;">
         <div style="flex: 1; margin-left: 20px;">
             <h2>Modifica lo {{ spostamento }}</h2>

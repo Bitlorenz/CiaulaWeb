@@ -6,6 +6,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
+    {% include "header.html" %}
     <h1>Cancella l'attrazione: {{ attr.nome  }}</h1>
     <h3>Stai cancellando questa attrazione, sei sicuro?</h3>
     <form method="post">

@@ -8,6 +8,7 @@
 
 {% block title %} Crea Attrazione {% endblock %}
 {% block content %}
+    {% include "header.html" %}
     <h2>Inserisci i dati della Nuova Attrazione</h2>
     {% crispy form %}
     <a class="btn" href="{% url 'attractions:attrazioni' %}">Cancel</a>

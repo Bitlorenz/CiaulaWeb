@@ -1,10 +1,12 @@
 {% extends "base.html" %}
-
-{% block title %}
-    Cancella Spostamento
+{% block head %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
 {% endblock %}
+{% block title %} {{ title }} {% endblock %}
 
 {% block content %}
+    {% include "header.html" %}
     <h1>Cancella lo  {{ object.attrazione.nome  }}</h1>
     <h3>Stai cancellando questo spostamento, sei sicuro?</h3>
     <form method="post">

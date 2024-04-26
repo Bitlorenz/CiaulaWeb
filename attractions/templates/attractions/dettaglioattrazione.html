@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+    {% include "header.html" %}
 <div class="container">
     <img src="{{ attivita.attrazione_image.url | default_if_none:'#' }}" alt="pic attrazione" style="width:auto;height:240px">
     <p> Città: {{ attivita.citta }}</p>

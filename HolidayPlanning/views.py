@@ -99,6 +99,7 @@ class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
         scelta_partenza = Scelta.objects.get(pk=self.kwargs['par'])
         context['sugg_oraPartenza'] = scelta_partenza.oraFine
         context['sugg_oraArrivo'] = scelta_partenza.next_scelta().oraInizio
+        context['title'] = "Aggiungi uno spostamento"
         return context
 
     def get_success_url(self):
@@ -123,6 +124,7 @@ class ModificaSpostamento(LoginRequiredMixin, UpdateView):
         spostamento = self.get_object()
         context['spostamento'] = spostamento
         context['v_pk'] = getVacanzapkFromSpostamento(self.request.user, spostamento)
+        context['title'] = "Modifica lo Spostamento"
         return context
 
     def form_valid(self, form):
@@ -146,6 +148,7 @@ class CancellaSpostamento(LoginRequiredMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['v_pk'] = getVacanzapkFromSpostamento(self.request.user, self.get_object())
+        context['title'] = "Cancella Spostamento"
         return context
 
     def get_success_url(self):
@@ -176,7 +179,7 @@ def scegliattrazione(request, pk, vacanza_id):
         if Vacanza.objects.filter(utente=utente).count() == 0:
             return redirect("HolidayPlanning:creavacanza")
         return render(request, template_name="HolidayPlanning/scegli_attrazione.html",
-                      context={"form": form, "att": att, "title": att.nome, "vacanza": vacanza})
+                      context={"form": form, "att": att, "title": "Aggiungi questa attrazione alla Vacanza", "vacanza": vacanza})
     return render(request, template_name="HolidayPlanning/scegli_attrazione.html", context={"form": form})
 
 
@@ -203,6 +206,7 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
         context["v_id"] = vacanza_pk
         context["ora inizio attr"] = attivita.attrazione.oraApertura
         context["ora fine attr"] = attivita.attrazione.oraChiusura
+        context['title'] = "Modiifca la tua scelta"
         return context
 
     def form_valid(self, form):
@@ -237,6 +241,7 @@ class CancellaScelta(IsVacanzaUserOwnedMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["v_id"] = self.kwargs['pk']
+        context["title"] = "Cancella Attrazione Scelta"
         return context
 
     def get_success_url(self):
@@ -306,6 +311,11 @@ class CreaVacanza(LoginRequiredMixin, CreateView):
         vacanza.save()
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Crea la tua Vacanza"
+        return context
+
 
 # classe usata per copiare un tour organizzato e usarlo come vacanza propria
 class AggiungiTourVacanza(LoginRequiredMixin, CreateView):
@@ -347,7 +357,7 @@ class DettaglioVacanza(LookingTourMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Dettagli Vacanza"
+        context['title'] = "La Vacanza nel Dettaglio"
         context['tour'] = False
         context['utente'] = self.request.user
         vacanza = Vacanza.objects.get(pk=kwargs['object'].id)
@@ -364,6 +374,11 @@ class ModificaVacanza(IsVacanzaUserOwnedMixin, UpdateView):
     model = Vacanza
     template_name = "HolidayPlanning/modificavacanza.html"
     form_class = ModificaVacanzaForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Modifica la tua Vacanza"
+        return context
 
     def get_success_url(self):
         return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": self.object.pk})
