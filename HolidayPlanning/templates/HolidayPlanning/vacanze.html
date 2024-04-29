@@ -11,30 +11,37 @@
   <div class="container mt-4">
     <div class="row">
         {% for v in vacanze %}
-            <div class="col-md-3 mb-4">
-                <div class="card">
+            {% if vacanze|length <= 2 %}
+                <div class="col-md-6 mb-3 mb-md-0"> <!-- Use col-md-6 if there are only two cards -->
+                {% else %}
+                    <div class="col-md-4 mb-3 mb-md-0"> <!-- Use col-md-4 if there are more than two cards -->
+            {% endif %}
+                <div class="card" style="width: 15rem;">
                     <div class="card-body">
-                    {% if v.nome != "" %}
-                        <h5 class="card-title">{{ v.nome }}</h5>
-                    {% else %}
-                        <h5 class="card-title">Vacanza {{forloop.counter }}</h5>
-                    {% endif %}
-                        <p class="card-text">Itinerario dal {{ v.dataArrivo }} al {{ v.dataPartenza }}</p>
-                    {% if tour %}
-                        <a href="{% url "HolidayPlanning:dettagliotour" v.pk %}" class="btn btn-primary">Dettagli Tour</a>
-                    {% else %}
-                        <a href="{% url "HolidayPlanning:dettagliovacanza" v.pk %}" class="btn btn-primary">Dettagli Vacanza</a>
-                    {% endif %}
-                    {% if not tour %}
-                        <a href="{% url "HolidayPlanning:modificavacanza" v.pk %}" class="btn btn-primary">Modifica Vacanza</a>
-                        <a href="{% url "attractions:attrazioni" %}?vacanza_id={{v.pk}}" class="btn btn-primary">Aggiungi Attrazioni</a>
-                    {% endif %}
-                    {% if tour %} <!-- si stanno visualizzando i tour organizzati -->
-			            <a href="{% url "HolidayPlanning:aggiungitour" v.pk %}" class="btn btn-primary">Aggiungi Vacanza</a>
-			        {% endif %}
-                    </div>
-                </div>
-            </div>
+                    	{% if v.nome != "" %}
+                        	<h5 class="card-title" style="margin-bottom: 0.5rem;">{{ v.nome }}</h5>
+                    	{% else %}
+                        	<h5 class="card-title" style="margin-bottom: 0.5rem;">Vacanza {{forloop.counter }}</h5>
+                    	{% endif %}
+                        	<p class="card-text" style="margin-bottom: 0.5rem;">Inizio: {{ v.dataArrivo }}</p>
+							<p class="card-text" style="margin-bottom: 0.5rem;">Fine: {{ v.dataPartenza }}</p>
+						<div class="button-group" style="display: flex; flex-wrap: wrap; justify-content: space-between;">			
+                    		{% if tour %}
+                        		<a href="{% url "HolidayPlanning:dettagliotour" v.pk %}" class="btn btn-primary" style="margin-top: 0.5rem;">Dettagli Tour</a>
+                    		{% else %}
+                        		<a href="{% url "HolidayPlanning:dettagliovacanza" v.pk %}" class="btn btn-primary" style="margin-top: 0.5rem;">Dettagli Vacanza</a>
+                    		{% endif %}
+                    		{% if not tour %}
+                        		<a href="{% url "HolidayPlanning:modificavacanza" v.pk %}" class="btn btn-primary">Modifica Vacanza</a>
+                        		<a href="{% url "attractions:attrazioni" %}?vacanza_id={{v.pk}}" class="btn btn-primary">Aggiungi Attrazioni</a>
+                    		{% endif %}
+                    		{% if tour %} <!-- si stanno visualizzando i tour organizzati -->
+			            		<a href="{% url "HolidayPlanning:aggiungitour" v.pk %}" class="btn btn-primary">Aggiungi Vacanza</a>
+			        		{% endif %}
+						</div>
+                    	</div>
+                	</div>
+            	</div>
         {% empty %}
                 <p class="col-12">Non Hai ancora creato vacanze</p>
                 <p class="col-12">Clicca <a href="{% url "HolidayPlanning:creavacanza" %}">qui</a> per crearne una</p>

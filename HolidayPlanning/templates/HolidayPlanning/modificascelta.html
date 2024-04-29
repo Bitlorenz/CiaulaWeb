@@ -8,18 +8,34 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
     {% include "header.html" %}
-
-    <div style="display: flex;">
-        <div style="flex: 1; margin-left: 20px;">
-            <h2>Modifica la scelta di {{ attivita.attrazione.nome }}</h2>
-            <p>Giorno attuale: {{ attivita.giorno }}</p>
-            <p>Ora inizio attuale: {{ attivita.oraInizio }}</p>
-            <p>Ora fine attuale: {{ attivita.oraFine }}</p>
-            <p>Vacanza dal {{ vacanza.dataArrivo }} al {{ vacanza.dataPartenza }}</p>
+<div class="container-fluid" style="margin-top: 10px">
+    <div class="row">
+        <div class="col-md-3">
+            <h3>Dati Scelta Attuali</h3>
+            <ul class="list-unstyled">
+                <li>Giorno attuale: {{ attivita.giorno }}</li>
+                <li>Ora inizio attuale: {{ attivita.oraInizio }}</li>
+                <li>Ora fine attuale: {{ attivita.oraFine }}</li>
+                <li>Vacanza dal {{ vacanza.dataArrivo }} al {{ vacanza.dataPartenza }}</li>
+            </ul>
         </div>
-        <div style="flex: 1; margin-right: 20px">
+        <div class="col-md-6">
+            <h2>Modifica la scelta di {{ attivita.attrazione.nome }}</h2>
             {% crispy form %}
+            <br>
             <a class="btn" href="{% url 'HolidayPlanning:dettagliovacanza' v_id %}">Cancel</a>
         </div>
+        <div class="col-md-3">
+            <h3>Riassunto vacanza</h3>
+            <ul class="list-group">
+                {% for s in vacanza.sort_scelte %}
+                    {% ifchanged s.giorno %}
+	    		        <h5>Giornata {{forloop.counter}}: {{ s.giorno }}</h5>
+                    {% endifchanged %}
+                    <li class="list-group-item">{{ s.attrazione.nome }} dalle {{ s.oraInizio }} alle {{ s.oraFine }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
+</div>
 {% endblock %}

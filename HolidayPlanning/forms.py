@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from .models import Vacanza, Scelta, Spostamento
 from attractions.models import Attrazione
 import gettext
+
 _ = gettext.gettext
 
 
@@ -49,18 +50,28 @@ class ScegliAttrazioneForm(forms.ModelForm):
     helper.add_input(Submit('submit', 'Aggiungi'))
     helper.inputs[0].field_classes = 'btn btn-success'
 
-    def __init__(self, pk, user, *args, **kwargs):
+    def __init__(self, pk, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user = user
         a = get_object_or_404(Attrazione, pk=pk)
         self.attrazione = a
-        self.fields['attrazione'].initial = a.citta
-        self.fields['attrazione'].disabled = True
-        self.fields['attrazione'].widget.attrs["readonly"] = True
-
+        self.fields['giorno'].widget.attrs.update(style='max-width: 48em')
+        self.fields['oraInizio'].widget.attrs.update(style='max-width: 48em')
+        self.fields['oraFine'].widget.attrs.update(style='max-width: 48em')
+        self.fields['giorno'].widget.attrs['placeholder'] = self.Meta.placeholders.get('giorno')
+        self.fields['oraInizio'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraInizio')+str(a.oraApertura)
+        self.fields['oraFine'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraFine')+str(a.oraChiusura)
     class Meta:
         model = Scelta
-        fields = ['attrazione', 'giorno', 'oraInizio', 'oraFine']
+        fields = ['giorno', 'oraInizio', 'oraFine']
+        labels = {
+            'oraInizio' : 'Ora Inizio',
+            'oraFine' : 'Ora Fine'
+        }
+        placeholders = {
+            'giorno':'aaaa-mm-gg',
+            'oraInizio' : 'Orario apertura attrazione: ',
+            'oraFine' : 'Orario chiusura attrazione: '
+        }
 
 
 class ModificaSceltaForm(forms.ModelForm):
@@ -70,10 +81,30 @@ class ModificaSceltaForm(forms.ModelForm):
     helper.add_input(Submit('submit', 'Modifica'))
     helper.inputs[0].field_classes = 'btn btn-success'
 
+    def __init__(self, pk, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        s = get_object_or_404(Scelta, pk=pk)
+        self.scelta = s
+        self.fields['giorno'].widget.attrs.update(style='max-width: 48em')
+        self.fields['oraInizio'].widget.attrs.update(style='max-width: 48em')
+        self.fields['oraFine'].widget.attrs.update(style='max-width: 48em')
+        self.fields['giorno'].widget.attrs['placeholder'] = self.Meta.placeholders.get('giorno')
+        self.fields['oraInizio'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraInizio') + str(
+            s.attrazione.oraApertura)
+        self.fields['oraFine'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraFine') + str(s.attrazione.oraChiusura)
+
     class Meta:
         model = Scelta
         fields = ['giorno', 'oraInizio', 'oraFine']
-
+        labels = {
+            'oraInizio': 'Ora Inizio',
+            'oraFine': 'Ora Fine'
+        }
+        placeholders = {
+            'giorno': 'aaaa-mm-gg',
+            'oraInizio': 'Orario apertura attrazione: ',
+            'oraFine': 'Orario chiusura attrazione: '
+        }
 
 class SpostamentoForm(forms.ModelForm):
     helper = FormHelper()

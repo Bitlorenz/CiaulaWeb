@@ -10,7 +10,13 @@
 
 {% block content %}
     {% include "header.html" %}
-    <h2>Inserisci i dati per iniziare a pianfificare la tua vacanza!</h2>
-    {% crispy form %}
-    <a class="btn" href="{% url 'attractions:attrazioni' %}">Cancel</a>
+<div class="container" style="margin-top: 60px;">
+    <div class="row">
+        <div class="col-md-9">
+            <h2>Inserisci i dati per iniziare a pianfificare la tua vacanza!</h2>
+            {% crispy form %}
+            <a class="btn" href="{% url 'attractions:attrazioni' %}">Cancel</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

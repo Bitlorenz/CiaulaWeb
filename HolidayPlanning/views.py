@@ -173,7 +173,7 @@ def scegliattrazione(request, pk, vacanza_id):
             return redirect("HolidayPlanning:dettagliovacanza", pk=rifvacanza.pk)
     else:
         utente = request.user
-        vacanza = Vacanza.objects.filter(utente=request.user, pk=vacanza_id)
+        vacanza = Vacanza.objects.get(utente=request.user, pk=vacanza_id)
         att = get_object_or_404(Attrazione, pk=pk)
         form = ScegliAttrazioneForm(pk=pk, user=utente)
         if Vacanza.objects.filter(utente=utente).count() == 0:
@@ -194,6 +194,9 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
         attivita_pk = self.kwargs.get(self.slug_url_kwarg)
         attivita = Scelta.objects.get(pk=attivita_pk)
         return attivita
+
+    def get_form(self, form_class=ModificaSceltaForm):
+        return form_class(pk=self.kwargs.get(self.slug_url_kwarg))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -366,6 +369,7 @@ class DettaglioVacanza(LookingTourMixin, DetailView):
         context['scelte'] = vacanza.sort_scelte()
         context['spostamenti'] = vacanza.spostamenti.all()
         context['totale'] = vacanza.calcolaTotaleAttrazioni()
+        context['difficolta'] = vacanza.difficolta_giornata()
         return context
 
 

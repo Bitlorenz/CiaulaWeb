@@ -130,6 +130,6 @@ EMAIL_HOST_USER = 'ciaulaweb@gmail.com'
 EMAIL_HOST_PASSWORD = 'pgetgjsdfvhnb'
 DEFAULT_FROM_EMAIL = 'CiaulaWeb\'s team <noreply@ciaulaweb.com>'
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'uni_form', 'bootstrap3', 'bootstrap4', 'bootstrap5' )
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 #DJANGO_SUPERUSER_USERNAME = 'root'

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 {% block head %}
 {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
@@ -8,9 +9,35 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
     {% include "header.html" %}
-<h1> Scegli Attrazione </h1>
-    <p>Attrazione {{ title }}</p>
-    {% crispy form %}
-    <a class="btn" href="{% url 'attractions:attrazioni' %}">Cancella</a>
-
+<div class="container-fluid" style="margin-top: 10px;">
+	<div class="row">
+        <div class="col-md-3">
+            <h2>Vacanza Attuale: {{ vacanza.nome }}</h2>
+            <ul class="list-unstyled">
+                <li> <strong> Inizio: {{ vacanza.dataArrivo }}</strong></li>
+                <li> <strong> Fine: {{ vacanza.dataPartenza }}</strong></li>
+                <li> <strong> Spesa totale corrente: {{ vacanza.calcolaTotaleAttrazioni }} €</strong></li>
+                <li> <strong> Budget disponibile: {{ vacanza.budgetDisponibile }} €</strong></li>
+            </ul>
+        </div>
+		<div class="col-md-6">
+            <h1> Scegli Attrazione </h1>
+                <h3>{{ att.nome }}</h3>
+                {% crispy form %}
+                <br>
+                <a class="btn" href="{% url 'attractions:attrazioni' %}">Cancella</a>
+        </div>
+        <div class="col-md-3">
+            <h3>Riassunto vacanza</h3>
+            <ul class="list-group">
+                {% for s in vacanza.sort_scelte %}
+                    {% ifchanged s.giorno %}
+	    		        <h5>Giornata {{forloop.counter}}: {{ s.giorno }}</h5>
+                    {% endifchanged %}
+                    <li class="list-group-item">{{ s.attrazione.nome }} dalle {{ s.oraInizio }} alle {{ s.oraFine }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}

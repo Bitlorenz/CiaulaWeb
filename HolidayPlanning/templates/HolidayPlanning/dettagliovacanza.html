@@ -27,12 +27,19 @@
             {% for s in scelte %}
             <div class="col-md-8">
             {% ifchanged s.giorno %}
-	    <h1>Giornata {{forloop.counter}}: {{ s.giorno }}</h1>
+	    		<h1>Giornata {{forloop.counter}}: {{ s.giorno }}</h1>
+				{% for key, value in difficolta.items %}
+					{% if key == s.giorno.day %}
+            			<h4>Difficoltà Giornata stimata: {{ value }}</h4>
+					{% endif %}
+				{% endfor %}
             {% endifchanged %}
                 <div class="card mb-12 scelta-card">
+                <a href="{% url 'attractions:dettaglioattr' s.attrazione.pk %}">
                     <img class="card-img-top img-fluid" src="{{ s.attrazione.attrazione_image.url }}"
                          alt="Card image cap"
                          style="max-width: 100%;">
+                </a>
                     <div class="card-body">
                         <h5 class="card-title">{{ s.attrazione.nome }}</h5>
                         <p class="card-text hours"> da {{ s.oraInizio }} a {{ s.oraFine }} il {{ s.giorno }}</p>

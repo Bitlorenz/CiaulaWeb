@@ -2,22 +2,29 @@
 {% block head %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
-{% block title %}{{ title }} : {{ attivita.nome }} {% endblock %}
 {% endblock %}
 
 {% block content %}
     {% include "header.html" %}
-<div class="container">
-    <img src="{{ attivita.attrazione_image.url | default_if_none:'#' }}" alt="pic attrazione" style="width:auto;height:240px">
-    <p> Città: {{ attivita.citta }}</p>
-    <p> Luogo: {{ attivita.luogo }}</p>
-    <p> Via: {{ attivita.via }}</p>
-    <p> costo: {{ attivita.costo }}</p>
-    <p> tipo: {{ attivita.tipo }}</p>
-    <p> Inizia alle: {{ attivita.oraApertura }}</p>
-    <p> Finisce alle: {{ attivita.oraChiusura }}</p>
-    <p> Attività: {{ attivita.descrizione }}</p>
-    <p> id: {{ attivita.pk }}</p>
+<div class="container" style="margin-top: 60px;">
+	<div class="row">	        	
+		<div class="col-md-6">
+    		<img src="{{ attivita.attrazione_image.url | default_if_none:'#' }}" alt="pic attrazione" style="max-width:100%;height:auto;">
+		</div>
+		<div class="col-md-6">
+			<h2>{{ attivita.nome }}</h2>
+			<ul class="list-unstyled">
+    			<li> <strong> Città: {{ attivita.citta }} </strong> </li>
+    			<li> <strong> Luogo: {{ attivita.luogo }} </strong> </li>
+    			<li> <strong> Via: {{ attivita.via }} </strong> </li>
+    			<li> <strong> costo: {{ attivita.costo }} </strong> </li>
+    			<li> <strong> tipo: {{ attivita.tipo }} </strong> </li>
+                <li> <strong> Inizia alle: {{ attivita.oraApertura }} </strong> </li>
+    			<li> <strong> Finisce alle: {{ attivita.oraChiusura }} </strong> </li>
+    			<li> <strong> Attività: {{ attivita.descrizione }} </strong> </li>
+			</ul>
+		</div>
+	</div>
 </div>
 
     <br> <br>

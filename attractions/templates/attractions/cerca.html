@@ -7,35 +7,38 @@
 
 {% block content %}
     {% include "header.html" %}
-<h1>Pagina di Ricerca</h1>
+    <h1>Pagina di Ricerca</h1>
     <div style="text-align: center;">
         <br>
         {% if listaricerca.count == 1 %}
-            <h3> <b> La ricerca ha prodotto {{listaricerca.count}} risultato:  </b></h3>
+            <h3> <b> La ricerca ha prodotto {{ listaricerca.count }} risultato: </b></h3>
             <br>
         {% else %}
-            <h3> <b> La ricerca ha prodotto {{listaricerca.count}} risultati: </b></h3>
+            <h3> <b> La ricerca ha prodotto {{ listaricerca.count }} risultati: </b></h3>
             <br>
         {% endif %}
 
         {% if listaricerca.count > 0 %}
-        <div class="container-fluid">
-            <div class="row">
-                {% for l in listaricerca %}
-                <div class="col-3">
-                    <div class="card" style="border-radius: 25px;">
-                        <br>
-                        <a href="{% url 'attractions:dettaglioattr' l.pk %}" style="color:black;"> <h3> <b> {{ l.nome }}</b></h3></a>
-                        <a href="{% url 'attractions:dettaglioattr' l.pk %}"> <img src="{{ l.image.url }}" style="width: auto; height: 240px"></a> <!--collegamento a specifiche attrazione -->
-                        <br>
-                    </div>
+            <div class="container">
+                <div class="row">
+                    {% for l in listaricerca %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <a href="{% url 'attractions:dettaglioattr' l.pk %}">
+                                    <img src="{{ l.attrazione_image.url }}" class="card-img-top" alt="pic" style="max-width: 100%;">
+                                </a>
+                                <div class="card-body">
+                                    <a href="{% url 'attractions:dettaglioattr' l.pk %}" style="color:black;">
+                                        <h5 class="card-title">{{ l.nome }}</h5>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
-        </div>
         {% else %}
             Nessuna attrazione trovata.
         {% endif %}
-
     </div>
 {% endblock %}
