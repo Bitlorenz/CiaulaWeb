@@ -58,19 +58,21 @@ class ScegliAttrazioneForm(forms.ModelForm):
         self.fields['oraInizio'].widget.attrs.update(style='max-width: 48em')
         self.fields['oraFine'].widget.attrs.update(style='max-width: 48em')
         self.fields['giorno'].widget.attrs['placeholder'] = self.Meta.placeholders.get('giorno')
-        self.fields['oraInizio'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraInizio')+str(a.oraApertura)
-        self.fields['oraFine'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraFine')+str(a.oraChiusura)
+        self.fields['oraInizio'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraInizio') + str(
+            a.oraApertura)
+        self.fields['oraFine'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraFine') + str(a.oraChiusura)
+
     class Meta:
         model = Scelta
         fields = ['giorno', 'oraInizio', 'oraFine']
         labels = {
-            'oraInizio' : 'Ora Inizio',
-            'oraFine' : 'Ora Fine'
+            'oraInizio': 'Ora Inizio',
+            'oraFine': 'Ora Fine'
         }
         placeholders = {
-            'giorno':'aaaa-mm-gg',
-            'oraInizio' : 'Orario apertura attrazione: ',
-            'oraFine' : 'Orario chiusura attrazione: '
+            'giorno': 'aaaa-mm-gg',
+            'oraInizio': 'Orario apertura attrazione: ',
+            'oraFine': 'Orario chiusura attrazione: '
         }
 
 
@@ -91,7 +93,8 @@ class ModificaSceltaForm(forms.ModelForm):
         self.fields['giorno'].widget.attrs['placeholder'] = self.Meta.placeholders.get('giorno')
         self.fields['oraInizio'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraInizio') + str(
             s.attrazione.oraApertura)
-        self.fields['oraFine'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraFine') + str(s.attrazione.oraChiusura)
+        self.fields['oraFine'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraFine') + str(
+            s.attrazione.oraChiusura)
 
     class Meta:
         model = Scelta
@@ -105,6 +108,7 @@ class ModificaSceltaForm(forms.ModelForm):
             'oraInizio': 'Orario apertura attrazione: ',
             'oraFine': 'Orario chiusura attrazione: '
         }
+
 
 class SpostamentoForm(forms.ModelForm):
     helper = FormHelper()

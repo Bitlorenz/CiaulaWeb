@@ -4,16 +4,37 @@
     <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
 {% endblock %}
 
-{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
     {% include "header.html" %}
 
-    <h1>Cancella la scelta di {{ object.attrazione.nome  }}</h1>
-    <h3>Stai cancellando questa scelta, sei sicuro?</h3>
-    <form method="post">
-        {% csrf_token %}
-        <a href="{% url 'HolidayPlanning:dettagliovacanza' v_id %}">Annulla</a>
-        <input type="submit" value="Conferma">
-    </form>
+{% block title %}
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h1 class="display-4">
+                {{ title }}
+            </h1>
+            <h3>Stai cancellando questa scelta, sei sicuro?</h3>
+            <h2>{{ attivita.nome }}</h2>
+			<ul class="list-unstyled">
+                <li> <strong> Attività: {{ scelta.attrazione.nome }} </strong> </li>
+                <li> <strong> Città: {{ scelta.attrazione.citta }} </strong> </li>
+                <li> <strong> Giorno: {{ scelta.giorno }} </strong> </li>
+                <li> <strong> Ora di Inizio: {{ scelta.oraInizio }} </strong> </li>
+                <li> <strong> Ora di Fine: {{ scelta.oraFine }} </strong> </li>
+                <li> <strong> Durata: {{ scelta.durata }} </strong> </li>
+                <li> <strong> costo: {{ scelta.attrazione.costo }} €</strong> </li>
+                <li> <strong> Luogo: {{ scelta.attrazione.luogo }} </strong> </li>
+                <li> <strong> Via: {{ scelta.attrazione.via }} </strong> </li>
+            </ul>
+            <form method="post">
+                {% csrf_token %}
+                <a href="{% url 'HolidayPlanning:dettagliovacanza' v_id %}">Annulla</a>
+                <input type="submit" value="Conferma" class="btn button-ciaula">
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+
 {% endblock %}

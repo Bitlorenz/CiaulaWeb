@@ -10,88 +10,92 @@
     {% include "header.html" %}
 
     <div class="container-fluid">
-        <div class="row" id="to-fill">
+        <div class="row">
             <div class="col-md-4">
-                <h3>{{ vacanza.nome }}</h3>
-                <p>Budget: {{ vacanza.budgetDisponibile }} €</p>
-                <p>Data di Arrivo: {{ vacanza.dataArrivo }}</p>
-                <p>Data di Partenza: {{ vacanza.dataPartenza }}</p>
-                <p>Durata: {{ vacanza.calcolaGiorni }} giorni</p>
-                <p>Numero di persone: {{ vacanza.nrPersone }}</p>
-                <h3> Totale parziale: <b> {{ totale }}€ </b></h3>
                 <br>
+                <h3><strong>{{ vacanza.nome }}</strong></h3>
+                <ul class="list-unstyled">
+                    <li> <strong>Budget disponibile {{ vacanza.budgetDisponibile }} €</strong></li>
+                    <li> <strong>Data di Arrivo: {{ vacanza.dataArrivo }}</strong></li>
+                    <li> <strong>Data di Partenza: {{ vacanza.dataPartenza }}</strong></li>
+                    <li> <strong>Durata: {{ vacanza.calcolaGiorni }} giorni</strong></li>
+                    <li> <strong>Numero di persone: {{ vacanza.nrPersone }}</strong></li>
+                    <li> <strong>Totale corrente: <b> {{ totale }}€ </b></strong></li>
+                </ul>
+                <br>
+                <h3>Salva la vacanza in formato PDF!</h3>
                 <button class="btn btn-success">
                     <a href="{% url 'HolidayPlanning:stampavacanza' vacanza.pk %}" style="color:white"> PDF Vacanza </a>
                 </button>
             </div>
-            {% for s in scelte %}
-            <div class="col-md-8">
-            {% ifchanged s.giorno %}
-	    		<h1>Giornata {{forloop.counter}}: {{ s.giorno }}</h1>
-				{% for key, value in difficolta.items %}
-					{% if key == s.giorno.day %}
-            			<h4>Difficoltà Giornata stimata: {{ value }}</h4>
-					{% endif %}
-				{% endfor %}
-            {% endifchanged %}
-                <div class="card mb-12 scelta-card">
-                <a href="{% url 'attractions:dettaglioattr' s.attrazione.pk %}">
-                    <img class="card-img-top img-fluid" src="{{ s.attrazione.attrazione_image.url }}"
-                         alt="Card image cap"
-                         style="max-width: 100%;">
-                </a>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ s.attrazione.nome }}</h5>
-                        <p class="card-text hours"> da {{ s.oraInizio }} a {{ s.oraFine }} il {{ s.giorno }}</p>
-                        {% if not tour %}
-                            <a href="{% url 'HolidayPlanning:modificascelta' s.pk vacanza.pk %}"
-                               class="btn btn-primary">Modifica
+            <div class="col-md-6">
+                {% for s in scelte %}
+                    {% ifchanged s.giorno %}
+	    		        <h1>Giornata {{forloop.counter}}: {{ s.giorno }}</h1>
+				            {% for key, value in difficolta.items %}
+					            {% if key == s.giorno.day %}
+            			            <h4>Difficoltà Giornata stimata: {{ value }}</h4>
+                                {% endif %}
+				            {% endfor %}
+                    {% endifchanged %}
+                    <div class="card mb-12 scelta-card">
+                        <a href="{% url 'attractions:dettaglioattr' s.attrazione.pk %}">
+                            <img class="card-img-top img-fluid" src="{{ s.attrazione.attrazione_image.url }}"
+                            alt="Card image cap"
+                            style="width:auto;height:100%">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ s.attrazione.nome }}</h5>
+                            <p class="card-text hours"> da {{ s.oraInizio }} a {{ s.oraFine }} il {{ s.giorno }}</p>
+                            {% if not tour %}
+                                <a href="{% url 'HolidayPlanning:modificascelta' s.pk vacanza.pk %}"
+                                class="btn btn-primary">Modifica
                                 scelta</a>
-                            <a href="{% url 'HolidayPlanning:cancellascelta' s.pk vacanza.pk %}"
-                               class="btn btn-primary">Cancella
+                                <a href="{% url 'HolidayPlanning:cancellascelta' s.pk vacanza.pk %}"
+                                class="btn btn-primary">Cancella
                                 scelta</a>
-                            {% if s.giorno < giorno %}
-                                <a href="{% url 'attractions:crea_recensione' s.pk %}"
-                                   class="btn btn-primary">Recensisci</a>
-                            {% endif %}
-                            {% if s.next_scelta is not None %}
-                                <a href="{% url 'HolidayPlanning:spostamento' s.pk vacanza.pk %}"
-                                   class="btn btn-primary">
+                                {% if s.giorno < giorno %}
+                                    <a href="{% url 'attractions:crea_recensione' s.pk %}"
+                                    class="btn btn-primary">Recensisci</a>
+                                {% endif %}
+                                {% if s.next_scelta is not None %}
+                                    <a href="{% url 'HolidayPlanning:spostamento' s.pk vacanza.pk %}"
+                                    class="btn btn-primary">
                                     Aggiungi spostamento da {{ s.attrazione.citta }}
                                     per {{ s.next_scelta.attrazione.citta }}
-                                </a>
-                            {% endif %}
-                    </div>
-                </div>
-                            {% for i in spostamenti %}
-                                {% if i.scelta_partenza == s %}
-                                    <div class="card mb-12 spostamento-card">
-                                        <div class="card-body">
-                                            <h4 class="spostamento-card-title">SPOSTAMENTO</h4>
-                                            <h5 class="card-text">Attività di Partenza: {{ i.scelta_partenza.attrazione.nome }} a {{i.scelta_partenza.attrazione.luogo}}</h5>
-					    <h5 class="card-text">Attività di Arrivo: {{ i.scelta_arrivo.attrazione.nome }} a {{i.scelta_arrivo.attrazione.luogo}}</h5>
-                                            <h5 class="card-text">Ora Partenza: {{ i.ora_partenza }}</h5>
-                                            <h5 class="card-text">Ora Arrivo: {{ i.ora_arrivo }}</h5>
-                                            <h5 class="card-text">Durata Spostamento: {{ i.durata_spostamento }}</h5>
-                                            <h5 class="card-text">Veicolo: {{ i.veicolo }}</h5>
-                                            <h5 class="card-text">Tipo Spostamento: {{ i.tipo_spostamento }}</h5>
-                                            <h5 class="card-text">Costo: {{ i.costo }} €</h5>
-					    <div class="spostamento-card-buttons">
-                                            	<a href="{% url 'HolidayPlanning:modificaspostamento' i.pk %}"
-                                               class="btn btn-primary">Modifica</a>
-                                            	<a href="{% url 'HolidayPlanning:cancellaspostamento' i.pk %}"
-                                               class="btn btn-primary">Cancella</a>
-					    </div>
-                                        </div>
-                                    </div>
+                                    </a>
                                 {% endif %}
-                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% for i in spostamenti %}
+                    {% if i.scelta_partenza == s %}
+                        <div class="card mb-12 spostamento-card">
+                            <div class="card-body">
+                                <h4 class="spostamento-card-title">SPOSTAMENTO</h4>
+                                <h5 class="card-text">Attività di Partenza: {{ i.scelta_partenza.attrazione.nome }} a {{i.scelta_partenza.attrazione.luogo}}</h5>
+					            <h5 class="card-text">Attività di Arrivo: {{ i.scelta_arrivo.attrazione.nome }} a {{i.scelta_arrivo.attrazione.luogo}}</h5>
+                                <h5 class="card-text">Ora Partenza: {{ i.ora_partenza }}</h5>
+                                <h5 class="card-text">Ora Arrivo: {{ i.ora_arrivo }}</h5>
+                                <h5 class="card-text">Durata Spostamento: {{ i.durata_spostamento }}</h5>
+                                <h5 class="card-text">Veicolo: {{ i.veicolo }}</h5>
+                                <h5 class="card-text">Tipo Spostamento: {{ i.tipo_spostamento }}</h5>
+                                <h5 class="card-text">Costo: {{ i.costo }} €</h5>
+					            <div class="spostamento-card-buttons">
+                                   	<a href="{% url 'HolidayPlanning:modificaspostamento' i.pk %}"
+                                        class="btn btn-primary">Modifica</a>
+                                    <a href="{% url 'HolidayPlanning:cancellaspostamento' i.pk %}"
+                                        class="btn btn-primary">Cancella</a>
+					            </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
             </div>
-                        {% endif %}
-        {% endfor %}
         </div>
-    </div>
     {% if scelte|length == 0 %}
         <p class="col-12">L'itinerario è ancora vuoto</p>
     {% endif %}
+    </div>
 {% endblock %}

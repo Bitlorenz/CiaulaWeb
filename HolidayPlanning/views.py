@@ -1,6 +1,8 @@
 from datetime import timedelta as td, datetime
 import io
 from gettext import gettext as _
+
+from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.http import FileResponse, HttpResponse
 from reportlab.pdfgen import canvas
@@ -244,7 +246,8 @@ class CancellaScelta(IsVacanzaUserOwnedMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["v_id"] = self.kwargs['pk']
-        context["title"] = "Cancella Attrazione Scelta"
+        context["scelta"] = self.get_object()
+        context["title"] = "Cancella L' Attrazione Scelta"
         return context
 
     def get_success_url(self):
@@ -342,7 +345,6 @@ class AggiungiTourVacanza(LoginRequiredMixin, CreateView):
 
     def get_initial(self):
         initial = super().get_initial()
-        print("esecuzione metodo get_initial")
         # Controlla se l'oggetto è passato nella richiesta
         vacanza_id = self.kwargs.get('pk')
         if vacanza_id is not None:
@@ -378,6 +380,20 @@ class ModificaVacanza(IsVacanzaUserOwnedMixin, UpdateView):
     model = Vacanza
     template_name = "HolidayPlanning/modificavacanza.html"
     form_class = ModificaVacanzaForm
+
+    def form_valid(self, form):
+        vacanza = form.save(commit=False)
+        newDataArrivo = form.cleaned_data["dataArrivo"]
+        newDataPartenza = form.cleaned_data["dataPartenza"]
+        # TODO bisogna chiedere conferma all'utente --> messages framework
+        if newDataArrivo > vacanza.dataArrivo:
+            print("Vuoi cancellare le scelte per i giorni eliminati?")
+            messages.warning(self.request, "Stai per cancellare le scelte nei giorni precedenti")
+        if newDataPartenza < vacanza.dataPartenza:
+            print("Vuoi cancellare le scelte per i giorni eliminati?")
+            messages.warning(self.request, "Stai per cancellare le scelte nei giorni successivi")
+        vacanza.save()
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

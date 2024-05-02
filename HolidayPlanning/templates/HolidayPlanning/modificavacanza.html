@@ -1,27 +1,42 @@
 {% extends 'base.html' %}
 {% block head %}
-{% load static %}
+    {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
-{% load crispy_forms_tags %}
+    {% load crispy_forms_tags %}
 {% endblock %}
 
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
     {% include "header.html" %}
-    <div class="row">
-    	<div class="col-md-6">
-    		<h2> Dettagli Attuali Vacanza </h2>
-		<h5>Data di Arrivo:	{{object.dataArrivo}} </h5>
-		<h5>Data di Partenza:   {{object.dataPartenza}} </h5>
-		<h5>Numero di persone:  {{object.nrPersone}} </h5>
-		<h5>Budget Disponibile: {{object.budgetDisponibile}} </h5>
-		<h5>Nome Vacanza: {{object.nome}} </h5>
-    	</div>
-    	<div class="col-md-6">
-    		<h2>Inserisci i dati per modificare la tua vacanza!</h2>
-    		{% crispy form %}
-    		<a class="btn" href="{% url 'HolidayPlanning:vacanze' %}">Cancel</a>
-    	</div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <h2> Dettagli Attuali Vacanza </h2>
+                <ul class="list-unstyled">
+                    <li>Data di Arrivo: {{ object.dataArrivo }} </li>
+                    <li>Data di Partenza: {{ object.dataPartenza }} </li>
+                    <li>Numero di persone: {{ object.nrPersone }} </li>
+                    <li>Budget Disponibile: {{ object.budgetDisponibile }} </li>
+                    <li>Nome Vacanza: {{ object.nome }} </li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h2>Inserisci i dati per modificare la tua vacanza!</h2>
+                {% crispy form %}
+                <a class="btn" href="{% url 'HolidayPlanning:vacanze' %}">Annulla</a>
+            </div>
+            <div class="col-md-4">
+                <h3>Riassunto vacanza</h3>
+                <ul class="list-group">
+                    {% for s in vacanza.sort_scelte %}
+                        {% ifchanged s.giorno %}
+	    		            <h5>Giornata {{forloop.counter}}: {{ s.giorno }}</h5>
+                        {% endifchanged %}
+                        <li class="list-group-item">{{ s.attrazione.nome }} dalle {{ s.oraInizio }} alle {{ s.oraFine }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 {% endblock %}
 

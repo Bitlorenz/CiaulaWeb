@@ -41,11 +41,21 @@ a:link, a:visited {
   text-align: center;
   text-decoration: none;
   display: inline-block;
+  border-radius: 6px;
 }
 
-  a:hover, a:active {
-    background-color: rgb(201, 142, 33);
-  }
+a:hover, a:active {
+  background-color: rgb(201, 142, 33);
+}
+
+.button-ciaula {
+  background-color: #f4b136;
+  color: rgb(199, 77, 77);
+  padding: 10px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
 
 footer {
   text-align: center;
