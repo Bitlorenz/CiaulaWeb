@@ -34,7 +34,8 @@ FRONTEND
 # DOING:
 * BACKEND:
   * ModificaVacanza: se restringo i giorni in una vacanza con delle scelte le scelte di qquel giorno andrebbero rimosse
-    * chiedere conferma con il framework messages?
+    * funzione js che però deve prendere in ingresso i due valori inseriti e i due vecchi, se vanno in conrasto (condizione nella view)
+        allora si mostra il popup
   * controllare views profiles e completare view per modificare utente 
 * FRONTEND:
 * modificare template modiifica vacanza con specchietto uguale a modifica scelta

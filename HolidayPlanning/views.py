@@ -383,21 +383,24 @@ class ModificaVacanza(IsVacanzaUserOwnedMixin, UpdateView):
 
     def form_valid(self, form):
         vacanza = form.save(commit=False)
+        oldVacanza = Vacanza.objects.get(pk=self.kwargs["pk"])
         newDataArrivo = form.cleaned_data["dataArrivo"]
         newDataPartenza = form.cleaned_data["dataPartenza"]
-        # TODO bisogna chiedere conferma all'utente --> messages framework
-        if newDataArrivo > vacanza.dataArrivo:
-            print("Vuoi cancellare le scelte per i giorni eliminati?")
-            messages.warning(self.request, "Stai per cancellare le scelte nei giorni precedenti")
-        if newDataPartenza < vacanza.dataPartenza:
-            print("Vuoi cancellare le scelte per i giorni eliminati?")
-            messages.warning(self.request, "Stai per cancellare le scelte nei giorni successivi")
+        if newDataArrivo.day > oldVacanza.dataArrivo.day:
+            if oldVacanza.scelte.filter(giorno__lt=newDataArrivo):
+                print("Vuoi cancellare le scelte per i giorni precedenti eliminati?")
+                # messages.warning(self.request, "Stai per cancellare le scelte nei giorni precedenti")
+        if newDataPartenza.day < oldVacanza.dataPartenza.day:
+            if oldVacanza.scelte.filter(giorno__gt=newDataPartenza):
+                print("Vuoi cancellare le scelte per i giorni successivi eliminati?")
+                #messages.warning(self.request, "Stai per cancellare le scelte nei giorni successivi")
         vacanza.save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Modifica la tua Vacanza"
+        context['show_modal'] = True
         return context
 
     def get_success_url(self):

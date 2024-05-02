@@ -28,11 +28,20 @@ class CreaVacanzaForm(forms.ModelForm):
 
 # form per modificare una vacanza
 class ModificaVacanzaForm(forms.ModelForm):
-    helper = FormHelper()
-    helper.form_id = 'vacanza-crispy-form'
-    helper.form_method = 'POST'
-    helper.add_input(Submit('submit', 'Modifica'))
-    helper.inputs[0].field_classes = 'btn btn-success'
+    dataArrivo = forms.DateField(required=True, widget=forms.DateInput(attrs={'placeholder': 'Inserire data di arrivo'}))
+    dataPartenza = forms.DateField(required=True, widget=forms.DateInput(attrs={'placeholder': 'Inserire data di ritorno'}))
+    nrPersone = forms.IntegerField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Inserire numero persone'}))
+    budgetDisponibile = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Inserire budget complessivo'}))
+    nome = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Inserire nome'}))
+
+    # Imposto le label
+    def __int__(self, *args, **kwargs):
+        super().__int__(*args, **kwargs)
+        self.fields['dataArrivo'].label = "Data di Arrivo"
+        self.fields['dataPartenza'].label = "Data di Partenza"
+        self.fields['nrPersone'].label = "Numero di Partecipanti"
+        self.fields['budgetDisponibile'].label = "Budget totale"
+        self.fields['nome'].label = "Nome della Vacanza"
 
     def clean(self):
         if self.cleaned_data["dataArrivo"] > self.cleaned_data["dataPartenza"]:
