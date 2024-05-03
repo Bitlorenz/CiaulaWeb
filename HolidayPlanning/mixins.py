@@ -25,3 +25,4 @@ class IsVacanzaUserOwnedMixin(LoginRequiredMixin):
             raise Http404("Non hai il permesso per accedere a questa vacanza.")
         return super().dispatch(request, *args, **kwargs)
 
+

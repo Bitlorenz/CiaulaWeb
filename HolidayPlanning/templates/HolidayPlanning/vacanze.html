@@ -32,8 +32,10 @@
                         		<a href="{% url "HolidayPlanning:dettagliovacanza" v.pk %}" class="btn btn-primary" style="margin-top: 0.5rem;">Dettagli Vacanza</a>
                     		{% endif %}
                     		{% if not tour %}
-                        		<a href="{% url "HolidayPlanning:modificavacanza" v.pk %}" class="btn btn-primary">Modifica Vacanza</a>
-                        		<a href="{% url "attractions:attrazioni" %}?vacanza_id={{v.pk}}" class="btn btn-primary">Aggiungi Attrazioni</a>
+                                {% if not v.dataPartenza < today %}
+                        		    <a href="{% url "HolidayPlanning:modificavacanza" v.pk %}" class="btn btn-primary">Modifica Vacanza</a>
+                        		{% endif %}
+                                    <a href="{% url "attractions:attrazioni" %}?vacanza_id={{v.pk}}" class="btn btn-primary">Aggiungi Attrazioni</a>
                     		{% endif %}
                     		{% if tour %} <!-- si stanno visualizzando i tour organizzati -->
 			            		<a href="{% url "HolidayPlanning:aggiungitour" v.pk %}" class="btn btn-primary">Aggiungi Vacanza</a>

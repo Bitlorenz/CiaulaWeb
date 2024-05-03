@@ -42,8 +42,9 @@ class ModificaVacanzaForm(forms.ModelForm):
         self.fields['nrPersone'].label = "Numero di Partecipanti"
         self.fields['budgetDisponibile'].label = "Budget totale"
         self.fields['nome'].label = "Nome della Vacanza"
-
+        self.fields['dataArrivo']
     def clean(self):
+
         if self.cleaned_data["dataArrivo"] > self.cleaned_data["dataPartenza"]:
             raise forms.ValidationError(_("Valori non validi: Data di Arrivo precede data di Partenza"))
 

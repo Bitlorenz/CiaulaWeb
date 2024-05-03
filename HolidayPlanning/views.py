@@ -1,10 +1,10 @@
-from datetime import timedelta as td, datetime
+from datetime import date, timedelta as td, datetime
 import io
 from gettext import gettext as _
 
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.http import FileResponse, HttpResponse
+from django.http import FileResponse, HttpResponse, HttpResponseForbidden
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
@@ -267,6 +267,7 @@ class VacanzeList(LoginRequiredMixin, ListView):
         context['utente'] = self.request.user
         context['vacanze'] = Vacanza.objects.filter(utente=self.request.user)
         context['tour'] = False
+        context['today'] = date.today()
         return context
 
 
@@ -381,19 +382,26 @@ class ModificaVacanza(IsVacanzaUserOwnedMixin, UpdateView):
     template_name = "HolidayPlanning/modificavacanza.html"
     form_class = ModificaVacanzaForm
 
+    def dispatch(self, request, *args, **kwargs):
+        vacanza = self.get_object()
+        if vacanza.dataPartenza < date.today():
+            return HttpResponseForbidden("Non puoi modificare una vacanza già conclusa.")
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         vacanza = form.save(commit=False)
         oldVacanza = Vacanza.objects.get(pk=self.kwargs["pk"])
         newDataArrivo = form.cleaned_data["dataArrivo"]
         newDataPartenza = form.cleaned_data["dataPartenza"]
+        scelteEliminare = []
         if newDataArrivo.day > oldVacanza.dataArrivo.day:
-            if oldVacanza.scelte.filter(giorno__lt=newDataArrivo):
-                print("Vuoi cancellare le scelte per i giorni precedenti eliminati?")
-                # messages.warning(self.request, "Stai per cancellare le scelte nei giorni precedenti")
+            scelteEliminare = oldVacanza.scelte.filter(giorno__lt=newDataArrivo)
+            for scelta in scelteEliminare:
+                vacanza.scelte.remove(scelta)
         if newDataPartenza.day < oldVacanza.dataPartenza.day:
-            if oldVacanza.scelte.filter(giorno__gt=newDataPartenza):
-                print("Vuoi cancellare le scelte per i giorni successivi eliminati?")
-                #messages.warning(self.request, "Stai per cancellare le scelte nei giorni successivi")
+            scelteEliminare = oldVacanza.scelte.filter(giorno__gt=newDataPartenza)
+            for scelta in scelteEliminare:
+                vacanza.scelte.remove(scelta)
         vacanza.save()
         return super().form_valid(form)
 

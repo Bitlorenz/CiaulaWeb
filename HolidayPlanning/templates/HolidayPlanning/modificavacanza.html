@@ -7,7 +7,7 @@
 
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
-    <script src="{% static 'js/modificaVacanzaConferma.js' %}"></script>
+
     {% include "header.html" %}
     <div class="container-fluid">
         <div class="row">
@@ -26,8 +26,12 @@
                 <form method="post" enctype="multipart/form-data" id="modificaVacanzaForm">
                     {% csrf_token %}
                     {{ form.nome | as_crispy_field }}
-                    {{ form.dataArrivo | as_crispy_field }}
-                    {{ form.dataPartenza | as_crispy_field }}
+                    <label > Data Arrivo
+                        <input type="date" name="dataArrivo" value="{{ object.dataArrivo.isoformat }}" data-old-value="{{ object.dataArrivo.isoformat }}">
+                    </label>
+                    <label> Data Partenza
+                        <input type="date" name="dataPartenza" value="{{ object.dataPartenza.isoformat }}" data-old-value="{{ object.dataPartenza.isoformat }}">
+                    </label>
                     {{ form.nrPersone | as_crispy_field }}
                     {{ form.budgetDisponibile | as_crispy_field }}
                     <button type="button" value="Submit" class="btn btn-primary" name="SubmitButton" id="submitButton">
@@ -51,12 +55,30 @@
         </div>
     </div>
     <script type="text/javascript">
-        var nuovaDataPartenza = document.querySelector('input[name="dataPartenza"]').value;
-        var nuovaDataArrivo = document.querySelector('input[name="dataArrivo"]').value;
-        var inputElement = document.getElementById("submitButton")
+        let vecchiaDataArrivo = document.querySelector('input[name="dataArrivo"]').getAttribute('data-old-value');
+        let vecchiaDataPartenza = document.querySelector('input[name="dataPartenza"]').getAttribute('data-old-value');
+        let inputElement = document.getElementById("submitButton")
         inputElement.addEventListener("click", function (){
-            if (confirm('Vuoi modificare la vacanza? \n nuova data partenza: '+nuovaDataPartenza+
-                '\n nuova data arrivo: '+nuovaDataArrivo)){
+            let nuovaDataPartenza = document.querySelector('input[name="dataPartenza"]').value;
+            let nuovaDataArrivo = document.querySelector('input[name="dataArrivo"]').value;
+            let messageArrivo="";
+            let messagePartenza="";
+            if(nuovaDataArrivo != "" && nuovaDataArrivo>vecchiaDataArrivo)
+                messageArrivo = "\n Nuova data di arrivo ("+nuovaDataArrivo+
+                    ") posteriore alla vecchia data di arrivo ("+vecchiaDataArrivo+")";
+            if (nuovaDataPartenza != "" && nuovaDataPartenza < vecchiaDataPartenza)
+                messagePartenza = "\n Nuova data di partenza ("+nuovaDataPartenza+
+                    ") precedente alla vecchia data di partenza ("+vecchiaDataPartenza+")";
+            let confirmMessage = " ";
+            if(messageArrivo != "")
+                confirmMessage += messageArrivo;
+            if(messagePartenza != "")
+                confirmMessage += messagePartenza;
+            if (confirmMessage == " "){
+                confirmMessage = "Vuoi davvero modificare la vacanza?";
+            } else
+                confirmMessage += "\n Le attività dei giorni eliminati saranno eliminate.";
+            if (confirm(confirmMessage)){
                 document.getElementById("modificaVacanzaForm").submit()
             } else {
                 return false;

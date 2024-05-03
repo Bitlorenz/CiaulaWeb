@@ -33,16 +33,31 @@ FRONTEND
 
 # DOING:
 * BACKEND:
-  * ModificaVacanza: se restringo i giorni in una vacanza con delle scelte le scelte di qquel giorno andrebbero rimosse
-    * funzione js che però deve prendere in ingresso i due valori inseriti e i due vecchi, se vanno in conrasto (condizione nella view)
-        allora si mostra il popup
-  * controllare views profiles e completare view per modificare utente 
+  * APP PROFILES REFACTORING: Necessario per capire cosa si è fatto e sistemare i vari utenti
+    * Modelli:
+      * vedere da dove si è preso il modello fatto
+      * provare a cambiarlo, senza distruggere l'admin
+      * perche AbstractBaseUSer anzichè AbstractUSer?
+      * come usare e cosa fare di user manager?
+    * Views
+      * specificare il template nelle view non negli url 
+      * View per creare un nuovo utente:
+      * view per modificare utente
+      * View per modificare il proprio profilo
+    * Template
+      * fare template per registrazione
+      * fare template per modifica
+      * fare template per dettagli
+  * TEST DI CLASSI E FUNZIONI
+      * testare upload foto profilo utente e aggiungerla in un punto visibile
 * FRONTEND:
-* modificare template modiifica vacanza con specchietto uguale a modifica scelta
+    * L'unica homepage deve essere quella del recommendation system 
   * sistemare header.html ->navbar
+  * Sistemare bene il pdf
   * inserire in css
     * class: Top_bar_content
 * ampliare vacanze del root
+* fare README.md seguendo esempio watchmarket
 
 # RECOMMENDATION SYSTEM
 * raccomandazioni basate sulla tipologia e durata e costo
@@ -108,62 +123,64 @@ FRONTEND
 
     
 # DONE:
-1) inserire dettagli scelta o migliorare scheda della scelta in dettaglio vacanza
-2) Miglioramento pagina dettagli della vacanza, bisogna aggiustare grandezza card e immagine
-3) sistemare pagina di cancella scelta
+1) ModificaVacanza: se restringo i giorni in una vacanza con delle scelte, le scelte di quel giorno vanno rimosse
+2) modificare template modifica vacanza con specchietto uguale a modifica scelta
+3) inserire dettagli scelta o migliorare scheda della scelta in dettaglio vacanza
+4) Miglioramento pagina dettagli della vacanza, bisogna aggiustare grandezza card e immagine
+5) sistemare pagina di cancella scelta
     * ingrandire bottoni
     * mostrare dettagli della scelta
-4) migliorati template modifica scelta e aggiungiscelta
-5) nel template di aggiunta scelta bisogna ricordare la vacanza
+6) migliorati template modifica scelta e aggiungiscelta
+7) nel template di aggiunta scelta bisogna ricordare la vacanza
     * aggiungere l'attrazione (nome o field form che si vuole aggiungere)
     * aggiungere anche dettagli sull'attrazione da aggiungere, costo, orari apertura ecc...
-6) inclusione nei templates di HolidayPlanning e profiles del blocco head e del titolo
-7) fare view cancella attrazione solo per admin
-8) una recensione all'attività lasciata dopo che si è fatta l'attrazione, quindi dopo che è passata la data scelta
-9) fare form e template modifica attrazione accessibile solo all'admin
-10) l'url è sbagliato quando si clicca sul titolo immagine dei risultati
-11) sistemare pannello scelta, deve funzionare anche per root
-12) home page principale: definita dal recommendation system, cliccando su logo o home tutte le attrazioni
-13) TEST: Da url si può cambiare la pk di una vacanza/scelta e accedere alla vacanza/scelta di un altro utente.
-14) aggiungere campo immagine al UserProfileModel, con anche la cartella upload_to
-15) Aggiungere nome alla vacanza
-16) Aggiustare CancellaScelta perchè non ritorna nessun parametro, andrebbe ritornata la pk della vacanza
-17) Aggiustare ModificaScelta, prendere spunto da ProductUpdateView in progetto fillo
-18) aggiustare itinerario di viaggio perchè nel mixin quando viene chiamato con pk==0 non viene trovata attrazione
-19) difficoltà prevista della giornata
-20) la lista delle scelte all'interno della vacanza deve sempre essere ordinata in dettagliovacanza: metodo all'interno della classe model Vacanza 
-21) OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano
-22) Immettere interfacce di gestione per cancellare attrazioni
-23) Refactoring separando views di gestione dell'attrazione in nuova app attractions (cambiare urls, views, forms, tempalates...)
-24) Immettere interfacce di gestione per aggiungere, modificare attrazioni
-25) AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
+8) inclusione nei templates di HolidayPlanning e profiles del blocco head e del titolo
+9) fare view cancella attrazione solo per admin
+10) una recensione all'attività lasciata dopo che si è fatta l'attrazione, quindi dopo che è passata la data scelta
+11) fare form e template modifica attrazione accessibile solo all'admin
+12) l'url è sbagliato quando si clicca sul titolo immagine dei risultati
+13) sistemare pannello scelta, deve funzionare anche per root
+14) home page principale: definita dal recommendation system, cliccando su logo o home tutte le attrazioni
+15) TEST: Da url si può cambiare la pk di una vacanza/scelta e accedere alla vacanza/scelta di un altro utente.
+16) aggiungere campo immagine al UserProfileModel, con anche la cartella upload_to
+17) Aggiungere nome alla vacanza
+18) Aggiustare CancellaScelta perchè non ritorna nessun parametro, andrebbe ritornata la pk della vacanza
+19) Aggiustare ModificaScelta, prendere spunto da ProductUpdateView in progetto fillo
+20) aggiustare itinerario di viaggio perchè nel mixin quando viene chiamato con pk==0 non viene trovata attrazione
+21) difficoltà prevista della giornata
+22) la lista delle scelte all'interno della vacanza deve sempre essere ordinata in dettagliovacanza: metodo all'interno della classe model Vacanza 
+23) OPERAZIONI FINE VACANZA: concludere la vacanza e stampare il piano
+24) Immettere interfacce di gestione per cancellare attrazioni
+25) Refactoring separando views di gestione dell'attrazione in nuova app attractions (cambiare urls, views, forms, tempalates...)
+26) Immettere interfacce di gestione per aggiungere, modificare attrazioni
+27) AGGIUNGERE NAVBAR PER OPERAZIONI DI HOLIDAYPLANNING: LISTASCELTE.HTML E MODIFICA SCELTE
     Navbar piccola sotto quella principale che aggiunge qualche link se il turista ha già creato una vacanza oppure
     mostra un messaggio "Inizia a Creare la tua vacanza! Clicca su HolidayPlanning"
-26) pulsante di logut quando l'utente è entrato
-27) sistemare detailview attrazione con tutti i campi e la foto
-28) API per le vacanze: VacanzeList, VacanzaDetail, VacanzaEdit
-29) fare detail view della vacanza con tutte le scelte
-30) mettere mixin login required nella lista di attrazioni da scegliere e nella pagina della scelta
-31) aggiungere campo foto al modello di attrazione
-32) aggiungere controllo sui giorni di creazione della vacanza direttamente nel form
-33) consistenza scelte
+28) pulsante di logut quando l'utente è entrato
+29) sistemare detailview attrazione con tutti i campi e la foto
+30) API per le vacanze: VacanzeList, VacanzaDetail, VacanzaEdit
+31) fare detail view della vacanza con tutte le scelte
+32) mettere mixin login required nella lista di attrazioni da scegliere e nella pagina della scelta
+33) aggiungere campo foto al modello di attrazione
+34) aggiungere controllo sui giorni di creazione della vacanza direttamente nel form
+35) consistenza scelte
      quando si fa una scelta si controlla che la data sia nel periodo della vacanza
      quando si fa una scelta si controlla che non si sovrapponga ad altre
-34) ListView lista attrazioni che mostra le attrazioni in prima pagina (home) e rimanda nella detail view di ogni
+36) ListView lista attrazioni che mostra le attrazioni in prima pagina (home) e rimanda nella detail view di ogni
  attrazione, a differenza della pagina attrazioni è raggiungibile senza il login
-35) unione login e creazione vacanza
+37) unione login e creazione vacanza
          inserimento dei mixin login required per controllare che l'utente sia registrato (creazione vacanza)
-36) aggiustare file ciaulaweb\views.py: dare a template_name un valore esistente e in ciaulaweb\urls.py aggiungere il
+38) aggiustare file ciaulaweb\views.py: dare a template_name un valore esistente e in ciaulaweb\urls.py aggiungere il
 path('', HomeView.as_view(), name='home') con from ciaulaweb.views import HomeView
 !!!RISOLVERE InconsistentMigrationHistory !!!
-37) creazione login
+39) creazione login
          cosa fanno le variabili in settings.py: LOGIN_REDIRECT_URL, LOGIN_URL, AUTH_USER_MODEL
          registrazione di un profilo utente
          recuperare la schermata di admin
          admin.py aggiustamento
-38) nell'app profiles fare dei template appositi per login e logout e inserire l'argomento template_name nella funzione
+40) nell'app profiles fare dei template appositi per login e logout e inserire l'argomento template_name nella funzione
 as_view nel path corrispondente in urlpatterns
-39) ripopolare db attrazioni
+41) ripopolare db attrazioni
 
 
 * testing delle view di HolidayPlanning (soprattutto quelle protette dal mixin)

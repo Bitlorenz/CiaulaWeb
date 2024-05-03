@@ -1,6 +1,4 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
-from django.shortcuts import render
 from django.views.generic import CreateView
 
 from profiles.forms import UserCreationForm
