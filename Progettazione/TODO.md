@@ -51,11 +51,11 @@ FRONTEND
   * TEST DI CLASSI E FUNZIONI
       * testare upload foto profilo utente e aggiungerla in un punto visibile
 * FRONTEND:
-    * L'unica homepage deve essere quella del recommendation system 
+  * L'unica homepage deve essere quella del recommendation system 
   * sistemare header.html ->navbar
   * Sistemare bene il pdf
   * inserire in css
-    * class: Top_bar_content
+  * class: Top_bar_content
 * ampliare vacanze del root
 * fare README.md seguendo esempio watchmarket
 

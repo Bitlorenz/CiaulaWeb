@@ -4,13 +4,12 @@
     <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
 {% load crispy_forms_tags %}
 {% endblock %}
-{% block title %} Login come Turista {% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
     {% include "header.html" %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form | crispy }}
-        <input type="submit" class="btn btn-success" value="Login">
-    </form>
+    <h1>Modifica Il Tuo Profilo</h1>
+    {% crispy form %}
+    <a class="btn" href="{% url 'profiles:user-detail' user.pk %}">Annulla</a>
 {% endblock %}

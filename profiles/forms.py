@@ -1,14 +1,21 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-
+from django.contrib.auth.forms import UserCreationForm
 from profiles.models import UserProfileModel
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+
 
 # Un form per creare nuovi utenti. Include tutti i campi richiesti e una password ripetuta
-class UserCreationForm(forms.ModelForm):
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Conferma Password', widget=forms.PasswordInput)
+class UserProfileForm(UserCreationForm):
+    # password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    # password2 = forms.CharField(label='Conferma Password', widget=forms.PasswordInput)
+    helper = FormHelper()
+    helper.form_id = 'user_profile_crispy_form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('save', 'Save'))
+    helper.inputs[0].field_classes = 'btn btn-success'
 
     class Meta:
         model = UserProfileModel
@@ -42,13 +49,22 @@ class UserCreationForm(forms.ModelForm):
         return user
 
 
-# A form for updating users. Includes all the fields on
-# the user, but replaces the password field with admin's
-# disabled password hash display field.
-class UserChangeForm(forms.ModelForm):
-
-    password = ReadOnlyPasswordHashField()
+class UserUpdateForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'user_profile_crispy_form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('save', 'Save'))
+    helper.inputs[0].field_classes = 'btn btn-success'
 
     class Meta:
         model = UserProfileModel
-        fields = ('email', 'password', 'is_active', 'is_admin')
+        fields = ['first_name', 'last_name', 'email', 'codiceFiscale', 'telefono', 'dataDiNascita', 'profile_image']
+# A form for updating users. Includes all the fields on
+# the user, but replaces the password field with admin's
+# disabled password hash display field.
+# class UserChangeForm(forms.ModelForm):
+#    password = ReadOnlyPasswordHashField()
+
+#    class Meta:
+#        model = UserProfileModel
+#        fields = ('email', 'password', 'is_active', 'is_admin')

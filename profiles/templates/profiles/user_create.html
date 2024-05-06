@@ -10,9 +10,6 @@
 {% block content %}
     {% include "header.html" %}
     <h1>Registrati su CiaulaWeb!</h1>
-    <form method="post">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">Registrati</button>
-    </form>
+    {% crispy form %}
+    <a class="btn" href="{% url 'home' %}">Annulla</a>
 {% endblock %}
