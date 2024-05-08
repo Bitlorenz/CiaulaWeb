@@ -109,7 +109,7 @@ class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
 
 
 def getVacanzapkFromSpostamento(user, spostamento):
-    vacanzeutente = Vacanza.objects.filter(user=user)
+    vacanzeutente = Vacanza.objects.filter(utente=user)
     for v in vacanzeutente:
         if v.spostamenti.contains(spostamento):
             return v.pk
@@ -220,8 +220,11 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
         ini = form.cleaned_data["oraInizio"]
         fine = form.cleaned_data["oraFine"]
         scelta.durata = td(hours=fine.hour - ini.hour, minutes=fine.minute - ini.minute)
+        print("controllo della validità")
         checkOrariGiorno(rifvacanza, scelta, None)
+        print("check passato, inizio: " + str(scelta.oraInizio) + ", fine: " + str(scelta.oraFine))
         scelta.save()
+        print("scelta salvata, inizio: "+str(scelta.oraInizio)+", fine: "+str(scelta.oraFine))
         return super().form_valid(form)
 
     def get_success_url(self):

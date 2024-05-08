@@ -130,6 +130,9 @@ def home(request):
                 else:
                     attrazioni = all_attrazioni()
                     ctx = {"listaattrazioni": attrazioni, "title": "Tutte le Attrazioni"}
+        else:
+            attrazioni = all_attrazioni()
+            ctx = {"listaattrazioni": attrazioni, "title": "Tutte le Attrazioni"}
     # se utente non è loggato
     else:
         # Se esistono vacanze degli utenti

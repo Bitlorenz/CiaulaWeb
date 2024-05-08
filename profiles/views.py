@@ -12,12 +12,14 @@ class UserCreateView(CreateView):
     model = UserProfileModel
     form_class = UserCreationForm
     template_name = "profiles/user_create.html"
-    success_message = "Utente creato correttamente!"
-    success_url = reverse_lazy("profiles:user-login")
+
+    def get_success_url(self):
+        return reverse_lazy("profiles:user-login")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Registrazione Utente"
+        return context
 
 
 # view per poter visualizzare tutti i dettagli di un certo utente

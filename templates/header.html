@@ -15,7 +15,7 @@
                     {% else %}
                     <div class="top_bar_user">
                         <div class="user_icon"><img src="{% static '/img/user.svg' %}"  class="img-fluid" alt="user img"></div>
-                        <div><a href="{% url 'profiles:user-registration' %}">Registrati</a></div>
+                        <div><a href="{% url 'profiles:registration' %}">Registrati</a></div>
                         <div><a href="{% url 'profiles:user-login' %}">Login</a></div>
                     </div>
                     {% endif %}
@@ -28,7 +28,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="w-75 container-fluid">
     <!-- Brand -->
-        <a class="navbar-brand pl-5" href="{% url 'attractions:attrazioni' %}">
+        <a class="navbar-brand pl-5" href="{% url 'home' %}">
             <img src="{% static '/img/logo_ciaulaweb.png' %}" class="d-inline-block logo_ciaulaweb align-top" alt="Logo">
             CiaulaWeb
         </a>
@@ -41,7 +41,7 @@
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
             <ul class="navbar-nav pl-5">
                 <li class="nav-item active pl-5">
-                    <a class="nav-link" href="{% url 'attractions:attrazioni' %}">Home</a>
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item pl-5">
                     <a class="nav-link" href="{% url 'HolidayPlanning:creavacanza' %}">Holiday Planning</a>
@@ -87,7 +87,7 @@
                         <a class="nav-link " href="{% url 'profiles:user-login' %}">Login</a>
                     </li>
                     <li class="nav-item pl-5">
-                        <a class="nav-link " href="{% url 'profiles:user-registration' %}">Registrati</a>
+                        <a class="nav-link " href="{% url 'profiles:registration' %}">Registrati</a>
                     </li>
                 {% endif %}
             </ul>

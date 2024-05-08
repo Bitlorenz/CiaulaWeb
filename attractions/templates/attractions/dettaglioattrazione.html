@@ -23,7 +23,10 @@
     			<li> <strong> Finisce alle: {{ attivita.oraChiusura }} </strong> </li>
     			<li> <strong> Attività: {{ attivita.descrizione }} </strong> </li>
 			</ul>
-		</div>
+            {% if user.is_staff %}
+            <a type="button" class="btn button-ciaula" href="{% url 'attractions:modifica_attrazione' attivita.pk %} ">Modifica Attrazione</a>
+		    {% endif %}
+        </div>
 	</div>
 </div>
 

@@ -6,7 +6,7 @@ app_name = 'profiles'
 
 
 urlpatterns = [
-    path("register/", UserCreateView.as_view(), name="user-registration"),
+    path("register/", UserCreateView.as_view(), name="registration"),
     path("login/", auth_views.LoginView.as_view(
         template_name='profiles/registration/login.html'
     ), name="user-login"),

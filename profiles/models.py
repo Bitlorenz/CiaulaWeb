@@ -14,7 +14,6 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        print("utente salvato tramite profiles.forms.UserManager.create_user")
         user.save(using=self.db)
         return user
 
@@ -38,7 +37,7 @@ class UserProfileModel(AbstractBaseUser):
     codiceFiscale = models.CharField(max_length=18)
     telefono = models.CharField(max_length=32)
     dataDiNascita = models.DateField(null=True)
-    profile_image = models.ImageField(blank=True, null=True, default="defaultuser.png")
+    profile_image = models.ImageField(blank=True, null=True, default="defaultuser.png", upload_to="profiles/photos")
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 

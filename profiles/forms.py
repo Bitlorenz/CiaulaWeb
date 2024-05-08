@@ -1,5 +1,5 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit, Layout, Field
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
@@ -10,15 +10,21 @@ from profiles.models import UserProfileModel
 
 # Un form per creare nuovi utenti. Include tutti i campi richiesti e una password ripetuta
 class UserCreationForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'create-user-form'
+    helper.form_method = "POST"
+    helper.add_input(Submit('submit', 'Aggiungi'))
+    helper.inputs[0].field_classes = 'btn btn-success'
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Conferma Password', widget=forms.PasswordInput)
 
     class Meta:
         model = UserProfileModel
-        fields = ['first_name', 'last_name', 'email', 'codiceFiscale', 'telefono', 'dataDiNascita', 'profile_image']
+        fields = ['first_name', 'last_name', 'email', 'codiceFiscale', 'telefono', 'dataDiNascita', 'profile_image','password1','password2']
         labels = {'first_name': _('Nome'), 'last_name': _('Cognome'),
                   'codiceFiscale': _('Codice Fiscale'), 'telefono': _('Telefono'),
-                  'dataDiNascita': _('Data di Nascita'), 'profile_image': _('Immagine Profilo')}
+                  'dataDiNascita': _('Data di Nascita'), 'profile_image': _('Immagine Profilo'),
+                  'password1': _('Password'), 'password2': _('Conferma Password')}
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -36,8 +42,6 @@ class UserCreationForm(forms.ModelForm):
         return profile_image
 
     def save(self, commit=True):
-        # Save the provided password in hashed format
-        print("chiamata la funzione save di UserCreationForm ")
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         if commit:
@@ -45,9 +49,7 @@ class UserCreationForm(forms.ModelForm):
         return user
 
 
-# A form for updating users. Includes all the fields on
-# the user, but replaces the password field with admin's
-# disabled password hash display field.
+# Form per aggiornare gli utenti
 class UserChangeForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_id = 'user-update-crispy-form'

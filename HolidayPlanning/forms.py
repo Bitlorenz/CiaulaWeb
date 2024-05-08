@@ -44,7 +44,6 @@ class ModificaVacanzaForm(forms.ModelForm):
         self.fields['nome'].label = "Nome della Vacanza"
         self.fields['dataArrivo']
     def clean(self):
-
         if self.cleaned_data["dataArrivo"] > self.cleaned_data["dataPartenza"]:
             raise forms.ValidationError(_("Valori non validi: Data di Arrivo precede data di Partenza"))
 
@@ -105,6 +104,11 @@ class ModificaSceltaForm(forms.ModelForm):
             s.attrazione.oraApertura)
         self.fields['oraFine'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraFine') + str(
             s.attrazione.oraChiusura)
+
+    def clean(self):
+        print("metodo clean spostamento")
+        if self.cleaned_data["oraInizio"] > self.cleaned_data["oraFine"]:
+            raise forms.ValidationError(_("Valori non validi: Data di Arrivo precede data di Partenza"))
 
     class Meta:
         model = Scelta

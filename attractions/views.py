@@ -1,15 +1,13 @@
 import datetime
-
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponseForbidden, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 from datetime import datetime
 from profiles.models import UserProfileModel
-from attractions.forms import CreaAttrazioneForm, SearchForm, CreaRecensioneForm
+from attractions.forms import CreaAttrazioneForm, CreaRecensioneForm
 from attractions.models import Attrazione, Recensione
 from HolidayPlanning.models import Vacanza, Scelta
 
@@ -52,7 +50,7 @@ def DetailAttrazioneEntita(request, nome_attr):
                     for v in vacanza.scelte.all():
                         if v.attrazione == attrazione:  # Se utente ha scelto questa attrazione
                             check = True
-            # Se utente ha già recensito il prodotto (non può recensirlo più volte)
+            # Se utente ha già recensito l'attrazione (non può recensirlo più volte)
             # if Recensione.objects.filter().exists():
             for r in recensioni.all():
                 if r.attrazione == attrazione:
@@ -66,7 +64,6 @@ def DetailAttrazioneEntita(request, nome_attr):
 
 
 # CreateView per l'inserimento di un'attrazione da parte dell'admin
-#  @staff_member_required
 class AttrazioneCreateView(UserPassesTestMixin, CreateView):
     model = Attrazione
     template_name = 'attractions/attrazione_form.html'
@@ -80,22 +77,15 @@ class AttrazioneCreateView(UserPassesTestMixin, CreateView):
     def handle_no_permission(self):
         return HttpResponseForbidden("Non sei un amministratore, non puoi creare attrazioni")
 
-    # def get_context_data(self, **kwargs):
-    #  category = self.kwargs['category']
-    #  context = super().get_context_data(**kwargs)
-    #  context['title'] = category
-    #  return context
-
     def form_valid(self, form):
         if not self.request.user.is_staff:
             return reverse("profiles:user-login")
         attrazione = form.save(commit=False)
-        # aggiungere altre modifiche da fare sull'attrazione in fase di salvataggio
         attrazione.save()
         return super().form_valid(form)
 
 
-#  UpdateView per l'aggiornamento di un'attrazione già inserita
+#  UpdateView per l'aggiornamento di un'attrazione
 class AggiornaAttrazione(UserPassesTestMixin, UpdateView):
     model = Attrazione
     template_name = "attractions/aggiorna_attrazione.html"
@@ -111,7 +101,6 @@ class AggiornaAttrazione(UserPassesTestMixin, UpdateView):
         if not self.request.user.is_staff:
             return reverse("profiles:user-login")
         attrazione = form.save(commit=False)
-        # aggiungere controlli da fare sull'attrazione in fase di salvataggio
         attrazione.save()
         return super().form_valid(form)
 

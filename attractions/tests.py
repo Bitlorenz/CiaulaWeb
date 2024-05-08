@@ -2,7 +2,6 @@ from datetime import time
 
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
-from django.http import HttpResponseForbidden
 from profiles.models import UserProfileModel
 from .models import Attrazione
 from .views import CancellaAttrazione
