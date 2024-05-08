@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block head %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+{% load crispy_forms_tags %}
+{% endblock %}
+
+{% block title %}Modifica Profilo Utente{% endblock %}
+
+{% block content %}
+    {% include "header.html" %}
+    <h1>Modifica Profilo Utente</h1>
+    {% crispy form %}
+    <a href="{% url 'profiles:user-detail' user.pk %}" class="btn">Annulla</a>
+{% endblock %}

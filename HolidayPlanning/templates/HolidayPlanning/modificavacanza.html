@@ -63,18 +63,18 @@
             let nuovaDataArrivo = document.querySelector('input[name="dataArrivo"]').value;
             let messageArrivo="";
             let messagePartenza="";
-            if(nuovaDataArrivo != "" && nuovaDataArrivo>vecchiaDataArrivo)
+            if(nuovaDataArrivo !== "" && nuovaDataArrivo>vecchiaDataArrivo)
                 messageArrivo = "\n Nuova data di arrivo ("+nuovaDataArrivo+
                     ") posteriore alla vecchia data di arrivo ("+vecchiaDataArrivo+")";
-            if (nuovaDataPartenza != "" && nuovaDataPartenza < vecchiaDataPartenza)
+            if (nuovaDataPartenza !== "" && nuovaDataPartenza < vecchiaDataPartenza)
                 messagePartenza = "\n Nuova data di partenza ("+nuovaDataPartenza+
                     ") precedente alla vecchia data di partenza ("+vecchiaDataPartenza+")";
             let confirmMessage = " ";
-            if(messageArrivo != "")
+            if(messageArrivo !== "")
                 confirmMessage += messageArrivo;
-            if(messagePartenza != "")
+            if(messagePartenza !== "")
                 confirmMessage += messagePartenza;
-            if (confirmMessage == " "){
+            if (confirmMessage === " "){
                 confirmMessage = "Vuoi davvero modificare la vacanza?";
             } else
                 confirmMessage += "\n Le attività dei giorni eliminati saranno eliminate.";

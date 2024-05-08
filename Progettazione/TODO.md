@@ -40,10 +40,10 @@ FRONTEND
       * perche AbstractBaseUSer anzichè AbstractUSer?
       * come usare e cosa fare di user manager?
     * Views
-      * specificare il template nelle view non negli url 
-      * View per creare un nuovo utente:
-      * view per modificare utente
-      * View per modificare il proprio profilo
+      * specificare il template nelle view non negli url: si fa perchè sono delle view di django, basta specificare quello
+      * View per creare un nuovo utente: user create view va bene ma l'admin va creato con create_superuser
+      * view per modificare utente: da fare, vedere se c'è qualcosa già pronto
+      * View per visualizzare dettagli del proprio profilo: prendere template da watchmarket e provare con stessa view
     * Template
       * fare template per registrazione
       * fare template per modifica

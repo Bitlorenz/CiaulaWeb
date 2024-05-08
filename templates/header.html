@@ -10,7 +10,7 @@
                     {% if user.is_authenticated %}
                     <div class="top_bar_user">
                         <div class="user_icon"><img src="{% static '/img/user.svg' %}"  class="img-fluid" alt="user img"></div>
-                        <a>Benvenuto/a, {{user.first_name}}! </a>
+                            <a href="{% url "profiles:user-detail" user.pk %}">Benvenuto/a, {{user.first_name}}! </a>
                         </div>
                     {% else %}
                     <div class="top_bar_user">

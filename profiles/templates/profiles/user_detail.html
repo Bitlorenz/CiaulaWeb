@@ -8,21 +8,19 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-
-{% include 'header.html' %}
-
-<div class="container">
-    <div class="row justify-content-center">
+    {% include "header.html" %}
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-body text-center">
-                        {% if object.profile_image  %}
-                            <div class="pv-lg"><img class="center-block img-responsive img-thumbnail img-circle" src="{{ object.profile_image.url }}" alt="Pic Profilo"></div>
+                        {% if object.profile_image %}
+                            <div class="pv-lg"><img class="center-block img-responsive img-circle img-thumbnail"
+                                                    src="{{ object.profile_image.url }}" alt="Imm Profilo"></div>
                         {% endif %}
                         {% if user.pk == object.pk %}
-                            <div class="text-center"><a class="btn btn-primary" href="{% url 'profiles:user-update' object.pk %}">Modifica</a></div>
-                            <div class="text-center"><a class="btn btn-primary" href="{% url 'profiles:change-password' %}">Cambia Password</a></div>
+                            <div class="text-center"><a class="btn btn-primary" href="{% url 'profiles:user-update' user.pk %}">Modifica</a></div>
+                            <div class="text-center"><a class="btn btn-primary" href="">Cambia Password</a></div>
                         {% endif %}
                     </div>
                 </div>
@@ -34,44 +32,50 @@
                         <div class="row pv-lg">
                             <div class="col-lg-2"></div>
                             <div class="col-lg-8">
-                                <form class="form-horizontal ng-pristine ng-valid">
+                                <div class="form-horizontal">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label" for="inputUser1">Nome</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" id="inputUser1" type="text" placeholder="" value="{{ object.first_name }}" disabled>
+                                            <input class="form-control" id="inputUser1" type="text" placeholder=""
+                                                   value="{{ object.first_name }}" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="inputUser1">Cognome</label>
+                                        <label class="col-sm-2 control-label" for="inputUser2">Cognome</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" id="inputUser1" type="text" placeholder="" value="{{ object.last_name }}" disabled>
+                                            <input class="form-control" id="inputUser2" type="text" placeholder=""
+                                                   value="{{ object.last_name }}" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="inputUser1">Email</label>
+                                        <label class="col-sm-2 control-label" for="inputUser3">Email</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" id="inputUser1" type="text" placeholder="" value="{{ object.email }}" disabled>
+                                            <input class="form-control" id="inputUser3" type="email" placeholder=""
+                                                   value="{{ object.email }}" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="inputUser1">Telefono</label>
+                                        <label class="col-sm-2 control-label" for="inputUser4">Telefono</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" id="inputUser1" type="text" placeholder="" value="{{ object.telefono }}" disabled>
+                                            <input class="form-control" id="inputUser4" type="text" placeholder=""
+                                                   value="{{ object.telefono }}" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="inputUser1">Codice Fiscale</label>
+                                        <label class="col-sm-2 control-label" for="inputUser5">Codice Fiscale</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" id="inputUser1" type="text" placeholder="" value="{{ object.codiceFiscale }}" disabled>
+                                            <input class="form-control" id="inputUser5" type="text" placeholder=""
+                                                   value="{{ object.codiceFiscale }}" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="inputUser1">Data di Nascita</label>
+                                        <label class="col-sm-2 control-label" for="inputUser6">Data di Nascita</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" id="inputUser1" type="date" placeholder="" value="{{ object.dataDiNascita }}" disabled>
+                                            <input class="form-control" id="inputUser6" type="date" placeholder=""
+                                                   value="{{ object.dataDiNascita }}" disabled>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -79,6 +83,5 @@
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
