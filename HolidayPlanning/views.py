@@ -37,13 +37,14 @@ def checkOrariGiorno(vacanza, scelta, spostamento):
                                   code="invalid", params={"valore": scelta.oraFine.isoformat()})
         # controllo sovrapposizione con tutte le scelte presenti
         if vacanza.scelte.exists():
-            for s in vacanza.scelte:
-                if s.oraInizio <= scelta.oraInizio <= s.oraFine:
-                    raise ValidationError(
+            for s in vacanza.scelte.all():
+                if s.id != scelta.id:
+                    if s.oraInizio <= scelta.oraInizio <= s.oraFine:
+                        raise ValidationError(
                         _("Orario di Inizio si sovrappone con la scelta: %(nome)s che inizia alle %(inizio)s"),
-                        code="invalid", params={"inizio": scelta.oraInzio.isoformat(), "nome": scelta.attrazione.nome})
-                if s.oraInizio <= scelta.oraFine <= s.oraFine:
-                    raise ValidationError(
+                        code="invalid", params={"inizio": scelta.oraInizio.isoformat(), "nome": scelta.attrazione.nome})
+                    if s.oraInizio <= scelta.oraFine <= s.oraFine:
+                        raise ValidationError(
                         _("Orario di Fine si sovrappone con la scelta: %(nome)s che inizia alle %(inizio)s"),
                         code="invalid", params={"inizio": scelta.oraFine.isoformat(), "nome": scelta.attrazione.nome})
     else:  # caso aggiungi o modifica spostamento
@@ -197,9 +198,6 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
         attivita = Scelta.objects.get(pk=attivita_pk)
         return attivita
 
-    def get_form(self, form_class=ModificaSceltaForm):
-        return form_class(pk=self.kwargs.get(self.slug_url_kwarg))
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         attivita_pk = self.kwargs['att_pk']
@@ -211,7 +209,7 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
         context["v_id"] = vacanza_pk
         context["ora inizio attr"] = attivita.attrazione.oraApertura
         context["ora fine attr"] = attivita.attrazione.oraChiusura
-        context['title'] = "Modiifca la tua scelta"
+        context['title'] = "Modifica la tua scelta"
         return context
 
     def form_valid(self, form):
@@ -221,10 +219,18 @@ class ModificaScelta(IsVacanzaUserOwnedMixin, UpdateView):
         fine = form.cleaned_data["oraFine"]
         scelta.durata = td(hours=fine.hour - ini.hour, minutes=fine.minute - ini.minute)
         print("controllo della validità")
-        checkOrariGiorno(rifvacanza, scelta, None)
-        print("check passato, inizio: " + str(scelta.oraInizio) + ", fine: " + str(scelta.oraFine))
+        try:
+            checkOrariGiorno(rifvacanza, scelta, None)
+        except ValidationError as e:
+            error_message = e.message % e.params
+            messages.error(request=self.request, message=error_message)
+            context = self.get_context_data(form=form)
+            context['error_message'] = str(e.message)
+            return render(self.request, self.template_name, context)
+        scelta.oraInizio = ini
+        scelta.oraFine = fine
+        scelta.giorno = form.cleaned_data["giorno"]
         scelta.save()
-        print("scelta salvata, inizio: "+str(scelta.oraInizio)+", fine: "+str(scelta.oraFine))
         return super().form_valid(form)
 
     def get_success_url(self):

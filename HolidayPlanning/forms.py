@@ -92,18 +92,16 @@ class ModificaSceltaForm(forms.ModelForm):
     helper.add_input(Submit('submit', 'Modifica'))
     helper.inputs[0].field_classes = 'btn btn-success'
 
-    def __init__(self, pk, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        s = get_object_or_404(Scelta, pk=pk)
-        self.scelta = s
+    def __init__(self, *args, **kwargs): # aggiungere parametro pk
+        super(ModificaSceltaForm, self).__init__(*args, **kwargs)
+        #s = get_object_or_404(Scelta, pk=kwargs["att_pk"])
+        #self.scelta = s
         self.fields['giorno'].widget.attrs.update(style='max-width: 48em')
         self.fields['oraInizio'].widget.attrs.update(style='max-width: 48em')
         self.fields['oraFine'].widget.attrs.update(style='max-width: 48em')
         self.fields['giorno'].widget.attrs['placeholder'] = self.Meta.placeholders.get('giorno')
-        self.fields['oraInizio'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraInizio') + str(
-            s.attrazione.oraApertura)
-        self.fields['oraFine'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraFine') + str(
-            s.attrazione.oraChiusura)
+        #self.fields['oraInizio'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraInizio') + str(s.attrazione.oraApertura)
+        #self.fields['oraFine'].widget.attrs['placeholder'] = self.Meta.placeholders.get('oraFine') + str(s.attrazione.oraChiusura)
 
     def clean(self):
         print("metodo clean spostamento")
