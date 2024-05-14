@@ -113,7 +113,7 @@ def home(request):
                         # Se non ho attrazioni popolari non scelte dall'utente
                         else:
                             attrazioni = all_attrazioni()  # Acquisisco tutte le vacanze
-                            ctx = {"listaattrazioni": attrazioni, "title": "Tutte le Attrazioni Belle"}
+                            ctx = {"listaattrazioni": attrazioni, "title": "Tutte le Attrazioni"}
                     else:  # Se non esistono vacanze fatte da altri turisti
                         attrazioni = all_attrazioni()  # Acquisisco tutte le vacanze
                         ctx = {"listaattrazioni": attrazioni, "title": "Tutte le Attrazioni"}

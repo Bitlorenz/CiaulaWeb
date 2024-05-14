@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.http import FileResponse, HttpResponse, HttpResponseForbidden
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-from reportlab.lib.units import inch
+from reportlab.lib.units import cm
 
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -163,13 +163,14 @@ class CancellaSpostamento(LoginRequiredMixin, DeleteView):
 # Funzione per creare una scelta data un attrazione
 def scegliattrazione(request, pk, vacanza_id):
     if request.method == "POST":
-        form = ScegliAttrazioneForm(data=request.POST, pk=pk, user=request.user)
+        form = ScegliAttrazioneForm(data=request.POST, pk=pk)
         if form.is_valid():
             scelta = form.save(commit=False)
             rifvacanza = Vacanza.objects.get(utente=request.user, pk=vacanza_id)
             ini = form.cleaned_data.get("oraInizio")
             fine = form.cleaned_data.get("oraFine")
             scelta.durata = td(hours=fine.hour - ini.hour, minutes=fine.minute - ini.minute)
+            scelta.attrazione = Attrazione.objects.get(pk=pk)
             checkOrariGiorno(rifvacanza, scelta, None)
             scelta.save()
             rifvacanza.scelte.add(scelta)
@@ -178,7 +179,7 @@ def scegliattrazione(request, pk, vacanza_id):
         utente = request.user
         vacanza = Vacanza.objects.get(utente=request.user, pk=vacanza_id)
         att = get_object_or_404(Attrazione, pk=pk)
-        form = ScegliAttrazioneForm(pk=pk, user=utente)
+        form = ScegliAttrazioneForm(pk=pk)
         if Vacanza.objects.filter(utente=utente).count() == 0:
             return redirect("HolidayPlanning:creavacanza")
         return render(request, template_name="HolidayPlanning/scegli_attrazione.html",
@@ -430,23 +431,53 @@ def stampaVacanza(request, pk):
     buffer = io.BytesIO()
     # crea un canvas per scrivere il pdf
     p = canvas.Canvas(buffer, pagesize=letter, bottomup=0)
-    # scrive il testo
-    textob = p.beginText()
-    textob.setTextOrigin(inch * 0.5, inch * 0.5)
-    textob.setFont("Helvetica", 14)
+    #cornice
+    larghezza_frame = letter[0] - (2*0.5*cm)
+    altezza_frame = letter[1] - (2*0.5*cm)
+    p.setStrokeColorRGB(0, 0, 0)
+    p.rect(0.5*cm, 0.5*cm, larghezza_frame, altezza_frame)
 
     # recupera l'oggetto vacanza data la chiave primaria
     vacanza = Vacanza.objects.get(pk=pk, utente=request.user)
+    if vacanza.nome is not None:
+        titolo = vacanza.nome
+        p.setFont("Helvetica", 24)
+        p.setFillColorRGB(1, 0, 0) # Rosso
+        larghezza_titolo = p.stringWidth(titolo, "Helvetica", 24)
+        p.drawCentredString((larghezza_frame - larghezza_titolo) / 2+0.5*cm, 1.5*cm, titolo)
+
+    # scrive il testo
+    textob = p.beginText()
+    textob.setTextOrigin(cm * 0.7, cm * 2)
+    textob.setFont("Helvetica", 14)
+    textob.setFillColorRGB(0,0,0)
     righeTesto = ["Vacanza di " + vacanza.utente.first_name + " " + vacanza.utente.last_name,
                   "Data di arrivo: " + str(vacanza.dataArrivo), "Data di partenza: " + str(vacanza.dataPartenza),
                   "Numero di persone: " + str(vacanza.nrPersone),
-                  "Budget disponibile: " + str(vacanza.budgetDisponibile), "Scelte effettuate: "]
+                  "Budget disponibile: €" + str(vacanza.budgetDisponibile), "Programma Vacanza: "]
     costoTotale = 0
-    for s in vacanza.scelte.all():
-        righeTesto.append(
-            str(s.giorno) + " - " + str(s.attrazione.nome) + " - " + str(s.oraInizio) + " - " + str(s.oraFine))
+    giornoprec = None
+    for index, s in enumerate(vacanza.sort_scelte()):
+        giornocorrente = str(s.giorno)
+        if giornoprec is None or giornocorrente != giornoprec:
+            righeTesto.append("Giornata "+str(index+1)+" - "+giornocorrente)
+        righeTesto.append(str(s.attrazione.nome))
+        righeTesto.append(" \nOra Inizio: " + str(s.oraInizio) + " - Ora Fine:" + str(s.oraFine))
+        spostamenti = vacanza.spostamenti.all()
+        spos = vacanza.spostamenti.filter(scelta_arrivo=s)
+        spos = spos.first()
+        if spos is not None:
+            luoghi = "Da " + spos.scelta_partenza.attrazione.citta + " A " + spos.scelta_arrivo.attrazione.citta
+            orari = "\nOra Partenza: " + str(spos.ora_partenza) + ", Ora Arrivo: " + str(spos.ora_arrivo) +\
+                    ", Durata: " + str(spos.durata_spostamento)
+            veicolocosti = "Veicolo: " + spos.veicolo + ", Costo Spostamento: €" + str(spos.costo)
+            righeTesto.append("SPOSTAMENTO:" )
+            righeTesto.append(luoghi)
+            righeTesto.append(orari)
+            righeTesto.append(veicolocosti)
         costoTotale = costoTotale + s.attrazione.costo
-    righeTesto.append("Costo totale: " + str(costoTotale))
+        giornoprec = giornocorrente
+    righeTesto.append("Costo totale: €" + str(costoTotale))
     righeTesto.append("Buona vacanza!")
     righeTesto.append(" ")
 

@@ -5,14 +5,12 @@ from profiles.models import UserProfileModel
 class ProfileTest(TestCase):
     # setup dove creo un nuovo utente nel db
     def setUp(self):
-        self.created_user = UserProfileModel.objects.create_user('provatest',
-                                                                 email='prova@prova.it',
+        self.created_user = UserProfileModel.objects.create_user(email='prova@prova.it',
                                                                  password='Tentativo.1')
 
     def test_registration(self):
         client = Client()
-
-        response = client.post(reverse_lazy('profiles:user-registration'), {
+        response = client.post(reverse_lazy('profiles:registration'), {
                             'email': 'prova@prova.it',
                             'password1': 'Tentativo.1',
                             'password2': 'Tentativo.1'

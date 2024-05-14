@@ -11,7 +11,7 @@
     <h3>Stai cancellando questo spostamento, sei sicuro?</h3>
     <form method="post">
         {% csrf_token %}
-        <a href="{% url 'HolidayPlanning:dettagliovacanza' v_id %}">Annulla</a>
+        <a href="{% url 'HolidayPlanning:dettagliovacanza' v_pk %}">Annulla</a>
         <input type="submit" value="Conferma">
     </form>
 {% endblock %}

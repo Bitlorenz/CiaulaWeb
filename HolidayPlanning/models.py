@@ -52,27 +52,6 @@ class Spostamento(models.Model):
         verbose_name_plural = "Spostamenti"
 
 
-'''
-def get_next_activity(self):
-        if self.tipo_spostamento == self.PARTENZA:
-            next_activities = Attrazione.objects.filter(
-                giorno=self.giorno,
-                oraInizio__gte=self.ora_arrivo,
-                oraInizio__lte=timezone.datetime.combine(self.giorno, self.ora_arrivo) + self.durata_spostamento
-            ).order_by('oraInizio')
-            if next_activities.exists():
-                return next_activities.first()
-        elif self.tipo_spostamento == self.ARRIVO:
-            next_activities = Attrazione.objects.filter(
-                giorno=self.giorno,
-                oraInizio__gte=self.ora_arrivo
-            ).order_by('oraInizio')
-            if next_activities.exists():
-                return next_activities.first()
-        return None
-'''
-
-
 class Vacanza(models.Model):
     nome = models.CharField(max_length=300, blank=True)
     dataArrivo = models.DateField()
@@ -105,7 +84,7 @@ class Vacanza(models.Model):
 
     # metodo per calcolare il livello di difficoltà di una giornata basato sul numero di scelte in una giornata
     def difficolta_giornata(self):
-        # Group scelte objects by day
+        # Raggruppo le scelte per giornata
         scelte_per_giorno = {}
         for scelta in self.scelte.all():
             giorno_scelta = scelta.giorno.day
@@ -113,7 +92,7 @@ class Vacanza(models.Model):
                 scelte_per_giorno[giorno_scelta] = []
             scelte_per_giorno[giorno_scelta].append(scelta)
 
-        # Determine difficulty level for each day
+        # Determino livelli di difficoltà per ogni giorno
         difficulty_levels = {}
         for giorno_scelta, scelte_nel_giorno in scelte_per_giorno.items():
             count = len(scelte_nel_giorno)
