@@ -91,7 +91,7 @@ class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
         scelta_partenza = Scelta.objects.get(pk=self.kwargs['par'])
         spostamento.scelta_partenza = scelta_partenza
         spostamento.scelta_arrivo = scelta_partenza.next_scelta()
-        rifvacanza = Vacanza.objects.get(pk=self.kwargs['vac'])
+        rifvacanza = Vacanza.objects.get(pk=self.kwargs['pk'])
         checkOrariGiorno(rifvacanza, None, spostamento)
         spostamento.save()
         rifvacanza.spostamenti.add(spostamento)
@@ -106,7 +106,7 @@ class AggiungiSpostamento(IsVacanzaUserOwnedMixin, CreateView):
         return context
 
     def get_success_url(self):
-        return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": self.kwargs['vac']})
+        return reverse("HolidayPlanning:dettagliovacanza", kwargs={"pk": self.kwargs['pk']})
 
 
 def getVacanzapkFromSpostamento(user, spostamento):
